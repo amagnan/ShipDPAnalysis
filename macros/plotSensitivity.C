@@ -83,7 +83,7 @@ int plotSensitivity(){
 
   const double clsval = 2.3;
   
-  const std::string prod="180608/";
+  const std::string prod="../data/180608/";
   
   TLatex lat;
   char lbuf[500];
@@ -116,7 +116,7 @@ int plotSensitivity(){
     std::sort(lRate[iP].begin(), lRate[iP].end(), customSort);
 
     lname.str("");
-    lname << prod << "/ForNico_2.3_" << proc[iP] << ".txt";
+    lname << "ForNico_2.3_" << proc[iP] << ".txt";
     foutCLS[iP].open(lname.str().c_str());
 
     
