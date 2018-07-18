@@ -83,13 +83,13 @@ int plotSensitivity(){
 
   const double clsval = 2.3;
   
-  const std::string prod="../data/180608/";
+  const std::string prod="/afs/cern.ch/user/t/takmete/ShipDPAnalysis-master/data/180608/";
   
   TLatex lat;
   char lbuf[500];
   
-  const unsigned nP = 3;
-  std::string proc[nP] = {"meson","pbrem","qcd"};
+  const unsigned nP = 4;
+  std::string proc[nP] = {"meson","pbrem","qcd","dp_qcd"};
 
   std::ofstream foutCLS[nP];
   
@@ -116,7 +116,7 @@ int plotSensitivity(){
     std::sort(lRate[iP].begin(), lRate[iP].end(), customSort);
 
     lname.str("");
-    lname << "ForNico_2.3_" << proc[iP] << ".txt";
+    lname << "ForNico" << proc[iP] << ".txt";
     foutCLS[iP].open(lname.str().c_str());
 
     
@@ -128,12 +128,12 @@ int plotSensitivity(){
 
     lname.str("");
     lname << "hSensitivity_" << proc[iP];
-    hSens[iP] = new TH2F(lname.str().c_str(),";mass (GeV);#gamma' coupling to SM log_{10}(#varepsilon);rate for 2.10^{10} p.o.t.",120,0,iP==0?1.2:12,100,-9,-5);
+    hSens[iP] = new TH2F(lname.str().c_str(),";mass (GeV);#gamma' coupling to SM log_{10}(#varepsilon);rate for 2.10^{10} p.o.t.",120,0,9.2,100,-9,-5);
     if (!hSens[iP]) return 1;
 
     lname.str("");
     lname << "hvtxEff_" << proc[iP];
-    hvtxEff[iP] = new TH2F(lname.str().c_str(),";mass (GeV);#gamma' coupling to SM log_{10}(#varepsilon);vtx in decay volume (%)",120,0,iP==0?1.2:12,100,-9,-5);
+    hvtxEff[iP] = new TH2F(lname.str().c_str(),";mass (GeV);#gamma' coupling to SM log_{10}(#varepsilon);vessel efficiency (%)",120,0,9.2,100,-9,-5);
 
     double mass = 0;
     unsigned nM = 0;
@@ -273,22 +273,22 @@ int plotSensitivity(){
     gPad->SetLogx(0);
     gPad->SetLogy(0);
     gPad->SetLogz(1);
-    if (iP==0) hSens[iP]->GetXaxis()->SetRangeUser(0,1.1);
-    else if (iP==1) hSens[iP]->GetXaxis()->SetRangeUser(0,2.5);
-    else if (iP==2) hSens[iP]->GetXaxis()->SetRangeUser(0,6);
+    if (iP==0) hSens[iP]->GetXaxis()->SetRangeUser(0,9.1);
+    else if (iP==1) hSens[iP]->GetXaxis()->SetRangeUser(0,9.1);
+    else if (iP==2) hSens[iP]->GetXaxis()->SetRangeUser(0,9.1);
     hSens[iP]->GetZaxis()->SetRangeUser(0.01,100);
     hSens[iP]->Draw("colz");
-    lat.DrawLatexNDC(0.2,0.8,proc[iP].c_str());
+    lat.DrawLatexNDC(0.1,1.0,proc[iP].c_str());
     myc[iP]->Update();
     myc[iP]->Print(("Sensitivity_"+proc[iP]+".pdf").c_str());
 
     mycV[iP]->cd();
-    if (iP==0) hvtxEff[iP]->GetXaxis()->SetRangeUser(0,1.1);
-    else if (iP==1) hvtxEff[iP]->GetXaxis()->SetRangeUser(0,2);
-    else if (iP==2) hvtxEff[iP]->GetXaxis()->SetRangeUser(0,6);
+    if (iP==0) hvtxEff[iP]->GetXaxis()->SetRangeUser(0,9.1);
+    else if (iP==1) hvtxEff[iP]->GetXaxis()->SetRangeUser(0,9.1);
+    else if (iP==2) hvtxEff[iP]->GetXaxis()->SetRangeUser(0,9.1);
     hvtxEff[iP]->GetZaxis()->SetRangeUser(1,100);
     hvtxEff[iP]->Draw("colz");
-    lat.DrawLatexNDC(0.2,0.8,proc[iP].c_str());
+    lat.DrawLatexNDC(0.1,1.0,proc[iP].c_str());
     mycV[iP]->Update();
     mycV[iP]->Print(("VtxEfficiency_"+proc[iP]+".pdf").c_str());
 
