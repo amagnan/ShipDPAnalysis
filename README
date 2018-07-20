@@ -1,24 +1,16 @@
-*** Analysis code for DP in Ship ***
+***Things are in progress**
+->A macro for
+  *merge the outputs of the analysis (by cat *.dat...)
+  *run plotSensitivity.C with these files, then takes its output;
+  *square the epsilons it then save it with .csv extension
+  *save into nico's plot
+->getting more rates with more smooth lines
+->line interpolation(masses may help)
+->superimpose the followings; efficiencies(for ploting vs mass), and efficiencies from kinematics(i.e eta,pt,p)
+->Ofc apply them for also meson and pbrem...
 
- * To send the production:
-script/submit_job.sh
-Example: 
-for run in `seq 0 4`; do for mass in 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9; do for epsilon in 5e-5 4e-5 2e-5 1e-5 8e-6 6e-6 4e-6 2e-6 1e-6 8e-7 5e-7 1e-7 8e-8 6e-8 4e-8 2e-8 1e-8; do for prod in meson pbrem; do ./submit_job.sh 180602 $prod $mass $epsilon 0 500 1nd; done; done; done; done
-
- * To hadd output files:
-script/harvester.py
-Example:
-python harvester.py -p pbrem --massList=0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.6,1.7,1.8,1.9,2.1,2.2 --epsList=2e-5,1e-6,2e-6,3e-6,5e-6,8e-6,1e-7,1.5e-7,5e-7,7e-7,1e-8,1.5e-8,2e-8,2.5e-8,3e-8,5e-8,8e-8,5e-9,8e-9
-
- * To run analysis:
-script/submit_ana.sh
-Example:
-for mass in 0.3; do for eps in 1e-5 5e-6; do ./submit_ana.sh meson $mass $eps 1nh; done; done
-
- * To get the output rates:
-script/getOutput.sh
-Example:
-./getOutput.sh pbrem
+ * To send the job for production and true analysis only for qcd:
+python scripts/sub.py
 
  * To plot the sensitivity
 Copy the outputs of the previous step (for meson, pbrem and qcd) in a directory inside data/ and modify the path inside macros/plotSensitivity.C then execute:
