@@ -1,4 +1,3 @@
-#What are left BR vs MAss, Eff vs Mass, output.dat for sensitivityPlot.C
 import ROOT as r
 import os,sys,getopt
 import rootUtils as ut
@@ -18,20 +17,20 @@ shipRoot_conf.configure()
 PDG = r.TDatabasePDG.Instance()
 
 try:
-	opts, args = getopt.getopt(sys.argv[1:], "f:g:", ["nEvents=","geoFile="])
+    opts, args = getopt.getopt(sys.argv[1:], "f:g:", ["nEvents=","geoFile="])
 
 except getopt.GetoptError:
-	print 'no file'
-	sys.exit()
+    print 'no file'
+    sys.exit()
 
 for o,a in opts:
-	if o in ('-f',): inputFile = a
-	if o in ('-g', '--geoFile',): geoFile = a
+    if o in ('-f',): inputFile = a
+    if o in ('-g', '--geoFile',): geoFile = a
 
-tmp=inputFile.replace('/eos/experiment/ship/data/DarkPhoton/PBC-June-3/AM/180602/sim/','')
+tmp=inputFile.replace("/eos/experiment/ship/data/DarkPhoton/PBC-June-3/sim/","")
 tmp1=tmp.replace('.root','')
 tmp2=tmp1.replace('mass','')
-tmp3=tmp2.replace('eps','')		
+tmp3=tmp2.replace('eps','')     
 out=tmp3.split('_') 
 pro=out[0]
 mass_mc=float(out[1])
@@ -65,7 +64,7 @@ run.Init()
 import geomGeant4
 
 if hasattr(ShipGeo.Bfield,"fieldMap"):
-	fieldMaker = geomGeant4.addVMCFields(ShipGeo.Bfield.fieldMap, ShipGeo.Bfield.z, True)
+    fieldMaker = geomGeant4.addVMCFields(ShipGeo.Bfield.fieldMap, ShipGeo.Bfield.z, True)
 
 hcalGeoFile = ShipGeo.hcal.File
 ecalGeoFile = ShipGeo.ecal.File
@@ -276,386 +275,392 @@ h['eff_Eta2_mu'].Draw("E")
 h['eff_Eta2_mu'].SetTitle("PseudoRapidity ;#eta;Eff.")
 
 def dist2InnerWall(X,Y,Z):
-	dist = 0
-	node = sGeo.FindNode(X,Y,Z)
-	if ShipGeo.tankDesign < 5:
-		if not 'cave' in node.GetName(): return dist  # TP 
-	else:
-		if not 'decayVol' in node.GetName(): return dist
-	start = array('d',[X,Y,Z])
-	nsteps = 8
-	dalpha = 2*r.TMath.Pi()/nsteps
-	rsq = X**2+Y**2
-	minDistance = 100 *u.m
-	for n in range(nsteps):
-		alpha = n * dalpha
-		sdir  = array('d',[r.TMath.Sin(alpha),r.TMath.Cos(alpha),0.])
-		node = sGeo.InitTrack(start, sdir)
-		nxt = sGeo.FindNextBoundary()
-		if ShipGeo.tankDesign < 5 and nxt.GetName().find('I')<0: return 0    
-		distance = sGeo.GetStep()
-		if distance < minDistance  : minDistance = distance
-	return minDistance
+    dist = 0
+    node = sGeo.FindNode(X,Y,Z)
+    if ShipGeo.tankDesign < 5:
+        if not 'cave' in node.GetName(): return dist  # TP 
+    else:
+        if not 'decayVol' in node.GetName(): return dist
+    start = array('d',[X,Y,Z])
+    nsteps = 8
+    dalpha = 2*r.TMath.Pi()/nsteps
+    rsq = X**2+Y**2
+    minDistance = 100 *u.m
+    for n in range(nsteps):
+        alpha = n * dalpha
+        sdir  = array('d',[r.TMath.Sin(alpha),r.TMath.Cos(alpha),0.])
+        node = sGeo.InitTrack(start, sdir)
+        nxt = sGeo.FindNextBoundary()
+        if ShipGeo.tankDesign < 5 and nxt.GetName().find('I')<0: return 0    
+        distance = sGeo.GetStep()
+        if distance < minDistance  : minDistance = distance
+    return minDistance
 
 def isInFiducial(X,Y,Z):
-	if Z > ShipGeo.TrackStation1.z : return False
-	if Z < ShipGeo.vetoStation.z+100.*u.cm : return False
-	if dist2InnerWall(X,Y,Z)<5*u.cm: return False
-	return True 
+    if Z > ShipGeo.TrackStation1.z : return False
+    if Z < ShipGeo.vetoStation.z+100.*u.cm : return False
+    if dist2InnerWall(X,Y,Z)<5*u.cm: return False
+    return True 
 
 def checkFiducialVolume(vtx,a):
-	x, y, z = vtx.X(), vtx.Y(), vtx.Z()
-	x_dprime = 1000.
-	y_dprime = 768.2500
-	z_dprime0 = 1349.7500
-	x_prime0=x+z_dprime0*a[0]
-	y_prime0=y+z_dprime0*a[1]
-	if x_prime0<=abs(x_dprime) and y_prime0<=abs(y_dprime): return True
+    x, y, z = vtx.X(), vtx.Y(), vtx.Z()
+    x_dprime = 1000.
+    y_dprime = 768.2500
+    z_dprime0 = 1349.7500
+    x_prime0=x+z_dprime0*a[0]
+    y_prime0=y+z_dprime0*a[1]
+    if x_prime0<=abs(x_dprime) and y_prime0<=abs(y_dprime): return True
 
 def ang_muon(vtx,a):
-	x, y, z = vtx.X(), vtx.Y(), vtx.Z()
-	x_dprime = 300.
-	y_dprime = 600.
-	z_dprime0 = 3918.6000
-	x_prime0=x+z_dprime0*a[0]
-	y_prime0=y+z_dprime0*a[1]
-	if x_prime0<=abs(x_dprime) and y_prime0<=abs(y_dprime): return True
+    x, y, z = vtx.X(), vtx.Y(), vtx.Z()
+    x_dprime = 300.
+    y_dprime = 600.
+    z_dprime0 = 3918.6000
+    x_prime0=x+z_dprime0*a[0]
+    y_prime0=y+z_dprime0*a[1]
+    if x_prime0<=abs(x_dprime) and y_prime0<=abs(y_dprime): return True
 
 def ang_ecal(vtx,a):
-	x, y, z = vtx.X(), vtx.Y(), vtx.Z()
-	x_dprime = 265.
-	y_dprime = 530.
-	z_dprime0 = 3621.5501
-	x_prime0=x+z_dprime0*a[0]
-	y_prime0=y+z_dprime0*a[1]
-	if x_prime0<=abs(x_dprime) and y_prime0<=abs(y_dprime): return True
+    x, y, z = vtx.X(), vtx.Y(), vtx.Z()
+    x_dprime = 265.
+    y_dprime = 530.
+    z_dprime0 = 3621.5501
+    x_prime0=x+z_dprime0*a[0]
+    y_prime0=y+z_dprime0*a[1]
+    if x_prime0<=abs(x_dprime) and y_prime0<=abs(y_dprime): return True
 
 
 def ang_hcal(vtx,a):
-	x, y, z = vtx.X(), vtx.Y(), vtx.Z()
-	x_dprime = 315.
-	y_dprime = 630.
-	z_dprime0 = 3666.6001
-	x_prime0=x+z_dprime0*a[0]
-	y_prime0=y+z_dprime0*a[1]
-	if x_prime0<=abs(x_dprime) and y_prime0<=abs(y_dprime): return True
+    x, y, z = vtx.X(), vtx.Y(), vtx.Z()
+    x_dprime = 315.
+    y_dprime = 630.
+    z_dprime0 = 3666.6001
+    x_prime0=x+z_dprime0*a[0]
+    y_prime0=y+z_dprime0*a[1]
+    if x_prime0<=abs(x_dprime) and y_prime0<=abs(y_dprime): return True
 
 
 
 def wgnew(dark):
-	flmin=47.505*u.m
-	flmax=98.265*u.m
-	LS = r.gRandom.Uniform(flmin,flmax)
-	p = dark.GetP()
-	e = dark.GetEnergy()
-	gam = e/r.TMath.Sqrt(e*e-p*p)
-	beta = p/e
-	DP_instance = darkphoton.DarkPhoton(mass_mc,eps)
-	ctau = DP_instance.cTau()
-	return r.TMath.Exp(-LS/(beta*gam*ctau))*( (ShipGeo.NuTauTarget.zdim*2.)/(beta*gam*ctau) )
+    flmin=47.505*u.m
+    flmax=98.265*u.m
+    LS = r.gRandom.Uniform(flmin,flmax)
+    p = dark.GetP()
+    e = dark.GetEnergy()
+    gam = e/r.TMath.Sqrt(e*e-p*p)
+    beta = p/e
+    DP_instance = darkphoton.DarkPhoton(mass_mc,eps)
+    ctau = DP_instance.cTau()
+    return r.TMath.Exp(-LS/(beta*gam*ctau))*( (ShipGeo.NuTauTarget.zdim*2.)/(beta*gam*ctau) )
 
-def angle(X,Y,Z,Px,Py,Pz):
-	x,y 	= X, Y
-	m_x, m_y, m_z	= Px, Py, Pz
-	a_x=np.arctan(m_x/m_z)
-	a_y=np.arctan(m_y/m_z)
-	return a_x,a_y
+def angle(P,Px,Py,Pz):
+    m_x, m_y, m_z   = Px, Py, Pz
+    mom=P
+    a_x=m.tan(m_x/mom)
+    a_y=m.tan(m_y/mom)
+    return a_x,a_y
 
-def invariant(S_x,S_y,e_0,e_1,p_0,p_1):
-	th=r.TMath.Sqrt((S_x[0]-S_x[1])**2.+(S_y[0]-S_y[1])**2.)
-	m_0=r.TMath.Sqrt(e_0**2-p_0**2)
-	m_1=r.TMath.Sqrt(e_1**2-p_1**2)
-	return r.TMath.Sqrt(m_0**2.+m_1**2.+2.*(e_0*e_1-p_0*p_1*m.cos(th)))
+def invariant(S_x,S_y,e_0,e_1,p_0,p_1,T,Ang):
+    #def invariant(S_x,S_y,m_0,m_1,p_0,p_1):
+    th=r.TMath.Sqrt((S_x[0]-S_x[1])**2.+(S_y[0]-S_y[1])**2.)
+    #th=r.TMath.Sqrt(S_x[0]**2.+S_y[0]**2.)+r.TMath.Sqrt(S_x[1]**2.+S_y[1]**2.)
+    #print T[0]+T[1],Ang[0]+Ang[1]
+    #th=abs(Ang[0]-Ang[1])
+    #e_0=m_0**2.+p_0**2.
+    #e_1=m_1**2.+p_1**2.
+    #return r.TMath.Sqrt(m_0**2.+m_1**2.+2.*(e_0*e_1-p_0*p_1*m.cos(th)))
+    return r.TMath.Sqrt((e_0+e_1)**2.-(p_0**2.+p_1**2.+2.*p_0*p_1*m.cos(th)))
 
 def myEventLoop(n,xsw):
-	neg,pos=0,0
-	dp,	e,	mu,	tau,	pi,	ka,	oth	=0, 0, 0, 0, 0, 0, 0
-	dp_a,	e_a,	mu_a,	tau_a,	pi_a, 	ka_a,	oth_a	=0, 0, 0, 0, 0, 0, 0
-	dp_v, 	e_v, 	mu_v, 	tau_v,	pi_v, 	ka_v,	oth_v	=0, 0, 0, 0, 0, 0, 0
-	rc=sTree.GetEntry(n)
-	had,vec=[],[]
-	mo=-99
-	E,P,S_x,S_y=[],[],[],[]
-	if pro=='meson': xsw = dputil.getDPprodRate(mass_mc,eps,'meson',sTree.MCTrack[0].GetPdgCode())
-	wg = sTree.MCTrack[1].GetWeight()
-	if abs(wg)<0.00000001: wg = wgnew(sTree.MCTrack[1])
-	for mc,track in enumerate(sTree.MCTrack):
-		"""if track.GetMotherId()!=-1 and sTree.MCTrack[track.GetMotherId()].GetPdgCode()!=9900015 and sTree.MCTrack[track.GetMotherId()].GetPdgCode()!=4900023 and (track.GetPdgCode()==9900015 or track.GetPdgCode()==4900023):
-			mo=mc
-			print mo
-		if track.GetMotherId()==mo:"""
-		if track.GetMotherId()==1 and (sTree.MCTrack[1].GetPdgCode()==9900015 or sTree.MCTrack[1].GetPdgCode()==4900023):
-			if abs(track.GetPdgCode())==11 or abs(track.GetPdgCode())==13 or abs(track.GetPdgCode())==15:
-				dp+=1
-				h['eff_P'].Fill(track.GetP(),wg)			
-				h['eff_Pt'].Fill(track.GetPt(),wg)
-				h['eff_Eta'].Fill(track.GetRapidity(),wg)
-				X=track.GetStartX()
-				Y=track.GetStartY()
-				Z=track.GetStartZ()
-				Px=track.GetPx()
-				Py=track.GetPy()
-				Pz=track.GetPz()
-				P.append(track.GetP())
-				E.append(track.GetEnergy())
-				a=angle(X,Y,Z,Px,Py,Pz)
-				vtx=r.TVector3(X,Y,Z)
-				mom=r.TVector3(Px,Py,Pz)
-				S_x.append(a[0])
-				S_y.append(a[1])
-				if isInFiducial(X,Y,Z):
-					dp_v+=1
-					h['eff_P0'].Fill(track.GetP())			
-					h['eff_Pt0'].Fill(track.GetPt())
-					h['eff_Eta0'].Fill(track.GetRapidity())
-					if ang_ecal(vtx,a) or ang_muon(vtx,a):
-						dp_a+=1
-						h['eff_P1'].Fill(track.GetP())			
-						h['eff_Pt1'].Fill(track.GetPt())
-						h['eff_Eta1'].Fill(track.GetRapidity())
-				if abs(track.GetPdgCode())==11:
-					e+=1
-					h['eff_P_e'].Fill(track.GetP(),wg)			
-					h['eff_Pt_e'].Fill(track.GetPt(),wg)
-					h['eff_Eta_e'].Fill(track.GetRapidity(),wg)
-					if isInFiducial(X,Y,Z):
-						e_v+=1
-						h['eff_P0_e'].Fill(track.GetP())			
-						h['eff_Pt0_e'].Fill(track.GetPt())
-						h['eff_Eta0_e'].Fill(track.GetRapidity())
-						if ang_ecal(vtx,a):
-							e_a+=1
-							h['eff_P1_e'].Fill(track.GetP())			
-							h['eff_Pt1_e'].Fill(track.GetPt())
-							h['eff_Eta1_e'].Fill(track.GetRapidity())
-				if abs(track.GetPdgCode())==13:
-					mu+=1
-					h['eff_P_mu'].Fill(track.GetP(),wg)			
-					h['eff_Pt_mu'].Fill(track.GetPt(),wg)
-					h['eff_Eta_mu'].Fill(track.GetRapidity(),wg)
-					if isInFiducial(X,Y,Z):
-						mu_v+=1
-						h['eff_P0_mu'].Fill(track.GetP())			
-						h['eff_Pt0_mu'].Fill(track.GetPt())
-						h['eff_Eta0_mu'].Fill(track.GetRapidity())
-						if ang_muon(vtx,a):
-							mu_a+=1
-							h['eff_P1_mu'].Fill(track.GetP())			
-							h['eff_Pt1_mu'].Fill(track.GetPt())
-							h['eff_Eta1_mu'].Fill(track.GetRapidity())
-				if abs(track.GetPdgCode())==15:#dont think that is the right way to do that
-					tau+=1
-					h['eff_P_tau'].Fill(track.GetP(),wg)			
-					h['eff_Pt_tau'].Fill(track.GetPt(),wg)
-					h['eff_Eta_tau'].Fill(track.GetRapidity(),wg)
-					if isInFiducial(X,Y,Z):		
-						tau_v+=1
-						h['eff_P0_tau'].Fill(track.GetP())			
-						h['eff_Pt0_tau'].Fill(track.GetPt())
-						h['eff_Eta0_tau'].Fill(track.GetRapidity())
-						if ang_ecal(vtx,a):
-							tau_a+=1
-							h['eff_P1_tau'].Fill(track.GetP())			
-							h['eff_Pt1_tau'].Fill(track.GetPt())
-							h['eff_Eta1_tau'].Fill(track.GetRapidity())
-			#else:#abs(1,2,3,4,5,6)
-		if track.GetMotherId()==1 and abs(track.GetPdgCode())<7:
-			had.append(mc)
-			#print track.GetPdgCode()
-			#if abs(track.GetPdgCode())>6: print track.GetPdgCode()#for testing else state
-		if dp != 2:
-			for daug in had:
-				X=track.GetStartX()
-				Y=track.GetStartY()
-				Z=track.GetStartZ()
-				Px=track.GetPx()
-				Py=track.GetPy()
-				Pz=track.GetPz()
-				vtx=r.TVector3(X,Y,Z)
-				mom=r.TVector3(Px,Py,Pz)
-				if track.GetMotherId()==daug:
-					P.append(track.GetP())
-					E.append(track.GetEnergy())
-					a=angle(X,Y,Z,Px,Py,Pz)
-					S_x.append(a[0])
-					S_y.append(a[1])
-					#print n,track.GetPdgCode()
-					if abs(track.GetPdgCode())==211:
-						pi+=1
-						h['eff_P_pi'].Fill(track.GetP(),wg)			
-						h['eff_Pt_pi'].Fill(track.GetPt(),wg)
-						h['eff_Eta_pi'].Fill(track.GetRapidity(),wg)
-						if isInFiducial(X,Y,Z):
-							pi_v+=1
-							h['eff_P0_pi'].Fill(track.GetP())			
-							h['eff_Pt0_pi'].Fill(track.GetPt())
-							h['eff_Eta0_pi'].Fill(track.GetRapidity())
-							if ang_ecal(vtx,a):
-								pi_a+=1
-								h['eff_P1_pi'].Fill(track.GetP())			
-								h['eff_Pt1_pi'].Fill(track.GetPt())
-								h['eff_Eta1_pi'].Fill(track.GetRapidity())
-					elif abs(track.GetPdgCode())==321:
-						ka+=1
-						h['eff_P_ka'].Fill(track.GetP(),wg)			
-						h['eff_Pt_ka'].Fill(track.GetPt(),wg)
-						h['eff_Eta_ka'].Fill(track.GetRapidity(),wg)
-						if isInFiducial(X,Y,Z):
-							ka_v+=1
-							h['eff_P0_ka'].Fill(track.GetP())			
-							h['eff_Pt0_ka'].Fill(track.GetPt())
-							h['eff_Eta0_ka'].Fill(track.GetRapidity())
-							if ang_ecal(vtx,a):
-								ka_a+=1
-								h['eff_P1_ka'].Fill(track.GetP())			
-								h['eff_Pt1_ka'].Fill(track.GetPt())
-								h['eff_Eta1_ka'].Fill(track.GetRapidity())
-					else:
-						print n,track.GetPdgCode()
-						oth+=1
-						h['eff_P_oth'].Fill(track.GetP(),wg)			
-						h['eff_Pt_oth'].Fill(track.GetPt(),wg)
-						h['eff_Eta_oth'].Fill(track.GetRapidity(),wg)
-						if isInFiducial(X,Y,Z):
-							oth_v+=1
-							h['eff_P0_oth'].Fill(track.GetP())			
-							h['eff_Pt0_oth'].Fill(track.GetPt())
-							h['eff_Eta0_oth'].Fill(track.GetRapidity())
-							if ang_ecal(vtx,a) or ang_hcal(vtx,a):
-								oth_a+=1
-								h['eff_P1_oth'].Fill(track.GetP())			
-								h['eff_Pt1_oth'].Fill(track.GetPt())
-								h['eff_Eta1_oth'].Fill(track.GetRapidity())
-					if abs(track.GetPdgCode())==211 or abs(track.GetPdgCode())==321:
-						if track.GetPdgCode()<0: neg=1
-						if track.GetPdgCode()>0: pos=1
-					dp+=1
-					if abs(track.GetPdgCode())==221 or abs(track.GetPdgCode())==213 or abs(track.GetPdgCode())==223: vec.append(mc)
-					if isInFiducial(X,Y,Z):
-						dp_v+=1
-						h['eff_P0'].Fill(track.GetP())			
-						h['eff_Pt0'].Fill(track.GetPt())
-						h['eff_Eta0'].Fill(track.GetRapidity())
-						if ang_ecal(vtx,a) or ang_hcal(vtx,a) or ang_muon(vtx,a):
-							dp_a+=1
-							h['eff_P1'].Fill(track.GetP())			
-							h['eff_Pt1'].Fill(track.GetPt())
-							h['eff_Eta1'].Fill(track.GetRapidity())
+    neg,pos=0,0
+    dp, e,  mu, tau,    pi, ka, oth =0, 0, 0, 0, 0, 0, 0
+    dp_a,   e_a,    mu_a,   tau_a,  pi_a,   ka_a,   oth_a   =0, 0, 0, 0, 0, 0, 0
+    dp_v,   e_v,    mu_v,   tau_v,  pi_v,   ka_v,   oth_v   =0, 0, 0, 0, 0, 0, 0
+    rc=sTree.GetEntry(n)
+    had,vec=[],[]
+    mo=-99
+    Ang, E,P,M,S_y,S_x,T=[],[],[],[],[],[],[]
+    if pro=='meson': xsw = dputil.getDPprodRate(mass_mc,eps,'meson',sTree.MCTrack[0].GetPdgCode())
+    wg = sTree.MCTrack[1].GetWeight()
+    if abs(wg)<0.00000001: wg = wgnew(sTree.MCTrack[1])
+    for mc,track in enumerate(sTree.MCTrack):
+        """if track.GetMotherId()>0 and sTree.MCTrack[track.GetMotherId()].GetPdgCode()!=9900015 and sTree.MCTrack[track.GetMotherId()].GetPdgCode()!=4900023 and (track.GetPdgCode()==9900015 or track.GetPdgCode()==4900023):
+            mo=mc
+            print mo
+        if track.GetMotherId()==mo:"""
+        if track.GetMotherId()==1 and (sTree.MCTrack[1].GetPdgCode()==9900015 or sTree.MCTrack[1].GetPdgCode()==4900023):
+            if abs(track.GetPdgCode())==11 or abs(track.GetPdgCode())==13 or abs(track.GetPdgCode())==15:
+                dp+=1
+                h['eff_P'].Fill(track.GetP(),wg)            
+                h['eff_Pt'].Fill(track.GetPt(),wg)
+                h['eff_Eta'].Fill(track.GetRapidity(),wg)
+                X=track.GetStartX()
+                Y=track.GetStartY()
+                Z=track.GetStartZ()
+                Px=track.GetPx()
+                Py=track.GetPy()
+                Pz=track.GetPz()
+                P.append(track.GetP())
+                E.append(track.GetEnergy())
+                a=angle(track.GetP(),Px,Py,Pz)
+                T.append(track.GetStartT())
+                Ang.append(m.atan(track.GetPt()/Pz))
+                vtx=r.TVector3(X,Y,Z)
+                mom=r.TLorentzVector()
+                track.Get4Momentum(mom)
+                M.append(mom.M())
+                #print r.TMath.Sqrt(Px**2.+Py**2.+Pz**2.),r.TMath.Sqrt(mom.X()**2.+mom.Y()**2.+mom.Z()**2.)
+                S_x.append(a[0])
+                S_y.append(a[1])
+                if isInFiducial(X,Y,Z):
+                    dp_v+=1
+                    h['eff_P0'].Fill(track.GetP())          
+                    h['eff_Pt0'].Fill(track.GetPt())
+                    h['eff_Eta0'].Fill(track.GetRapidity())
+                    if ang_ecal(vtx,a) or ang_muon(vtx,a):
+                        dp_a+=1
+                        h['eff_P1'].Fill(track.GetP())          
+                        h['eff_Pt1'].Fill(track.GetPt())
+                        h['eff_Eta1'].Fill(track.GetRapidity())
+                if abs(track.GetPdgCode())==11:
+                    e+=1
+                    h['eff_P_e'].Fill(track.GetP(),wg)          
+                    h['eff_Pt_e'].Fill(track.GetPt(),wg)
+                    h['eff_Eta_e'].Fill(track.GetRapidity(),wg)
+                    if isInFiducial(X,Y,Z):
+                        e_v+=1
+                        h['eff_P0_e'].Fill(track.GetP())            
+                        h['eff_Pt0_e'].Fill(track.GetPt())
+                        h['eff_Eta0_e'].Fill(track.GetRapidity())
+                        if ang_ecal(vtx,a):
+                            e_a+=1
+                            h['eff_P1_e'].Fill(track.GetP())            
+                            h['eff_Pt1_e'].Fill(track.GetPt())
+                            h['eff_Eta1_e'].Fill(track.GetRapidity())
+                if abs(track.GetPdgCode())==13:
+                    mu+=1
+                    h['eff_P_mu'].Fill(track.GetP(),wg)         
+                    h['eff_Pt_mu'].Fill(track.GetPt(),wg)
+                    h['eff_Eta_mu'].Fill(track.GetRapidity(),wg)
+                    if isInFiducial(X,Y,Z):
+                        mu_v+=1
+                        h['eff_P0_mu'].Fill(track.GetP())           
+                        h['eff_Pt0_mu'].Fill(track.GetPt())
+                        h['eff_Eta0_mu'].Fill(track.GetRapidity())
+                        if ang_muon(vtx,a):
+                            mu_a+=1
+                            h['eff_P1_mu'].Fill(track.GetP())           
+                            h['eff_Pt1_mu'].Fill(track.GetPt())
+                            h['eff_Eta1_mu'].Fill(track.GetRapidity())
+                if abs(track.GetPdgCode())==15:#dont think that is the right way to do that
+                    tau+=1
+                    h['eff_P_tau'].Fill(track.GetP(),wg)            
+                    h['eff_Pt_tau'].Fill(track.GetPt(),wg)
+                    h['eff_Eta_tau'].Fill(track.GetRapidity(),wg)
+                    if isInFiducial(X,Y,Z):     
+                        tau_v+=1
+                        h['eff_P0_tau'].Fill(track.GetP())          
+                        h['eff_Pt0_tau'].Fill(track.GetPt())
+                        h['eff_Eta0_tau'].Fill(track.GetRapidity())
+                        if ang_ecal(vtx,a):
+                            tau_a+=1
+                            h['eff_P1_tau'].Fill(track.GetP())          
+                            h['eff_Pt1_tau'].Fill(track.GetPt())
+                            h['eff_Eta1_tau'].Fill(track.GetRapidity())
+
+        if track.GetMotherId()==1 and abs(track.GetPdgCode())<7:
+            had.append(mc)
+            #print track.GetPdgCode()
+            #if abs(track.GetPdgCode())>6: print track.GetPdgCode()#for testing else state
+        if dp != 2:
+            for daug in had:
+                X=track.GetStartX()
+                Y=track.GetStartY()
+                Z=track.GetStartZ()
+                Px=track.GetPx()
+                Py=track.GetPy()
+                Pz=track.GetPz()
+                vtx=r.TVector3(X,Y,Z)
+                mom=r.TLorentzVector()
+                track.Get4Momentum(mom)
+                if track.GetMotherId()==daug:
+                    P.append(track.GetP())
+                    E.append(track.GetEnergy())
+                    M.append(mom.M())
+                    Ang.append(m.atan(track.GetPt()/Pz))
+                    T.append(track.GetStartT())
+                    #print r.TMath.Sqrt(Px**2.+Py**2.+Pz**2.),r.TMath.Sqrt(mom.X()**2.+mom.Y()**2.+mom.Z()**2.)
+                    a=angle(track.GetP(),Px,Py,Pz)
+                    S_x.append(a[0])
+                    S_y.append(a[1])
+                    #print n,track.GetPdgCode()
+                    if abs(track.GetPdgCode())==211:
+                        pi+=1
+                        h['eff_P_pi'].Fill(track.GetP(),wg)         
+                        h['eff_Pt_pi'].Fill(track.GetPt(),wg)
+                        h['eff_Eta_pi'].Fill(track.GetRapidity(),wg)
+                        if isInFiducial(X,Y,Z):
+                            pi_v+=1
+                            h['eff_P0_pi'].Fill(track.GetP())           
+                            h['eff_Pt0_pi'].Fill(track.GetPt())
+                            h['eff_Eta0_pi'].Fill(track.GetRapidity())
+                            if ang_ecal(vtx,a):
+                                pi_a+=1
+                                h['eff_P1_pi'].Fill(track.GetP())           
+                                h['eff_Pt1_pi'].Fill(track.GetPt())
+                                h['eff_Eta1_pi'].Fill(track.GetRapidity())
+                    elif abs(track.GetPdgCode())==321:
+                        ka+=1
+                        h['eff_P_ka'].Fill(track.GetP(),wg)         
+                        h['eff_Pt_ka'].Fill(track.GetPt(),wg)
+                        h['eff_Eta_ka'].Fill(track.GetRapidity(),wg)
+                        if isInFiducial(X,Y,Z):
+                            ka_v+=1
+                            h['eff_P0_ka'].Fill(track.GetP())           
+                            h['eff_Pt0_ka'].Fill(track.GetPt())
+                            h['eff_Eta0_ka'].Fill(track.GetRapidity())
+                            if ang_ecal(vtx,a):
+                                ka_a+=1
+                                h['eff_P1_ka'].Fill(track.GetP())           
+                                h['eff_Pt1_ka'].Fill(track.GetPt())
+                                h['eff_Eta1_ka'].Fill(track.GetRapidity())
+                    else:
+                        #print n,track.GetPdgCode()
+                        oth+=1
+                        h['eff_P_oth'].Fill(track.GetP(),wg)            
+                        h['eff_Pt_oth'].Fill(track.GetPt(),wg)
+                        h['eff_Eta_oth'].Fill(track.GetRapidity(),wg)
+                        if isInFiducial(X,Y,Z):
+                            oth_v+=1
+                            h['eff_P0_oth'].Fill(track.GetP())          
+                            h['eff_Pt0_oth'].Fill(track.GetPt())
+                            h['eff_Eta0_oth'].Fill(track.GetRapidity())
+                            if ang_ecal(vtx,a) or ang_hcal(vtx,a):
+                                oth_a+=1
+                                h['eff_P1_oth'].Fill(track.GetP())          
+                                h['eff_Pt1_oth'].Fill(track.GetPt())
+                                h['eff_Eta1_oth'].Fill(track.GetRapidity())
+                    if abs(track.GetPdgCode())==211 or abs(track.GetPdgCode())==321:
+                        if track.GetPdgCode()<0: neg=1
+                        if track.GetPdgCode()>0: pos=1
+                    dp+=1
+                    if abs(track.GetPdgCode())==221 or abs(track.GetPdgCode())==213 or abs(track.GetPdgCode())==223: vec.append(mc)
+                    if isInFiducial(X,Y,Z):
+                        dp_v+=1
+                        h['eff_P0'].Fill(track.GetP())          
+                        h['eff_Pt0'].Fill(track.GetPt())
+                        h['eff_Eta0'].Fill(track.GetRapidity())
+                        if ang_ecal(vtx,a) or ang_hcal(vtx,a) or ang_muon(vtx,a):
+                            dp_a+=1
+                            h['eff_P1'].Fill(track.GetP())          
+                            h['eff_Pt1'].Fill(track.GetPt())
+                            h['eff_Eta1'].Fill(track.GetRapidity())
 
 
-	if dp==2:
-		mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
-		h['eff_Pw'].Fill(sTree.MCTrack[1].GetP(),wg)			
-		h['eff_Ptw'].Fill(sTree.MCTrack[1].GetPt(),wg)
-		h['eff_Etaw'].Fill(sTree.MCTrack[1].GetRapidity(),wg)
-		h['DP'].Fill(mass)
-		h['DPW'].Fill(mass,wg*xsw)
-		if e==2:  
-			h['DP_e'].Fill(mass)
-			h['DPW_e'].Fill(mass,wg*xsw)
-		if mu==2:
-			#print mass              
-			h['DP_mu'].Fill(mass)
-			h['DPW_mu'].Fill(mass,wg*xsw)
-		if tau==2:              
-			h['DP_tau'].Fill(mass)
-			h['DPW_tau'].Fill(mass,wg*xsw)
-		if pi==2:      
-			h['DP_pi'].Fill(mass)
-			h['DPW_pi'].Fill(mass,wg*xsw)
-		if ka==2:
-			h['DP_ka'].Fill(mass)		
-			h['DPW_ka'].Fill(mass,wg*xsw)
-		if oth==2:
-			h['DP_oth'].Fill(mass)		
-			h['DPW_oth'].Fill(mass,wg*xsw)
-		if oth==1:
-			h['DP_mix'].Fill(mass)		
-			h['DPW_mix'].Fill(mass,wg*xsw)
-	"""if dp==1:
-		h['DP_single'].Fill(mass_mc)		
-		h['DPW_single'].Fill(mass_mc,wg*xsw)
-	if dp_v==1:
-		h['DPves_single'].Fill(mass_mc)		
-		h['DPvesW_single'].Fill(mass_mc,wg*xsw)
-	if dp_a==1:
-		h['DPang_single'].Fill(mass_mc)		
-		h['DPangW_single'].Fill(mass_mc,wg*xsw)"""
+    if dp==2:
+        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1],T,Ang)
+        h['eff_Pw'].Fill(sTree.MCTrack[1].GetP(),wg)            
+        h['eff_Ptw'].Fill(sTree.MCTrack[1].GetPt(),wg)
+        h['eff_Etaw'].Fill(sTree.MCTrack[1].GetRapidity(),wg)
+        h['DP'].Fill(mass)
+        h['DPW'].Fill(mass,wg*xsw)
+        if e==2:  
+            h['DP_e'].Fill(mass)
+            h['DPW_e'].Fill(mass,wg*xsw)
+        if mu==2:
+            #print mass              
+            h['DP_mu'].Fill(mass)
+            h['DPW_mu'].Fill(mass,wg*xsw)
+        if tau==2:              
+            h['DP_tau'].Fill(mass)
+            h['DPW_tau'].Fill(mass,wg*xsw)
+        if pi==2:      
+            h['DP_pi'].Fill(mass)
+            h['DPW_pi'].Fill(mass,wg*xsw)
+        if ka==2:
+            h['DP_ka'].Fill(mass)       
+            h['DPW_ka'].Fill(mass,wg*xsw)
+        if oth==2:
+            h['DP_oth'].Fill(mass)      
+            h['DPW_oth'].Fill(mass,wg*xsw)
+        if oth==1:
+            h['DP_mix'].Fill(mass)      
+            h['DPW_mix'].Fill(mass,wg*xsw)
 
-	if dp==1 and oth==1:
-		h['DP_single'].Fill(mass_mc)		
-		h['DPW_single'].Fill(mass_mc,wg*xsw)
-	if dp_v==1 and oth_v==1:
-		h['DPves_single'].Fill(mass_mc)		
-		h['DPvesW_single'].Fill(mass_mc,wg*xsw)
-	if dp_a==1 and oth_a==1:
-		h['DPang_single'].Fill(mass_mc)		
-		h['DPangW_single'].Fill(mass_mc,wg*xsw)
+    if dp==1 and oth==1:
+        h['DP_single'].Fill(mass_mc)        
+        h['DPW_single'].Fill(mass_mc,wg*xsw)
+    if dp_v==1 and oth_v==1:
+        h['DPves_single'].Fill(mass_mc)     
+        h['DPvesW_single'].Fill(mass_mc,wg*xsw)
+    if dp_a==1 and oth_a==1:
+        h['DPang_single'].Fill(mass_mc)     
+        h['DPangW_single'].Fill(mass_mc,wg*xsw)
 
-	if dp_v==2:
-		mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
-		h['DPves'].Fill(mass)
-		h['DPvesW'].Fill(mass,wg*xsw)
-		h['eff_P0w'].Fill(sTree.MCTrack[1].GetP(),wg*xsw)			
-		h['eff_Pt0w'].Fill(sTree.MCTrack[1].GetPt(),wg*xsw)
-		h['eff_Eta0w'].Fill(sTree.MCTrack[1].GetRapidity(),wg*xsw)
-		if e_v==2:  
-			h['DPves_e'].Fill(mass)
-			h['DPvesW_e'].Fill(mass,wg*xsw)
-		if mu_v==2:              
-			h['DPves_mu'].Fill(mass)
-			h['DPvesW_mu'].Fill(mass,wg*xsw)
-		if tau_v==2:              
-			h['DPves_tau'].Fill(mass)
-			h['DPvesW_tau'].Fill(mass,wg*xsw)
-		if pi_v==2:             
-			h['DPves_pi'].Fill(mass)
-			h['DPvesW_pi'].Fill(mass,wg*xsw)
-		if ka_v==2:
-			h['DPves_ka'].Fill(mass)		
-			h['DPvesW_ka'].Fill(mass,wg*xsw)
-		if oth_v==2:
-			h['DPves_oth'].Fill(mass)		
-			h['DPvesW_oth'].Fill(mass,wg*xsw)
-		if oth_v==1:
-			h['DPves_mix'].Fill(mass)		
-			h['DPvesW_mix'].Fill(mass,wg*xsw)
+    if dp_v==2:
+        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1],T,Ang)
+        h['DPves'].Fill(mass)
+        h['DPvesW'].Fill(mass,wg*xsw)
+        h['eff_P0w'].Fill(sTree.MCTrack[1].GetP(),wg*xsw)           
+        h['eff_Pt0w'].Fill(sTree.MCTrack[1].GetPt(),wg*xsw)
+        h['eff_Eta0w'].Fill(sTree.MCTrack[1].GetRapidity(),wg*xsw)
+        if e_v==2:  
+            h['DPves_e'].Fill(mass)
+            h['DPvesW_e'].Fill(mass,wg*xsw)
+        if mu_v==2:              
+            h['DPves_mu'].Fill(mass)
+            h['DPvesW_mu'].Fill(mass,wg*xsw)
+        if tau_v==2:              
+            h['DPves_tau'].Fill(mass)
+            h['DPvesW_tau'].Fill(mass,wg*xsw)
+        if pi_v==2:             
+            h['DPves_pi'].Fill(mass)
+            h['DPvesW_pi'].Fill(mass,wg*xsw)
+        if ka_v==2:
+            h['DPves_ka'].Fill(mass)        
+            h['DPvesW_ka'].Fill(mass,wg*xsw)
+        if oth_v==2:
+            h['DPves_oth'].Fill(mass)       
+            h['DPvesW_oth'].Fill(mass,wg*xsw)
+        if oth_v==1:
+            h['DPves_mix'].Fill(mass)       
+            h['DPvesW_mix'].Fill(mass,wg*xsw)
 
-	if dp_a==2:
-		mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
-		h['DPang'].Fill(mass)
-		h['DPangW'].Fill(mass,wg*xsw)
-		h['eff_P1w'].Fill(sTree.MCTrack[1].GetP(),wg*xsw)			
-		h['eff_Pt1w'].Fill(sTree.MCTrack[1].GetPt(),wg*xsw)
-		h['eff_Eta1w'].Fill(sTree.MCTrack[1].GetRapidity(),wg*xsw)
-		if e_a==2:  
-			h['DPang_e'].Fill(mass)
-			h['DPangW_e'].Fill(mass,wg*xsw)
-		if mu_a==2:              
-			h['DPang_mu'].Fill(mass)
-			h['DPangW_mu'].Fill(mass,wg*xsw)
-		if tau_a==2:              
-			h['DPang_tau'].Fill(mass)
-			h['DPangW_tau'].Fill(mass,wg*xsw)
-		if pi_a==2:              
-			h['DPang_pi'].Fill(mass)
-			h['DPangW_pi'].Fill(mass,wg*xsw)
-		if ka_a==2:
-			h['DPang_ka'].Fill(mass)		
-			h['DPangW_ka'].Fill(mass,wg*xsw)
-		if oth_a==2:
-			h['DPang_oth'].Fill(mass)		
-			h['DPangW_oth'].Fill(mass,wg*xsw)
-		if oth_a==1:
-			h['DPang_mix'].Fill(mass)		
-			h['DPangW_mix'].Fill(mass,wg*xsw)
+    if dp_a==2:
+        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1],T,Ang)
+        h['DPang'].Fill(mass)
+        h['DPangW'].Fill(mass,wg*xsw)
+        h['eff_P1w'].Fill(sTree.MCTrack[1].GetP(),wg*xsw)           
+        h['eff_Pt1w'].Fill(sTree.MCTrack[1].GetPt(),wg*xsw)
+        h['eff_Eta1w'].Fill(sTree.MCTrack[1].GetRapidity(),wg*xsw)
+        if e_a==2:  
+            h['DPang_e'].Fill(mass)
+            h['DPangW_e'].Fill(mass,wg*xsw)
+        if mu_a==2:              
+            h['DPang_mu'].Fill(mass)
+            h['DPangW_mu'].Fill(mass,wg*xsw)
+        if tau_a==2:              
+            h['DPang_tau'].Fill(mass)
+            h['DPangW_tau'].Fill(mass,wg*xsw)
+        if pi_a==2:              
+            h['DPang_pi'].Fill(mass)
+            h['DPangW_pi'].Fill(mass,wg*xsw)
+        if ka_a==2:
+            h['DPang_ka'].Fill(mass)        
+            h['DPangW_ka'].Fill(mass,wg*xsw)
+        if oth_a==2:
+            h['DPang_oth'].Fill(mass)       
+            h['DPangW_oth'].Fill(mass,wg*xsw)
+        if oth_a==1:
+            h['DPang_mix'].Fill(mass)       
+            h['DPangW_mix'].Fill(mass,wg*xsw)
 
 
 nEvents =sTree.GetEntries()
 print nEvents
 for n in range(nEvents):
-	if not pro=='meson': xsw = dputil.getDPprodRate(mass_mc,eps,pro,0)
-	myEventLoop(n,xsw)
+    if not pro=='meson': xsw = dputil.getDPprodRate(mass_mc,eps,pro,0)
+    myEventLoop(n,xsw)
 
 o1 = tmp1+"_rec.dat"
 o2 = tmp1+"_e.dat"
@@ -705,37 +710,37 @@ if float(h['DPvesW_oth'].Integral())!=0: Acc_oth=float(h['DPangW_oth'].Integral(
 if float(h['DPvesW_mix'].Integral())!=0: Acc_mix=float(h['DPangW_mix'].Integral())/float(h['DPvesW_mix'].Integral())
 
 if float(h['DPves'].Integral())!=0: 
-	RecW=float(h['DPangW'].Integral())/float(h['DPves'].Integral())*2e20
-	a.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW, RecW, Acc)) 
-	a.write('\n')
+    RecW=float(h['DPangW'].Integral())/float(h['DPves'].Integral())*2e20
+    a.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW, RecW, Acc)) 
+    a.write('\n')
 if float(h['DPves_e'].Integral())!=0:
-	RecW_e=float(h['DPangW_e'].Integral())/float(h['DPves_e'].Integral())*2e20
-	b.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_e, RecW_e, Acc_e))
-	b.write('\n')
+    RecW_e=float(h['DPangW_e'].Integral())/float(h['DPves_e'].Integral())*2e20
+    b.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_e, RecW_e, Acc_e))
+    b.write('\n')
 if float(h['DPves_mu'].Integral())!=0:
-	RecW_mu=float(h['DPangW_mu'].Integral())/float(h['DPves_mu'].Integral())*2e20
-	c.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_mu, RecW_mu, Acc_mu))
-	c.write('\n')
+    RecW_mu=float(h['DPangW_mu'].Integral())/float(h['DPves_mu'].Integral())*2e20
+    c.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_mu, RecW_mu, Acc_mu))
+    c.write('\n')
 if float(h['DPves_tau'].Integral())!=0:
-	RecW_tau=float(h['DPangW_tau'].Integral())/float(h['DPves_tau'].Integral())*2e20
-	t.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_tau, RecW_tau, Acc_tau))
-	t.write('\n')
+    RecW_tau=float(h['DPangW_tau'].Integral())/float(h['DPves_tau'].Integral())*2e20
+    t.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_tau, RecW_tau, Acc_tau))
+    t.write('\n')
 if float(h['DPves_pi'].Integral())!=0:
-	RecW_pi=float(h['DPangW_pi'].Integral())/float(h['DPves_pi'].Integral())*2e20
-	d.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_pi, RecW_pi, Acc_pi))
-	d.write('\n')
+    RecW_pi=float(h['DPangW_pi'].Integral())/float(h['DPves_pi'].Integral())*2e20
+    d.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_pi, RecW_pi, Acc_pi))
+    d.write('\n')
 if float(h['DPves_ka'].Integral())!=0:
-	RecW_ka=float(h['DPangW_ka'].Integral())/float(h['DPves_ka'].Integral())*2e20
-	e.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_ka, RecW_ka, Acc_ka)) 
-	e.write('\n')
+    RecW_ka=float(h['DPangW_ka'].Integral())/float(h['DPves_ka'].Integral())*2e20
+    e.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_ka, RecW_ka, Acc_ka)) 
+    e.write('\n')
 if float(h['DPves_oth'].Integral())!=0:
-	RecW_oth=float(h['DPangW_oth'].Integral())/float(h['DPves_oth'].Integral())*2e20
-	f.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_oth, RecW_oth, Acc_oth))
-	f.write('\n')
+    RecW_oth=float(h['DPangW_oth'].Integral())/float(h['DPves_oth'].Integral())*2e20
+    f.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_oth, RecW_oth, Acc_oth))
+    f.write('\n')
 if float(h['DPves_mix'].Integral())!=0:
-	RecW_mix=float(h['DPangW_mix'].Integral())/float(h['DPves_mix'].Integral())*2e20
-	g.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_mix, RecW_mix, Acc_mix))
-	g.write('\n')
+    RecW_mix=float(h['DPangW_mix'].Integral())/float(h['DPves_mix'].Integral())*2e20
+    g.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_mix, RecW_mix, Acc_mix))
+    g.write('\n')
 
 
 a1.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DP'].Integral()), float(h['DPves'].Integral()), float(h['DPang'].Integral())))
@@ -896,5 +901,6 @@ h['eff_Eta2_mix'].SetTitle("PseudoRapidity ;#eta;Eff.")
 
 r.gStyle.SetOptStat(0)
 hfile =tmp1+"_ana.root"
+print hfile
 r.gROOT.cd()#gr.
 ut.writeHists(h,hfile)
