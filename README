@@ -1,12 +1,11 @@
 ***Things are in progress**
 ->A macro for
-  *merge the outputs of the analysis (by cat *.dat...)
   *run plotSensitivity.C with these files, then takes its output;
   *square the epsilons it then save it with .csv extension
   *save into nico's plot
 ->getting more rates with more smooth lines
 ->line interpolation(masses may help)
-->superimpose the followings; efficiencies(for ploting vs mass), and efficiencies from kinematics(i.e eta,pt,p)
+->superimpose the followings; efficiencies(for ploting vs mass),(i.e eta,pt,p)
 ->Ofc apply them for also meson and pbrem...
 
  * To send the job for production and true analysis only for qcd:
