@@ -358,12 +358,14 @@ def angle(P,Px,Py,Pz):
     mom=P
     a_x=m.tan(m_x/mom)
     a_y=m.tan(m_y/mom)
-    return a_x,a_y
+    theta=m.atan(r.TMath.Sqrt(m_x**2.+m_y**2.)/m_z)
+    return a_x,a_y,theta
 
 def invariant(S_x,S_y,e_0,e_1,p_0,p_1,T,Ang):
     #def invariant(S_x,S_y,m_0,m_1,p_0,p_1):
     th=r.TMath.Sqrt((S_x[0]-S_x[1])**2.+(S_y[0]-S_y[1])**2.)
     #th=r.TMath.Sqrt(S_x[0]**2.+S_y[0]**2.)+r.TMath.Sqrt(S_x[1]**2.+S_y[1]**2.)
+    #th=abs(Ang[0]-Ang[1])
     #print T[0]+T[1],Ang[0]+Ang[1]
     #th=abs(Ang[0]-Ang[1])
     #e_0=m_0**2.+p_0**2.
@@ -404,7 +406,7 @@ def myEventLoop(n,xsw):
                 E.append(track.GetEnergy())
                 a=angle(track.GetP(),Px,Py,Pz)
                 T.append(track.GetStartT())
-                Ang.append(m.atan(track.GetPt()/Pz))
+                Ang.append(a[2])
                 vtx=r.TVector3(X,Y,Z)
                 mom=r.TLorentzVector()
                 track.Get4Momentum(mom)
@@ -487,12 +489,13 @@ def myEventLoop(n,xsw):
                     P.append(track.GetP())
                     E.append(track.GetEnergy())
                     M.append(mom.M())
-                    Ang.append(m.atan(track.GetPt()/Pz))
+                    #Ang.append(m.atan(track.GetPt()/Pz))
                     T.append(track.GetStartT())
                     #print r.TMath.Sqrt(Px**2.+Py**2.+Pz**2.),r.TMath.Sqrt(mom.X()**2.+mom.Y()**2.+mom.Z()**2.)
                     a=angle(track.GetP(),Px,Py,Pz)
                     S_x.append(a[0])
                     S_y.append(a[1])
+                    Ang.append(a[2])
                     #print n,track.GetPdgCode()
                     if abs(track.GetPdgCode())==211:
                         pi+=1
@@ -662,7 +665,7 @@ for n in range(nEvents):
     if not pro=='meson': xsw = dputil.getDPprodRate(mass_mc,eps,pro,0)
     myEventLoop(n,xsw)
 
-o1 = tmp1+"_rec.dat"
+o1 = tmp1+"_true.dat"
 o2 = tmp1+"_e.dat"
 o3 = tmp1+"_mu.dat"
 o4 = tmp1+"_pi.dat"
@@ -681,15 +684,15 @@ g=open(o7,'w+')
 t=open(o8,'w+')
 #s=open(o9,w+)
 
-o11 = tmp1+"_table_rec.dat"
-o12 = tmp1+"_table_e.dat"
-o13 = tmp1+"_table_mu.dat"
-o14 = tmp1+"_table_pi.dat"
-o15 = tmp1+"_table_ka.dat"
-o16 = tmp1+"_table_oth.dat"
-o17 = tmp1+"_table_mix.dat"
-o18 = tmp1+"_table_tau.dat"
-o19 = tmp1+"_table_single.dat"
+o11 = tmp1+"_true_table.dat"
+o12 = tmp1+"_e_table.dat"
+o13 = tmp1+"_mu_table.dat"
+o14 = tmp1+"_pi_table.dat"
+o15 = tmp1+"_ka_table.dat"
+o16 = tmp1+"_oth_table.dat"
+o17 = tmp1+"_mix_table.dat"
+o18 = tmp1+"_tau_table.dat"
+o19 = tmp1+"_single_table.dat"
 a1=open(o11,'w+')
 b1=open(o12,'w+')
 c1=open(o13,'w+')
