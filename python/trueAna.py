@@ -80,69 +80,84 @@ fM.init(bfield)
 
 h={}
 
-ut.bookHist(h,'DP','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPW','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPves','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPvesW','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPang','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPangW','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
+ut.bookHist(h,'DP','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPves','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPang','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
 
-ut.bookHist(h,'DP_e','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPW_e','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DP_mu','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPW_tau','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DP_tau','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPW_mu','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DP_pi','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPW_pi','invariant Mass (GeV) with Weight',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DP_ka','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPW_ka','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DP_tau','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPW_tau','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DP_oth','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPW_oth','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DP_mix','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPW_mix','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DP_single','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPW_single','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
+ut.bookHist(h,'DP_e','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW_e','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DP_mu','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW_tau','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DP_tau','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW_mu','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DP_pi','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW_pi','invariant Mass (GeV) with Weight',50,0.,mass_mc+1.)
+ut.bookHist(h,'DP_ka','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW_ka','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DP_oth','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW_oth','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DP_mix','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW_mix','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DP_single','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW_single','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
 
-ut.bookHist(h,'DPang_e','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPangW_e','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPang_mu','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPangW_tau','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPang_tau','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPangW_mu','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPang_pi','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPangW_pi','invariant Mass (GeV) with Weight',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPang_ka','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPangW_ka','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPang_tau','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPangW_tau','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPang_oth','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPangW_oth','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPang_mix','invariant Mass(GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPangW_mix','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPang_single','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPangW_single','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
+ut.bookHist(h,'DPang_e','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW_e','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPang_mu','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW_tau','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPang_tau','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW_mu','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPang_pi','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW_pi','invariant Mass (GeV) with Weight',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPang_ka','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW_ka','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPang_oth','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW_oth','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPang_mix','invariant Mass(GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW_mix','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPang_single','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW_single','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
 
-ut.bookHist(h,'DPves_e','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPvesW_e','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPves_mu','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPvesW_tau','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPves_tau','invariant Mass (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPvesW_mu','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPves_pi','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPvesW_pi','invariant Mass (GeV) with Weight',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPves_ka','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPvesW_ka','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPves_tau','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPvesW_tau','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPves_oth','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPvesW_oth','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPves_mix','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPvesW_mix','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPves_single','invariant Mass',50,mass_mc-1.,mass_mc+1.)
-ut.bookHist(h,'DPvesW_single','invariant Mass with Weights (GeV)',50,mass_mc-1.,mass_mc+1.)
+ut.bookHist(h,'DPves_e','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW_e','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPves_mu','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW_tau','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPves_tau','invariant Mass (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW_mu','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPves_pi','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW_pi','invariant Mass (GeV) with Weight',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPves_ka','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW_ka','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPves_oth','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW_oth','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPves_mix','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW_mix','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPves_single','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW_single','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+
+ut.bookHist(h,'DP2_pi','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW2_pi','invariant Mass (GeV) with Weight',50,0.,mass_mc+1.)
+ut.bookHist(h,'DP2_ka','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW2_ka','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DP2_oth','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPW2_oth','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+
+ut.bookHist(h,'DPves2_pi','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW2_pi','invariant Mass (GeV) with Weight',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPves2_ka','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW2_ka','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPves2_oth','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPvesW2_oth','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+
+ut.bookHist(h,'DPang2_pi','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW2_pi','invariant Mass (GeV) with Weight',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPang2_ka','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW2_ka','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPang2_oth','invariant Mass',50,0.,mass_mc+1.)
+ut.bookHist(h,'DPangW2_oth','invariant Mass with Weights (GeV)',50,0.,mass_mc+1.)
 
 ut.bookHist(h,'eff_P','',50,0.,250.)
 ut.bookHist(h,'eff_Pt','',50,0.,8.)
@@ -361,69 +376,56 @@ def angle(P,Px,Py,Pz):
     theta=m.atan(r.TMath.Sqrt(m_x**2.+m_y**2.)/m_z)
     return a_x,a_y,theta
 
-def invariant(S_x,S_y,e_0,e_1,p_0,p_1,T,Ang):
-    #def invariant(S_x,S_y,m_0,m_1,p_0,p_1):
+def invariant(S_x,S_y,e_0,e_1,p_0,p_1):
     th=r.TMath.Sqrt((S_x[0]-S_x[1])**2.+(S_y[0]-S_y[1])**2.)
-    #th=r.TMath.Sqrt(S_x[0]**2.+S_y[0]**2.)+r.TMath.Sqrt(S_x[1]**2.+S_y[1]**2.)
-    #th=abs(Ang[0]-Ang[1])
-    #print T[0]+T[1],Ang[0]+Ang[1]
-    #th=abs(Ang[0]-Ang[1])
-    #e_0=m_0**2.+p_0**2.
-    #e_1=m_1**2.+p_1**2.
-    #return r.TMath.Sqrt(m_0**2.+m_1**2.+2.*(e_0*e_1-p_0*p_1*m.cos(th)))
     return r.TMath.Sqrt((e_0+e_1)**2.-(p_0**2.+p_1**2.+2.*p_0*p_1*m.cos(th)))
 
 def myEventLoop(n,xsw):
     neg,pos=0,0
-    dp, e,  mu, tau,    pi, ka, oth =0, 0, 0, 0, 0, 0, 0
+    dp,     e,      mu,     tau,    pi,     ka,     oth     =0, 0, 0, 0, 0, 0, 0
     dp_a,   e_a,    mu_a,   tau_a,  pi_a,   ka_a,   oth_a   =0, 0, 0, 0, 0, 0, 0
     dp_v,   e_v,    mu_v,   tau_v,  pi_v,   ka_v,   oth_v   =0, 0, 0, 0, 0, 0, 0
     rc=sTree.GetEntry(n)
     had,vec=[],[]
     mo=-99
-    Ang, E,P,M,S_y,S_x,T=[],[],[],[],[],[],[]
-    if pro=='meson': xsw = dputil.getDPprodRate(mass_mc,eps,'meson',sTree.MCTrack[0].GetPdgCode())
+    moth_q=0
+    E,P,M,S_y,S_x=[],[],[],[],[]
+    #if pro=='meson': xsw = dputil.getDPprodRate(mass_mc,eps,'meson',sTree.MCTrack[0].GetPdgCode())
     wg = sTree.MCTrack[1].GetWeight()
-    if abs(wg)<0.00000001: wg = wgnew(sTree.MCTrack[1])
+    #if abs(wg)<0.00000001: wg = wgnew(sTree.MCTrack[1])
     for mc,track in enumerate(sTree.MCTrack):
-        """if track.GetMotherId()>0 and sTree.MCTrack[track.GetMotherId()].GetPdgCode()!=9900015 and sTree.MCTrack[track.GetMotherId()].GetPdgCode()!=4900023 and (track.GetPdgCode()==9900015 or track.GetPdgCode()==4900023):
-            mo=mc
-            print mo
-        if track.GetMotherId()==mo:"""
         if track.GetMotherId()==1 and (sTree.MCTrack[1].GetPdgCode()==9900015 or sTree.MCTrack[1].GetPdgCode()==4900023):
+            h['eff_P'].Fill(track.GetP(),wg)            
+            h['eff_Pt'].Fill(track.GetPt(),wg)
+            h['eff_Eta'].Fill(track.GetRapidity(),wg)
+            X=track.GetStartX()
+            Y=track.GetStartY()
+            Z=track.GetStartZ()
+            Px=track.GetPx()
+            Py=track.GetPy()
+            Pz=track.GetPz()
+            P.append(track.GetP())
+            E.append(track.GetEnergy())
+            a=angle(track.GetP(),Px,Py,Pz)
+            vtx=r.TVector3(X,Y,Z)
+            mom=r.TLorentzVector()
+            track.Get4Momentum(mom)
+            M.append(mom.M())
+            #print r.TMath.Sqrt(Px**2.+Py**2.+Pz**2.),r.TMath.Sqrt(mom.X()**2.+mom.Y()**2.+mom.Z()**2.)
+            S_x.append(a[0])
+            S_y.append(a[1])
+            dp+=1
+            if isInFiducial(X,Y,Z):
+                dp_v+=1
+                h['eff_P0'].Fill(track.GetP())          
+                h['eff_Pt0'].Fill(track.GetPt())
+                h['eff_Eta0'].Fill(track.GetRapidity())
+                if ang_ecal(vtx,a) or ang_muon(vtx,a) or ang_hcal(vtx,a):#bit problematic for hadrons because of the quarks are the first daughters
+                    dp_a+=1
+                    h['eff_P1'].Fill(track.GetP())          
+                    h['eff_Pt1'].Fill(track.GetPt())
+                    h['eff_Eta1'].Fill(track.GetRapidity())
             if abs(track.GetPdgCode())==11 or abs(track.GetPdgCode())==13 or abs(track.GetPdgCode())==15:
-                dp+=1
-                h['eff_P'].Fill(track.GetP(),wg)            
-                h['eff_Pt'].Fill(track.GetPt(),wg)
-                h['eff_Eta'].Fill(track.GetRapidity(),wg)
-                X=track.GetStartX()
-                Y=track.GetStartY()
-                Z=track.GetStartZ()
-                Px=track.GetPx()
-                Py=track.GetPy()
-                Pz=track.GetPz()
-                P.append(track.GetP())
-                E.append(track.GetEnergy())
-                a=angle(track.GetP(),Px,Py,Pz)
-                T.append(track.GetStartT())
-                Ang.append(a[2])
-                vtx=r.TVector3(X,Y,Z)
-                mom=r.TLorentzVector()
-                track.Get4Momentum(mom)
-                M.append(mom.M())
-                #print r.TMath.Sqrt(Px**2.+Py**2.+Pz**2.),r.TMath.Sqrt(mom.X()**2.+mom.Y()**2.+mom.Z()**2.)
-                S_x.append(a[0])
-                S_y.append(a[1])
-                if isInFiducial(X,Y,Z):
-                    dp_v+=1
-                    h['eff_P0'].Fill(track.GetP())          
-                    h['eff_Pt0'].Fill(track.GetPt())
-                    h['eff_Eta0'].Fill(track.GetRapidity())
-                    if ang_ecal(vtx,a) or ang_muon(vtx,a):
-                        dp_a+=1
-                        h['eff_P1'].Fill(track.GetP())          
-                        h['eff_Pt1'].Fill(track.GetPt())
-                        h['eff_Eta1'].Fill(track.GetRapidity())
                 if abs(track.GetPdgCode())==11:
                     e+=1
                     h['eff_P_e'].Fill(track.GetP(),wg)          
@@ -472,33 +474,31 @@ def myEventLoop(n,xsw):
 
         if track.GetMotherId()==1 and abs(track.GetPdgCode())<7:
             had.append(mc)
+            #mo=1
             #print track.GetPdgCode()
             #if abs(track.GetPdgCode())>6: print track.GetPdgCode()#for testing else state
-        if dp != 2:
+        if moth_q<4:
             for daug in had:
-                X=track.GetStartX()
-                Y=track.GetStartY()
-                Z=track.GetStartZ()
-                Px=track.GetPx()
-                Py=track.GetPy()
-                Pz=track.GetPz()
-                vtx=r.TVector3(X,Y,Z)
-                mom=r.TLorentzVector()
-                track.Get4Momentum(mom)
+                #mo=0
                 if track.GetMotherId()==daug:
-                    P.append(track.GetP())
-                    E.append(track.GetEnergy())
-                    M.append(mom.M())
-                    #Ang.append(m.atan(track.GetPt()/Pz))
-                    T.append(track.GetStartT())
-                    #print r.TMath.Sqrt(Px**2.+Py**2.+Pz**2.),r.TMath.Sqrt(mom.X()**2.+mom.Y()**2.+mom.Z()**2.)
-                    a=angle(track.GetP(),Px,Py,Pz)
-                    S_x.append(a[0])
-                    S_y.append(a[1])
-                    Ang.append(a[2])
-                    #print n,track.GetPdgCode()
+                    moth_q+=1
+                    X=track.GetStartX()
+                    Y=track.GetStartY()
+                    Z=track.GetStartZ()
+                    Px=track.GetPx()
+                    Py=track.GetPy()
+                    Pz=track.GetPz()
+                    vtx=r.TVector3(X,Y,Z)
+                    mom=r.TLorentzVector()
+                    track.Get4Momentum(mom)
                     if abs(track.GetPdgCode())==211:
                         pi+=1
+                        P.append(track.GetP())
+                        E.append(track.GetEnergy())
+                        M.append(mom.M())
+                        a=angle(track.GetP(),Px,Py,Pz)
+                        S_x.append(a[0])
+                        S_y.append(a[1])
                         h['eff_P_pi'].Fill(track.GetP(),wg)         
                         h['eff_Pt_pi'].Fill(track.GetPt(),wg)
                         h['eff_Eta_pi'].Fill(track.GetRapidity(),wg)
@@ -514,6 +514,12 @@ def myEventLoop(n,xsw):
                                 h['eff_Eta1_pi'].Fill(track.GetRapidity())
                     elif abs(track.GetPdgCode())==321:
                         ka+=1
+                        P.append(track.GetP())
+                        E.append(track.GetEnergy())
+                        M.append(mom.M())
+                        a=angle(track.GetP(),Px,Py,Pz)
+                        S_x.append(a[0])
+                        S_y.append(a[1])
                         h['eff_P_ka'].Fill(track.GetP(),wg)         
                         h['eff_Pt_ka'].Fill(track.GetPt(),wg)
                         h['eff_Eta_ka'].Fill(track.GetRapidity(),wg)
@@ -530,9 +536,17 @@ def myEventLoop(n,xsw):
                     else:
                         #print n,track.GetPdgCode()
                         oth+=1
+                        P.append(track.GetP())
+                        E.append(track.GetEnergy())
+                        M.append(mom.M())
+                        a=angle(track.GetP(),Px,Py,Pz)
+                        S_x.append(a[0])
+                        S_y.append(a[1])
                         h['eff_P_oth'].Fill(track.GetP(),wg)            
                         h['eff_Pt_oth'].Fill(track.GetPt(),wg)
                         h['eff_Eta_oth'].Fill(track.GetRapidity(),wg)
+                        vec.append(track.GetPdgCode())
+                        #if abs(track.GetPdgCode())==11: print n,track.GetPdgCode()
                         if isInFiducial(X,Y,Z):
                             oth_v+=1
                             h['eff_P0_oth'].Fill(track.GetP())          
@@ -543,121 +557,137 @@ def myEventLoop(n,xsw):
                                 h['eff_P1_oth'].Fill(track.GetP())          
                                 h['eff_Pt1_oth'].Fill(track.GetPt())
                                 h['eff_Eta1_oth'].Fill(track.GetRapidity())
-                    if abs(track.GetPdgCode())==211 or abs(track.GetPdgCode())==321:
-                        if track.GetPdgCode()<0: neg=1
-                        if track.GetPdgCode()>0: pos=1
-                    dp+=1
-                    if abs(track.GetPdgCode())==221 or abs(track.GetPdgCode())==213 or abs(track.GetPdgCode())==223: vec.append(mc)
-                    if isInFiducial(X,Y,Z):
-                        dp_v+=1
-                        h['eff_P0'].Fill(track.GetP())          
-                        h['eff_Pt0'].Fill(track.GetPt())
-                        h['eff_Eta0'].Fill(track.GetRapidity())
-                        if ang_ecal(vtx,a) or ang_hcal(vtx,a) or ang_muon(vtx,a):
-                            dp_a+=1
-                            h['eff_P1'].Fill(track.GetP())          
-                            h['eff_Pt1'].Fill(track.GetPt())
-                            h['eff_Eta1'].Fill(track.GetRapidity())
-
+        
+    if e==2:  
+        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
+        h['DP_e'].Fill(mass)
+        h['DPW_e'].Fill(mass,wg*xsw)
+        if e_v==2:  
+            h['DPves_e'].Fill(mass)
+            h['DPvesW_e'].Fill(mass,wg*xsw)
+            if e_a==2:
+                h['DPang_e'].Fill(mass)
+                h['DPangW_e'].Fill(mass,wg*xsw)
+    elif mu==2:
+        #print mass
+        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
+        h['DP_mu'].Fill(mass)
+        h['DPW_mu'].Fill(mass,wg*xsw)
+        if mu_v==2:
+            h['DPves_mu'].Fill(mass)
+            h['DPvesW_mu'].Fill(mass,wg*xsw)
+            if mu_a==2:
+                h['DPang_mu'].Fill(mass)
+                h['DPangW_mu'].Fill(mass,wg*xsw)
+    elif tau==2:
+        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
+        h['DP_tau'].Fill(mass)
+        h['DPW_tau'].Fill(mass,wg*xsw)
+        if tau_v==2:
+            h['DPves_tau'].Fill(mass)
+            h['DPvesW_tau'].Fill(mass,wg*xsw)
+            if tau_a==2:
+                h['DPang_tau'].Fill(mass)
+                h['DPangW_tau'].Fill(mass,wg*xsw)
+    elif ka==0 and oth==0 and pi==2:
+        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
+        h['DP_pi'].Fill(mass)
+        h['DPW_pi'].Fill(mass,wg*xsw)
+        if pi_v==2:
+            h['DPves_pi'].Fill(mass)
+            h['DPvesW_pi'].Fill(mass,wg*xsw)
+            if pi_a==2:
+                h['DPang_pi'].Fill(mass)
+                h['DPangW_pi'].Fill(mass,wg*xsw)
+    elif oth==0 and pi==0 and ka==2:
+        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
+        h['DP_ka'].Fill(mass)       
+        h['DPW_ka'].Fill(mass,wg*xsw)
+        if ka_v==2:
+            h['DPves_ka'].Fill(mass)        
+            h['DPvesW_ka'].Fill(mass,wg*xsw)
+            if ka_a==2:
+                h['DPang_ka'].Fill(mass)        
+                h['DPangW_ka'].Fill(mass,wg*xsw)
+    elif oth==2 and pi==0 and ka==0:
+        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
+        if abs(vec[0])==abs(vec[1]):
+            h['DP_oth'].Fill(mass)       
+            h['DPW_oth'].Fill(mass,wg*xsw)
+        else:
+            h['DP_mix'].Fill(mass)       
+            h['DPW_mix'].Fill(mass,wg*xsw)
+        if oth_v==2: 
+            if abs(vec[0])==abs(vec[1]):
+                h['DPves_oth'].Fill(mass)       
+                h['DPvesW_oth'].Fill(mass,wg*xsw)
+            else:
+                h['DPves_mix'].Fill(mass)       
+                h['DPvesW_mix'].Fill(mass,wg*xsw)
+            if oth_a==2:
+                if abs(vec[0])==abs(vec[1]):
+                    h['DPang_oth'].Fill(mass)       
+                    h['DPangW_oth'].Fill(mass,wg*xsw)
+                else:
+                    h['DPang_mix'].Fill(mass)       
+                    h['DPangW_mix'].Fill(mass,wg*xsw)
+    else:
+        print n,pi,ka,oth
+        h['DP_single'].Fill(mass_mc)        
+        h['DPW_single'].Fill(mass_mc,wg*xsw)
+        if pi_v==4:
+            h['DPves_single'].Fill(mass_mc)     
+            h['DPvesW_single'].Fill(mass_mc,wg*xsw)    
+            if pi_a==4:
+                h['DPang_single'].Fill(mass_mc)     
+                h['DPangW_single'].Fill(mass_mc,wg*xsw)
 
     if dp==2:
-        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1],T,Ang)
+        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
         h['eff_Pw'].Fill(sTree.MCTrack[1].GetP(),wg)            
         h['eff_Ptw'].Fill(sTree.MCTrack[1].GetPt(),wg)
         h['eff_Etaw'].Fill(sTree.MCTrack[1].GetRapidity(),wg)
         h['DP'].Fill(mass)
         h['DPW'].Fill(mass,wg*xsw)
-        if e==2:  
-            h['DP_e'].Fill(mass)
-            h['DPW_e'].Fill(mass,wg*xsw)
-        if mu==2:
-            #print mass              
-            h['DP_mu'].Fill(mass)
-            h['DPW_mu'].Fill(mass,wg*xsw)
-        if tau==2:              
-            h['DP_tau'].Fill(mass)
-            h['DPW_tau'].Fill(mass,wg*xsw)
-        if pi==2:      
-            h['DP_pi'].Fill(mass)
-            h['DPW_pi'].Fill(mass,wg*xsw)
-        if ka==2:
-            h['DP_ka'].Fill(mass)       
-            h['DPW_ka'].Fill(mass,wg*xsw)
-        if oth==2:
-            h['DP_oth'].Fill(mass)      
-            h['DPW_oth'].Fill(mass,wg*xsw)
-        if oth==1:
-            h['DP_mix'].Fill(mass)      
-            h['DPW_mix'].Fill(mass,wg*xsw)
-
-    if dp==1 and oth==1:
-        h['DP_single'].Fill(mass_mc)        
-        h['DPW_single'].Fill(mass_mc,wg*xsw)
-    if dp_v==1 and oth_v==1:
-        h['DPves_single'].Fill(mass_mc)     
-        h['DPvesW_single'].Fill(mass_mc,wg*xsw)
-    if dp_a==1 and oth_a==1:
-        h['DPang_single'].Fill(mass_mc)     
-        h['DPangW_single'].Fill(mass_mc,wg*xsw)
-
-    if dp_v==2:
-        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1],T,Ang)
-        h['DPves'].Fill(mass)
-        h['DPvesW'].Fill(mass,wg*xsw)
-        h['eff_P0w'].Fill(sTree.MCTrack[1].GetP(),wg*xsw)           
-        h['eff_Pt0w'].Fill(sTree.MCTrack[1].GetPt(),wg*xsw)
-        h['eff_Eta0w'].Fill(sTree.MCTrack[1].GetRapidity(),wg*xsw)
-        if e_v==2:  
-            h['DPves_e'].Fill(mass)
-            h['DPvesW_e'].Fill(mass,wg*xsw)
-        if mu_v==2:              
-            h['DPves_mu'].Fill(mass)
-            h['DPvesW_mu'].Fill(mass,wg*xsw)
-        if tau_v==2:              
-            h['DPves_tau'].Fill(mass)
-            h['DPvesW_tau'].Fill(mass,wg*xsw)
-        if pi_v==2:             
-            h['DPves_pi'].Fill(mass)
-            h['DPvesW_pi'].Fill(mass,wg*xsw)
-        if ka_v==2:
-            h['DPves_ka'].Fill(mass)        
-            h['DPvesW_ka'].Fill(mass,wg*xsw)
-        if oth_v==2:
-            h['DPves_oth'].Fill(mass)       
-            h['DPvesW_oth'].Fill(mass,wg*xsw)
-        if oth_v==1:
-            h['DPves_mix'].Fill(mass)       
-            h['DPvesW_mix'].Fill(mass,wg*xsw)
-
-    if dp_a==2:
-        mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1],T,Ang)
-        h['DPang'].Fill(mass)
-        h['DPangW'].Fill(mass,wg*xsw)
-        h['eff_P1w'].Fill(sTree.MCTrack[1].GetP(),wg*xsw)           
-        h['eff_Pt1w'].Fill(sTree.MCTrack[1].GetPt(),wg*xsw)
-        h['eff_Eta1w'].Fill(sTree.MCTrack[1].GetRapidity(),wg*xsw)
-        if e_a==2:  
-            h['DPang_e'].Fill(mass)
-            h['DPangW_e'].Fill(mass,wg*xsw)
-        if mu_a==2:              
-            h['DPang_mu'].Fill(mass)
-            h['DPangW_mu'].Fill(mass,wg*xsw)
-        if tau_a==2:              
-            h['DPang_tau'].Fill(mass)
-            h['DPangW_tau'].Fill(mass,wg*xsw)
-        if pi_a==2:              
-            h['DPang_pi'].Fill(mass)
-            h['DPangW_pi'].Fill(mass,wg*xsw)
-        if ka_a==2:
-            h['DPang_ka'].Fill(mass)        
-            h['DPangW_ka'].Fill(mass,wg*xsw)
-        if oth_a==2:
-            h['DPang_oth'].Fill(mass)       
-            h['DPangW_oth'].Fill(mass,wg*xsw)
-        if oth_a==1:
-            h['DPang_mix'].Fill(mass)       
-            h['DPangW_mix'].Fill(mass,wg*xsw)
-
+        if pi>2:             
+            h['DP2_pi'].Fill(mass)
+            h['DPW2_pi'].Fill(mass,wg*xsw)
+        if ka>2:
+            h['DP2_ka'].Fill(mass)       
+            h['DPW2_ka'].Fill(mass,wg*xsw)
+        if oth>2:
+            h['DP2_oth'].Fill(mass)      
+            h['DPW2_oth'].Fill(mass,wg*xsw)
+        if dp_v==2 and (e_v==2 or mu_v==2 or (pi_v==2 and ka_v==0 and oth_v==0) or (ka_v==2 and pi_v==0 and oth_v==0 ) or (oth_v==2 and pi_v==0 and ka_v==0) ):
+            h['DPves'].Fill(mass)
+            h['DPvesW'].Fill(mass,wg*xsw)
+            h['eff_P0w'].Fill(sTree.MCTrack[1].GetP(),wg*xsw)           
+            h['eff_Pt0w'].Fill(sTree.MCTrack[1].GetPt(),wg*xsw)
+            h['eff_Eta0w'].Fill(sTree.MCTrack[1].GetRapidity(),wg*xsw)
+            if pi_v>2:             
+                h['DPves2_pi'].Fill(mass)
+                h['DPvesW2_pi'].Fill(mass,wg*xsw)
+            if ka_v>2:
+                h['DPves2_ka'].Fill(mass)        
+                h['DPvesW2_ka'].Fill(mass,wg*xsw)
+            if oth_v>2:
+                h['DPves2_oth'].Fill(mass)       
+                h['DPvesW2_oth'].Fill(mass,wg*xsw) 
+            if dp_a==2 and (e_a==2 or mu_a==2 or (pi_a==2 and ka_a==0 and oth_a==0) or (ka_a==2 and pi_a==0 and oth_a==0 ) or (oth_a==2 and pi_a==0 and ka_a==0)):
+                h['DPang'].Fill(mass)
+                h['DPangW'].Fill(mass,wg*xsw)
+                h['eff_P1w'].Fill(sTree.MCTrack[1].GetP(),wg*xsw)           
+                h['eff_Pt1w'].Fill(sTree.MCTrack[1].GetPt(),wg*xsw)
+                h['eff_Eta1w'].Fill(sTree.MCTrack[1].GetRapidity(),wg*xsw)
+                if pi_a>2:              
+                    h['DPang2_pi'].Fill(mass)
+                    h['DPangW2_pi'].Fill(mass,wg*xsw)
+                if ka_a>2:
+                    h['DPang2_ka'].Fill(mass)        
+                    h['DPangW2_ka'].Fill(mass,wg*xsw)
+                if oth_a>2:
+                    h['DPang2_oth'].Fill(mass)       
+                    h['DPangW2_oth'].Fill(mass,wg*xsw)
 
 nEvents =sTree.GetEntries()
 print nEvents
@@ -674,6 +704,9 @@ o6 = tmp1+"_oth.dat"
 o7 = tmp1+"_mix.dat"
 o8 = tmp1+"_tau.dat"
 #o9 = tmp1+"_single.dat"
+o24 = tmp1+"_pi2.dat"
+o25 = tmp1+"_ka2.dat"
+o26 = tmp1+"_oth2.dat"
 a=open(o1,'w+')
 b=open(o2,'w+')
 c=open(o3,'w+')
@@ -683,6 +716,9 @@ f=open(o6,'w+')
 g=open(o7,'w+')
 t=open(o8,'w+')
 #s=open(o9,w+)
+d2=open(o24,'w+')
+e2=open(o25,'w+')
+f2=open(o26,'w+')
 
 o11 = tmp1+"_true_table.dat"
 o12 = tmp1+"_e_table.dat"
@@ -693,6 +729,10 @@ o16 = tmp1+"_oth_table.dat"
 o17 = tmp1+"_mix_table.dat"
 o18 = tmp1+"_tau_table.dat"
 o19 = tmp1+"_single_table.dat"
+o124 = tmp1+"_pi2_table.dat"
+o125 = tmp1+"_ka2_table.dat"
+o126 = tmp1+"_oth2_table.dat"
+
 a1=open(o11,'w+')
 b1=open(o12,'w+')
 c1=open(o13,'w+')
@@ -702,6 +742,9 @@ f1=open(o16,'w+')
 g1=open(o17,'w+')
 t1=open(o18,'w+')
 s1=open(o19,'w+')
+d12=open(o124,'w+')
+e12=open(o125,'w+')
+f12=open(o126,'w+')
 
 if float(h['DPvesW'].Integral())!=0: Acc=float(h['DPangW'].Integral())/float(h['DPvesW'].Integral())
 if float(h['DPvesW_e'].Integral())!=0: Acc_e=float(h['DPangW_e'].Integral())/float(h['DPvesW_e'].Integral())
@@ -711,6 +754,10 @@ if float(h['DPvesW_pi'].Integral())!=0: Acc_pi=float(h['DPangW_pi'].Integral())/
 if float(h['DPvesW_ka'].Integral())!=0: Acc_ka=float(h['DPangW_ka'].Integral())/float(h['DPvesW_ka'].Integral())
 if float(h['DPvesW_oth'].Integral())!=0: Acc_oth=float(h['DPangW_oth'].Integral())/float(h['DPvesW_oth'].Integral())
 if float(h['DPvesW_mix'].Integral())!=0: Acc_mix=float(h['DPangW_mix'].Integral())/float(h['DPvesW_mix'].Integral())
+if float(h['DPvesW2_pi'].Integral())!=0: Acc2_pi=float(h['DPangW2_pi'].Integral())/float(h['DPvesW2_pi'].Integral())
+if float(h['DPvesW2_ka'].Integral())!=0: Acc2_ka=float(h['DPangW2_ka'].Integral())/float(h['DPvesW2_ka'].Integral())
+if float(h['DPvesW2_oth'].Integral())!=0: Acc2_oth=float(h['DPangW2_oth'].Integral())/float(h['DPvesW2_oth'].Integral())
+
 
 if float(h['DPves'].Integral())!=0: 
     RecW=float(h['DPangW'].Integral())/float(h['DPves'].Integral())*2e20
@@ -744,7 +791,18 @@ if float(h['DPves_mix'].Integral())!=0:
     RecW_mix=float(h['DPangW_mix'].Integral())/float(h['DPves_mix'].Integral())*2e20
     g.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW_mix, RecW_mix, Acc_mix))
     g.write('\n')
-
+if float(h['DPves2_pi'].Integral())!=0:
+    RecW2_pi=float(h['DPangW2_pi'].Integral())/float(h['DPves2_pi'].Integral())*2e20
+    d2.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW2_pi, RecW2_pi, Acc2_pi))
+    d2.write('\n')
+if float(h['DPves2_ka'].Integral())!=0:
+    RecW2_ka=float(h['DPangW2_ka'].Integral())/float(h['DPves2_ka'].Integral())*2e20
+    e2.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW2_ka, RecW2_ka, Acc2_ka)) 
+    e2.write('\n')
+if float(h['DPves2_oth'].Integral())!=0:
+    RecW2_oth=float(h['DPangW2_oth'].Integral())/float(h['DPves2_oth'].Integral())*2e20
+    f2.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, RecW2_oth, RecW2_oth, Acc2_oth))
+    f2.write('\n')
 
 a1.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DP'].Integral()), float(h['DPves'].Integral()), float(h['DPang'].Integral())))
 a1.write('\n')
@@ -762,8 +820,14 @@ f1.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DP_oth'
 f1.write('\n')
 g1.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DP_mix'].Integral()), float(h['DPves_mix'].Integral()), float(h['DPang_mix'].Integral())))
 g1.write('\n')
-s1.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DP_mix'].Integral()), float(h['DPves_mix'].Integral()), float(h['DPang_mix'].Integral())))
+s1.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DP_single'].Integral()), float(h['DPves_single'].Integral()), float(h['DPang_single'].Integral())))
 s1.write('\n')
+d12.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DP2_pi'].Integral()), float(h['DPves2_pi'].Integral()), float(h['DPang_pi'].Integral())))
+d12.write('\n')
+e12.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DP2_ka'].Integral()), float(h['DPves2_ka'].Integral()), float(h['DPang2_ka'].Integral())))
+e12.write('\n')
+f12.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DP2_oth'].Integral()), float(h['DPves2_oth'].Integral()), float(h['DPang2_oth'].Integral())))
+f12.write('\n')
 
 a.close()
 b.close()
@@ -774,6 +838,9 @@ f.close()
 t.close()
 g.close()
 #s.close()
+d2.close()
+e2.close()
+f2.close()
 
 a1.close()
 b1.close()
@@ -784,6 +851,9 @@ f1.close()
 t1.close()
 g1.close()
 s1.close()
+d12.close()
+e12.close()
+f12.close()
 
 h['eff_P1w'].Sumw2()
 h['eff_Pt1w'].Sumw2()
