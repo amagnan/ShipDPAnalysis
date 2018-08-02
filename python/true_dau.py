@@ -402,9 +402,9 @@ def invariant(S_x,S_y,e_0,e_1,p_0,p_1):
 
 def myEventLoop(n,xsw):
     neg,pos=0,0
-    dp,     e,      mu,     tau,    pi,     ka,     oth,    pi0     =0,0, 0, 0, 0, 0, 0, 0
-    dp_a,   e_a,    mu_a,   tau_a,  pi_a,   ka_a,   oth_a,  pi0_v   =0,0, 0, 0, 0, 0, 0, 0
-    dp_v,   e_v,    mu_v,   tau_v,  pi_v,   ka_v,   oth_v,  pi0_a   =0,0, 0, 0, 0, 0, 0, 0
+    dp,     e,      mu,     tau,    pi,     ka,     oth,    pi0,    oth_d   =0,0,0, 0, 0, 0, 0, 0, 0
+    dp_a,   e_a,    mu_a,   tau_a,  pi_a,   ka_a,   oth_a,  pi0_v,  oth_da  =0,0,0, 0, 0, 0, 0, 0, 0
+    dp_v,   e_v,    mu_v,   tau_v,  pi_v,   ka_v,   oth_v,  pi0_a,  oth_dv  =0,0,0, 0, 0, 0, 0, 0, 0
     rc=sTree.GetEntry(n)
     had,vec,oth_mo=[],[],[]
     mo=-99
@@ -494,7 +494,8 @@ def myEventLoop(n,xsw):
 
         if track.GetMotherId()==1 and abs(track.GetPdgCode())<7:
             had.append(mc)
-        if len(had)!=0 and moth_q<4:
+        if moth_q<4:
+        #if len(had)!=0 and moth_q<4:
             for daug in had:
                 if track.GetMotherId()==daug:
                     moth_q+=1 
@@ -570,7 +571,26 @@ def myEventLoop(n,xsw):
 
                     else:
                         oth_mo.append(mc)
-        if len(oth_mo)!=0 and moth_dau<8:
+                        oth+=1
+                        vec.append(track.GetPdgCode())
+                        P.append(track.GetP())
+                        E.append(track.GetEnergy())
+                        M.append(mom.M())
+                        a=angle(track.GetP(),Px,Py,Pz)
+                        S_x.append(a[0])
+                        S_y.append(a[1])
+                        if isInFiducial(X,Y,Z):
+                            oth_v+=1
+                            h['eff_P0_oth'].Fill(track.GetP())          
+                            h['eff_Pt0_oth'].Fill(track.GetPt())
+                            h['eff_Eta0_oth'].Fill(track.GetRapidity())
+                            if checkFiducialVolume(vtx,a):
+                                oth_a+=1
+                                h['eff_P1_oth'].Fill(track.GetP())          
+                                h['eff_Pt1_oth'].Fill(track.GetPt())
+                                h['eff_Eta1_oth'].Fill(track.GetRapidity())
+        if moth_dau<8:
+        #if len(oth_mo)!=0 and moth_dau<8:
             for daug in oth_mo:
                 if track.GetMotherId()==daug:
                     moth_dau+=1
@@ -644,7 +664,7 @@ def myEventLoop(n,xsw):
                             if ang_muon(vtx,a):
                                 mu_a+=1
                     else:
-                        oth+=1
+                        oth_d+=1
                         vec.append(track.GetPdgCode())
                         P.append(track.GetP())
                         E.append(track.GetEnergy())
@@ -653,18 +673,12 @@ def myEventLoop(n,xsw):
                         S_x.append(a[0])
                         S_y.append(a[1])
                         if isInFiducial(X,Y,Z):
-                            oth_v+=1
-                            h['eff_P0_oth'].Fill(track.GetP())          
-                            h['eff_Pt0_oth'].Fill(track.GetPt())
-                            h['eff_Eta0_oth'].Fill(track.GetRapidity())
+                            oth_dv+=1
                             if checkFiducialVolume(vtx,a):
-                                oth_a+=1
-                                h['eff_P1_oth'].Fill(track.GetP())          
-                                h['eff_Pt1_oth'].Fill(track.GetPt())
-                                h['eff_Eta1_oth'].Fill(track.GetRapidity())
+                                oth_da+=1
 
     
-    if pi0==0 and ka==0 and oth==0 and e==2 and mu==0 and tau==0 and pi==0:  
+    if pi0==0 and ka==0 and (oth==0 or oth_d==0) and e==2 and mu==0 and tau==0 and pi==0:  
         mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
         h['DP_e'].Fill(mass)
         h['DPW_e'].Fill(mass,wg*xsw)
@@ -675,7 +689,7 @@ def myEventLoop(n,xsw):
                 h['DPang_e'].Fill(mass)
                 h['DPangW_e'].Fill(mass,wg*xsw)
 
-    elif pi0==0 and ka==0 and oth==0 and e==0 and mu==2 and tau==0 and pi==0:
+    elif pi0==0 and ka==0 and (oth==0 or oth_d==0) and e==0 and mu==2 and tau==0 and pi==0:
         mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
         h['DP_mu'].Fill(mass)
         h['DPW_mu'].Fill(mass,wg*xsw)
@@ -686,7 +700,7 @@ def myEventLoop(n,xsw):
                 h['DPang_mu'].Fill(mass)
                 h['DPangW_mu'].Fill(mass,wg*xsw)
 
-    elif pi0==0 and ka==0 and oth==0 and e==0 and mu==0 and tau==2 and pi==0:
+    elif pi0==0 and ka==0 and (oth==0 or oth_d==0) and e==0 and mu==0 and tau==2 and pi==0:
         mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
         h['DP_tau'].Fill(mass)
         h['DPW_tau'].Fill(mass,wg*xsw)
@@ -697,7 +711,7 @@ def myEventLoop(n,xsw):
                 h['DPang_tau'].Fill(mass)
                 h['DPangW_tau'].Fill(mass,wg*xsw)
 
-    elif pi0==0 and ka==0 and oth==0 and e==0 and mu==0 and tau==0 and pi==2:
+    elif pi0==0 and ka==0 and (oth==0 or oth_d==0) and e==0 and mu==0 and tau==0 and pi==2:
         mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
         h['DP_pi'].Fill(mass)
         h['DPW_pi'].Fill(mass,wg*xsw)
@@ -708,7 +722,7 @@ def myEventLoop(n,xsw):
                 h['DPang_pi'].Fill(mass)
                 h['DPangW_pi'].Fill(mass,wg*xsw)
 
-    elif oth==0 and pi0==0 and pi==0 and e==0 and mu==0 and tau==0 and ka==2:
+    elif (oth==0 or oth_d==0) and pi0==0 and pi==0 and e==0 and mu==0 and tau==0 and ka==2:
         mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
         h['DP_ka'].Fill(mass)       
         h['DPW_ka'].Fill(mass,wg*xsw)
@@ -719,7 +733,7 @@ def myEventLoop(n,xsw):
                 h['DPang_ka'].Fill(mass)        
                 h['DPangW_ka'].Fill(mass,wg*xsw)
 
-    elif oth==2 and pi==0 and pi0==0 and e==0 and mu==0 and tau==0 and ka==0:
+    elif oth==2 and oth_d!=0 and pi==0 and pi0==0 and e==0 and mu==0 and tau==0 and ka==0:
         mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
         if abs(vec[0])==abs(vec[1]):
             h['DP_oth'].Fill(mass)       
@@ -742,7 +756,7 @@ def myEventLoop(n,xsw):
                     h['DPang_mix'].Fill(mass)       
                     h['DPangW_mix'].Fill(mass,wg*xsw)
 
-    elif pi==2 and pi0==2 and oth==0 and ka==0 and e==0 and mu==0 and tau==0:
+    elif pi==2 and pi0==2 and (oth==0 or oth_d==0) and ka==0 and e==0 and mu==0 and tau==0:
         #mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
         h['DP_2pi0'].Fill(mass_mc)       
         h['DPW_2pi0'].Fill(mass_mc,wg*xsw)
@@ -753,7 +767,7 @@ def myEventLoop(n,xsw):
                 h['DPang_2pi0'].Fill(mass_mc)        
                 h['DPangW_2pi0'].Fill(mass_mc,wg*xsw)
 
-    elif pi==2 and pi0==1 and oth==0 and ka==0 and e==0 and mu==0 and tau==0:
+    elif pi==2 and pi0==1 and (oth==0 or oth_d==0) and ka==0 and e==0 and mu==0 and tau==0:
         #mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
         h['DP_3pi'].Fill(mass_mc)       
         h['DPW_3pi'].Fill(mass_mc,wg*xsw)
@@ -764,7 +778,7 @@ def myEventLoop(n,xsw):
                 h['DPang_3pi'].Fill(mass_mc)        
                 h['DPangW_3pi'].Fill(mass_mc,wg*xsw)
 
-    elif pi==4 and pi0==0 and e==0 and mu==0 and tau==0 and oth==0 and ka==0:
+    elif pi==4 and pi0==0 and e==0 and mu==0 and tau==0 and (oth==0 or oth_d==0) and ka==0:
         #mass=invariant(S_x, S_y,E[0],E[1],P[0],P[1])
         h['DP_4pi'].Fill(mass_mc)       
         h['DPW_4pi'].Fill(mass_mc,wg*xsw)
@@ -793,13 +807,13 @@ def myEventLoop(n,xsw):
         h['eff_Etaw'].Fill(sTree.MCTrack[1].GetRapidity(),wg)
         h['DP'].Fill(mass)
         h['DPW'].Fill(mass,wg*xsw)
-        if dp_v==2 and ((e_v==2 and mu_v==0 and tau_v==0 and pi_v==0 and ka_v==0 and pi0_v==0 and oth_v==0) or (e_v==0 and mu_v==2 and tau_v==0 and pi_v==0 and ka_v==0 and pi0_v==0 and oth_v==0) or (e_v==0 and mu_v==0 and tau_v==2 and pi_v==0 and ka_v==0 and pi0_v==0 and oth_v==0) or (e_v==0 and mu_v==0 and tau_v==0 and pi_v==2 and ka_v==0 and pi0_v==0 and oth_v==0) or (e_v==0 and mu_v==0 and tau_v==0 and pi_v==0 and ka_v==2 and pi0_v==0 and oth_v==0) or (e_v==0 and mu_v==0 and tau_v==0 and pi_v==2 and ka_v==0 and pi0_v==1 and oth_v==0) or (e_v==0 and mu_v==0 and tau_v==0 and pi_v==2 and ka_v==0 and pi0_v==2 and oth_v==0) or (e_v==0 and mu_v==0 and tau_v==0 and pi_v==4 and ka_v==0 and pi0_v==0 and oth_v==0) or (e_v==0 and mu_v==0 and tau_v==0 and pi_v==0 and ka_v==0 and pi0_v==0 and oth_v==2)):
+        if dp_v==2 and ((e_v==2 and mu_v==0 and tau_v==0 and pi_v==0 and ka_v==0 and pi0_v==0 and (oth_v==0 or oth_dv==0)) or (e_v==0 and mu_v==2 and tau_v==0 and pi_v==0 and ka_v==0 and pi0_v==0 and (oth_v==0 or oth_dv==0)) or (e_v==0 and mu_v==0 and tau_v==2 and pi_v==0 and ka_v==0 and pi0_v==0 and (oth_v==0 or oth_dv==0)) or (e_v==0 and mu_v==0 and tau_v==0 and pi_v==2 and ka_v==0 and pi0_v==0 and (oth_v==0 or oth_dv==0)) or (e_v==0 and mu_v==0 and tau_v==0 and pi_v==0 and ka_v==2 and pi0_v==0 and (oth_v==0 or oth_dv==0)) or (e_v==0 and mu_v==0 and tau_v==0 and pi_v==2 and ka_v==0 and pi0_v==1 and (oth_v==0 or oth_dv==0)) or (e_v==0 and mu_v==0 and tau_v==0 and pi_v==2 and ka_v==0 and pi0_v==2 and (oth_v==0 or oth_dv==0)) or (e_v==0 and mu_v==0 and tau_v==0 and pi_v==4 and ka_v==0 and pi0_v==0 and (oth_v==0 or oth_dv==0))):
             h['DPves'].Fill(mass)
             h['DPvesW'].Fill(mass,wg*xsw)
             h['eff_P0w'].Fill(sTree.MCTrack[1].GetP(),wg*xsw)           
             h['eff_Pt0w'].Fill(sTree.MCTrack[1].GetPt(),wg*xsw)
             h['eff_Eta0w'].Fill(sTree.MCTrack[1].GetRapidity(),wg*xsw)
-            if dp_a==2 and ((e_a==2 and mu_a==0 and tau_a==0 and pi_a==0 and ka_a==0 and pi0_a==0 and oth_a==0) or (e_a==0 and mu_a==2 and tau_a==0 and pi_a==0 and ka_a==0 and pi0_a==0 and oth_a==0) or (e_a==0 and mu_a==0 and tau_a==2 and pi_a==0 and ka_a==0 and pi0_a==0 and oth_a==0) or (e_a==0 and mu_a==0 and tau_a==0 and pi_a==2 and ka_a==0 and pi0_a==0 and oth_a==0) or (e_a==0 and mu_a==0 and tau_a==0 and pi_a==0 and ka_a==2 and pi0_a==0 and oth_a==0) or (e_a==0 and mu_a==0 and tau_a==0 and pi_a==2 and ka_a==0 and pi0_a==1 and oth_a==0) or (e_a==0 and mu_a==0 and tau_a==0 and pi_a==2 and ka_a==0 and pi0_a==2 and oth_a==0) or (e_a==0 and mu_a==0 and tau_a==0 and pi_a==4 and ka_a==0 and pi0_a==0 and oth_a==0) or (e_a==0 and mu_a==0 and tau_a==0 and pi_a==0 and ka_a==0 and pi0_a==0 and oth_a==2)):
+            if dp_a==2 and ((e_a==2 and mu_a==0 and tau_a==0 and pi_a==0 and ka_a==0 and pi0_a==0 and (oth_a==0 or oth_da==0)) or (e_a==0 and mu_a==2 and tau_a==0 and pi_a==0 and ka_a==0 and pi0_a==0 and (oth_a==0 or oth_da==0)) or (e_a==0 and mu_a==0 and tau_a==2 and pi_a==0 and ka_a==0 and pi0_a==0 and (oth_a==0 or oth_da==0)) or (e_a==0 and mu_a==0 and tau_a==0 and pi_a==2 and ka_a==0 and pi0_a==0 and (oth_a==0 or oth_da==0)) or (e_a==0 and mu_a==0 and tau_a==0 and pi_a==0 and ka_a==2 and pi0_a==0 and (oth_a==0 or oth_da==0)) or (e_a==0 and mu_a==0 and tau_a==0 and pi_a==2 and ka_a==0 and pi0_a==1 and (oth_a==0 or oth_da==0)) or (e_a==0 and mu_a==0 and tau_a==0 and pi_a==2 and ka_a==0 and pi0_a==2 and (oth_a==0 or oth_da==0)) or (e_a==0 and mu_a==0 and tau_a==0 and pi_a==4 and ka_a==0 and pi0_a==0 and (oth_a==0 or oth_da==0))):
                 h['DPang'].Fill(mass)
                 h['DPangW'].Fill(mass,wg*xsw)
                 h['eff_P1w'].Fill(sTree.MCTrack[1].GetP(),wg*xsw)           
