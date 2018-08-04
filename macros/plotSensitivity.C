@@ -83,14 +83,15 @@ int plotSensitivity(){
 
   const double clsval = 2.3;
   
-  const std::string prod="/afs/cern.ch/user/t/takmete/ShipDPAnalysis/data/180803/";
-  
+  //const std::string prod="/afs/cern.ch/user/t/takmete/ShipDPAnalysis/data/180803/";
+  const std::string prod="/afs/cern.ch/user/t/takmete/ShipDPAnalysis/data/180804/"; 
   TLatex lat;
   char lbuf[500];
   
+  //const unsigned nP = 4;
+  //std::string proc[nP] = {"qcd_true","qcd_rec","pbrem_true","meson_true"};
   const unsigned nP = 2;
-  std::string proc[nP] = {"qcd_true","qcd_rec"};
-
+  std::string proc[nP] ={"pbrem_true","meson_true"}; 
   std::ofstream foutCLS[nP];
   
   std::vector<Rate>lRate[nP];
