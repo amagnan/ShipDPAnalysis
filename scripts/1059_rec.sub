@@ -1,0 +1,8 @@
+executable              = 1059_rec.sh
+arguments               = $(myfile)
+output                  = output/1059_rec.$(ClusterId).$(ProcId).out
+error                   = error/1059_rec.$(ClusterId).$(ProcId).err
+log                     = log/1059_rec.$(ClusterId).$(ProcId).log
+transfer_output_files = ""
++JobFlavour = "workday"
+queue myfile from 1059.txt

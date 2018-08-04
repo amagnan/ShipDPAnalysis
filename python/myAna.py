@@ -27,7 +27,7 @@ for o,a in opts:
 	if o in ('-f',): inputFile = a
 	if o in ('-g', '--geoFile',): geoFile = a
 
-tmp=inputFile.replace('/eos/experiment/ship/data/DarkPhoton/PBC-June-3/AM/180602/rec/','')
+tmp=inputFile.replace('/eos/experiment/ship/data/DarkPhoton/PBC-June-3/rec/','')
 tmp1=tmp.replace('_rec.root','')
 tmp2=tmp1.replace('mass','')
 tmp3=tmp2.replace('eps','')		
@@ -187,7 +187,7 @@ def isInFiducial(X,Y,Z):
 	return True 
 
 
-def checkFiducialVolume(sTree,tkey,dy):
+def checkFiducialVolume(fT,tkey,dy):
 	inside = True
 	fT = sTree.FitTracks[tkey]
 	rc,pos,mom = TrackExtrapolateTool.extrapolateToPlane(fT,ShipGeo.Bfield.z)#
@@ -295,7 +295,7 @@ def myEventLoop(n,xsw):
 				if abs(mc.GetPdgCode())==321:
 					ka_v+=1
 					if ang_ecal(fit,dy): ka_a+=1
-				if ang_ecal(fit,dy) or ang_hcal(fit,dy) or ang_muon(fit,dy): a_f+=1
+				if checkFiducialVolume(sTree,f,dy): a_f+=1
 
 	if a_f==2:
 

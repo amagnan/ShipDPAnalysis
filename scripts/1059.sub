@@ -1,0 +1,8 @@
+executable              = 1059.sh
+arguments               = $(myfile)
+output                  = output/1059.$(ClusterId).$(ProcId).out
+error                   = error/1059.$(ClusterId).$(ProcId).err
+log                     = log/1059.$(ClusterId).$(ProcId).log
+transfer_output_files = ""
++JobFlavour = "microcentury"
+queue myfile from 1059.txt
