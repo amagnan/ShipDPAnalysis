@@ -90,8 +90,8 @@ int plotSensitivity(){
   
   //const unsigned nP = 4;
   //std::string proc[nP] = {"qcd_true","qcd_rec","pbrem_true","meson_true"};
-  const unsigned nP = 2;
-  std::string proc[nP] ={"pbrem_true","meson_true"}; 
+  const unsigned nP = 3;
+  std::string proc[nP] ={"qcd_true","pbrem_true","meson_true"}; 
   std::ofstream foutCLS[nP];
   
   std::vector<Rate>lRate[nP];
