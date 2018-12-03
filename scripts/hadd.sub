@@ -1,8 +1,0 @@
-executable              = hadd.sh
-arguments               = $(myfile)
-output                  = output/hadd.$(ClusterId).$(ProcId).out
-error                   = error/hadd.$(ClusterId).$(ProcId).err
-log                     = log/hadd.$(ClusterId).$(ProcId).log
-transfer_output_files = ""
-+JobFlavour = "microcentury"
-queue myfile from son.txt

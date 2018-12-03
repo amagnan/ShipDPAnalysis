@@ -1,8 +1,0 @@
-executable              = 2.sh
-arguments               = $(myfile)
-output                  = output/2.$(ClusterId).$(ProcId).out
-error                   = error/2.$(ClusterId).$(ProcId).err
-log                     = log/2.$(ClusterId).$(ProcId).log
-transfer_output_files = ""
-+JobFlavour = "testmatch"
-queue myfile from new2.txt

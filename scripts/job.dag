@@ -1,5 +1,0 @@
-VARS ALL_NODES directory="qcd"
-Job simulation 3.sub
-Job analysis 2.sub
-DOT dag.dot UPDATE
-Parent 3 Child 2

@@ -1,8 +1,0 @@
-executable              = 3.sh
-arguments               = $(myfile)
-output                  = output/3.$(ClusterId).$(ProcId).out
-error                   = error/3.$(ClusterId).$(ProcId).err
-log                     = log/3.$(ClusterId).$(ProcId).log
-transfer_output_files = "testmatch"
-+JobFlavour = ""
-queue myfile from new3.txt

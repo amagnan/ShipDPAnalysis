@@ -23,7 +23,7 @@ struct Rate{
 static bool customSort(const Rate & a,
 		       const Rate & b)
 {
-  if (fabs(a.mass-b.mass)<0.01) return a.eps <= b.eps;
+  if (fabs(a.mass-b.mass)<0.0001) return a.eps <= b.eps;
   else return a.mass <= b.mass;
 };
 
@@ -58,7 +58,7 @@ void readInput(const std::string & prodfile,
     if (tmp.rate2!=tmp.rate2) tmp.rate2=0;
 
     //protect against 0 values
-    if (tmp.mass>0 && tmp.rate2>0){
+    if (tmp.mass>0.00000 && tmp.rate2>0.00000){
       ratevec.push_back(tmp);
     } else {
       std::cout << " -- 0's for " << tmp.mass << " " << tmp.eps << " " << tmp.rate1 << " " << tmp.rate2 << std::endl;
@@ -84,14 +84,15 @@ int plotSensitivity(){
   const double clsval = 2.3;
   
   //const std::string prod="/afs/cern.ch/user/t/takmete/ShipDPAnalysis/data/180803/";
-  const std::string prod="/afs/cern.ch/user/t/takmete/ShipDPAnalysis/data/180804/"; 
+  //const std::string prod="/afs/cern.ch/user/t/takmete/ShipDPAnalysis/data/180804/"; 
+  const std::string prod="/afs/cern.ch/user/t/takmete/ShipDPAnalysis/data/180811/"; 
   TLatex lat;
   char lbuf[500];
   
   //const unsigned nP = 4;
   //std::string proc[nP] = {"qcd_true","qcd_rec","pbrem_true","meson_true"};
   const unsigned nP = 3;
-  std::string proc[nP] ={"qcd_true","pbrem_true","meson_true"}; 
+  std::string proc[nP] ={"meson_SigX_true","qcd_SigX_true","pbrem_SigX_true"}; 
   std::ofstream foutCLS[nP];
   
   std::vector<Rate>lRate[nP];
@@ -164,7 +165,7 @@ int plotSensitivity(){
       double tmpRate = lRate[iP][iN].rate2;
       //if (tmpRate>50) tmpRate=50;
       //if (tmpRate<0.05) tmpRate=0.05;
-      if (fabs(lRate[iP][iN].mass-mass)>0.01 || iN==lRate[iP].size()-1) {
+      if (fabs(lRate[iP][iN].mass-mass)>0.0001 || iN==lRate[iP].size()-1) {
 
 	if (iN==lRate[iP].size()-1){
 	  gr->SetPoint(nE,log10(lRate[iP][iN].eps),log10(tmpRate));
@@ -177,7 +178,7 @@ int plotSensitivity(){
 	  gr->SetMarkerStyle(20);
 	  gr->SetTitle(";#gamma' coupling to SM log(#varepsilon);log(rate) for 2.10^{10} p.o.t.");
 	  gr->Draw("AP");
-	  gr->GetYaxis()->SetRangeUser(-4,4);
+	  gr->GetYaxis()->SetRangeUser(-6,6);
 	  sprintf(lbuf,"mDP = %3.3f GeV",mass);
 	  lat.DrawLatexNDC(0.2,0.8,lbuf);
 	  line = new TLine(-9,log10(clsval),-5,log10(clsval));
