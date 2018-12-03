@@ -1,0 +1,8 @@
+executable              = ana.sh
+arguments               = $(myfile)
+output                  = output/ana.$(ClusterId).$(ProcId).out
+error                   = error/ana.$(ClusterId).$(ProcId).err
+log                     = log/ana.$(ClusterId).$(ProcId).log
+transfer_output_files = ""
++JobFlavour = "workday"
+queue myfile from input.txt
