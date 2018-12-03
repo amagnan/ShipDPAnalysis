@@ -12,6 +12,8 @@
 #include "TGraph.h"
 #include "TLine.h"
 
+#include "TDRStyle.h"
+
 struct Rate{
   double mass;
   double eps;
@@ -74,11 +76,13 @@ void readInput(const std::string & prodfile,
 };
 
 int plotSensitivity(){
+
+  SetTdrStyle();
   
   gStyle->SetPadTopMargin(0.05);
   gStyle->SetPadBottomMargin(0.10);
-  gStyle->SetPadLeftMargin(0.11);
-  gStyle->SetPadRightMargin(0.15);
+  gStyle->SetPadLeftMargin(0.12);
+  //gStyle->SetPadRightMargin(0.15);
   gStyle->SetOptStat(0);
 
   const double clsval = 2.3;
@@ -174,11 +178,12 @@ int plotSensitivity(){
 	  gPad->SetLogx(0);
 	  gPad->SetGridx(1);
 	  gr->SetMarkerStyle(20);
-	  gr->SetTitle(";#gamma' coupling to SM log(#varepsilon);log(rate) for 2.10^{10} p.o.t.");
+	  gr->SetMarkerSize(0.4);
+	  gr->SetTitle(";log(#varepsilon);log(rate) for 2.10^{10} p.o.t.");
 	  gr->Draw("AP");
 	  gr->GetYaxis()->SetRangeUser(-4,4);
-	  sprintf(lbuf,"mDP = %3.3f GeV",mass);
-	  lat.DrawLatexNDC(0.2,0.8,lbuf);
+	  sprintf(lbuf,"m_{#gamma^{D}} = %3.1f GeV",mass);
+	  lat.DrawLatexNDC(0.14,0.9,lbuf);
 	  line = new TLine(-9,log10(clsval),-5,log10(clsval));
 	  line->SetLineColor(6);
 	  line->Draw("same");
@@ -188,7 +193,7 @@ int plotSensitivity(){
 	  //interpolate and get 2.3 event points.
 	  std::vector<std::pair<double,double> > limitVec;
 	  lname.str("");
-	  lname << "hTest_" << proc[iP] << "_M" << mass;
+	  lname << "hTest_" << proc[iP] << "_M" << static_cast<int>(mass*10);
 	  grTest=new TGraph();
 	  grTest->SetName(lname.str().c_str());
 	  for (unsigned ieps(0); ieps<1000000;++ieps){
@@ -200,6 +205,7 @@ int plotSensitivity(){
 	    if (diff<0.01) limitVec.push_back(std::pair<double,double>(diff,tmpeps));
 	    //if (ieps>700&&ieps<800&&iP==2&&mass==1.0) std::cout << "check " << mass << " " << tmpeps << " " << limit << std::endl;
 	  }
+	  grTest->SetMarkerSize(0.4);
 	  grTest->Draw("Psame");
 	  if (limitVec.size()>0){
 	    std::sort(limitVec.begin(),limitVec.end(),sortPair);
@@ -227,11 +233,13 @@ int plotSensitivity(){
 	  
 	  mycC[iP]->Update();
 	  mycC[iP]->Print(("CheckRate_"+proc[iP]+".pdf").c_str());
+	  mycC[iP]->Print(("PerPoint/CheckRate_"+lname.str()+".C").c_str());
+	  mycC[iP]->Print(("PerPoint/CheckRate_"+lname.str()+".pdf").c_str());
 	}
 	nE=0;
 	mass = lRate[iP][iN].mass;
 	lname.str("");
-	lname << "hCheckRate_" << proc[iP] << "_M" << mass;
+	lname << "hCheckRate_" << proc[iP] << "_M" << static_cast<int>(mass*10);
 	std::cout << lname.str() << std::endl;
 	gr = new TGraph();
 	//gr->SetBit(TGraph::kIsSortedX);
