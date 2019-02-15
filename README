@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 cd P ython
 n Eval_2.py -d 181401 -p qcd -a Ana_rate1 > ../Exclusion/qcd1.txt
+=======
+cd .../Python
+python Eval_2.py -d 181401 -p qcd -a Ana_rate1 > ../Exclusion/qcd1.txt
+>>>>>>> 5f6c52d813f57599d62159cc54bc94679aa254cc
 python Eval_2.py -d 181401 -p qcd -a Ana_rate2 > ../Exclusion/qcd2.txt
 python Eval_2.py -d 181401 -p pbrem -a Ana_rate1 > ../Exclsuion/pbrem1.txt
 python Eval_2.py -d 181401 -p pbrem -a Ana_rate2 > ../Exclsuion/pbrem2.txt
