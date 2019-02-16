@@ -1,5 +1,19 @@
 <<<<<<< HEAD
-cd P ython
+
+\LATEST DATAS ARE ON data/190214/
+
+# _rate1 for all SM products(mass, epsilon, 3rd column expected rate)
+# _rate2 for leptophilic(mass, epsilon, expected rate)
+
+# _e,_mu,_tau,_had; mass, epsilon, BR(mode/all_events), Ves_Prob(Ves_weighted/mode), Reco_Eff(Final_Select_weighted/Ves_weighted)
+
+# _sum; mass, eps, # of Events, # of DP events, # of proper daughter events, # of events inside the Vessel, # of Selected events
+
+# _all; mass, eps, # of proper daughter events / # of DP events, Sum of BR(should be 1!), Ves_Prob, Reco_Eff
+# _other; mass, epsilon, lost from proper daughter, lost in vessel, lost in final selection
+
+
+cd Python
 n Eval_2.py -d 181401 -p qcd -a Ana_rate1 > ../Exclusion/qcd1.txt
 =======
 cd .../Python
@@ -10,6 +24,7 @@ python Eval_2.py -d 181401 -p pbrem -a Ana_rate1 > ../Exclsuion/pbrem1.txt
 python Eval_2.py -d 181401 -p pbrem -a Ana_rate2 > ../Exclsuion/pbrem2.txt
 python Eval_2.py -d 181401 -p meson -a Ana_rate1 > ../Exclsuion/meson1.txt
 python Eval_2.py -d 181401 -p meson -a Ana_rate2 > ../Exclsuion/meson2.txt 
+
 # outputs(qcd_Ana_rate1.csv,.....) will be on the data folder, and 1th column mass, 2nd column epsilon, 3rd abs(2.3-Evaluated_Rate)
 # the outputs should be ordered lower to higher mass for higher epsilons then higher to lower masses for lower epsilon
 # if some of the points are not corelated with the curve; one may change them from qcd1/2,pbrem1/2 or meson1/2 text files; there are 5 epsilon for higher values and 5 for lowers ordered w.r.t 3rd (error) column
@@ -17,17 +32,6 @@ python Eval_2.py -d 181401 -p meson -a Ana_rate2 > ../Exclsuion/meson2.txt
 # After sort the csv files;
 python Excl_2.py -d 181201
 python Excl_2.py -d 181201 -l True
-
-LATEST DATAS ARE ON data/190214/
-# _rate1 for all SM products(mass, epsilon, 3rd column expected rate)
-# _rate2 for leptophilic(mass, epsilon, expected rate)
-
-# _e,_mu,_tau,_had; mass, epsilon, BR(mode/all_events), Ves_Prob(Ves_weighted/mode), Reco_Eff(Final_Select_weighted/Ves_weighted)
-
-# _sum; mass, eps, # of Events, # of DP events, # of proper daughter events, # of events inside the Vessel, # of Selected events
-
-# _all; mass, eps, # of proper daughter events / # of DP events, Sum of BR(should be 1!), Ves_Prob, Reco_Eff
-# _other; mass, epsilon, lost from proper daughter, lost in vessel, lost in final selection
 
 # Also If you want to reanalyse them, copy python/Ana.py onto your $FAIRSHIP/macro. Then change the path of the Ana.py for your lxplus and relabel the data on the paths in scripts/ana.sh.
 # After that make the relevant folders in EOS...../data folder, and

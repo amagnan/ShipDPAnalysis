@@ -30,10 +30,10 @@ else: inp2="../data/"+date+"/"+prod+"_Ana_rate2.dat"
 g=open(inp2,'r') 
 
 k=g.readlines()
-print 'new rate file'
+#print 'new rate file'
 i=0
 for x in k:
     x=x.replace("\n","")
     y=x.split(" ")
     i+=1
-    if not (y[2]==0. or (y[0]==m[i-1] and y[1]==e[i-1])): print y[0], y[1], y[2]
+    if not (float(y[2])==0 or (y[0]==m[i-1] and y[1]==e[i-1])): print y[0], y[1], y[2]
