@@ -12,13 +12,12 @@ except getopt.GetoptError:
     print 'decay to all SM particles'
 
 for o,a in opts:
-    if o in ('-l',): leptophilic = a
+    if o in ('-l',): leptophilic = a 
     if o in ('-d',): date = a
 
 pathW = "../data/"+date+"/"
 pathR = "../Exclusion/"
-##### Signal Datasets
- 
+
 if leptophilic:
     data1 = pd.read_csv(pathW+'qcd_Ana_rate2.csv', header=None)
     data2 = pd.read_csv(pathW+'meson_Ana_rate2.csv', header=None)
@@ -44,10 +43,17 @@ import matplotlib.pyplot as pl
 pl.yscale('log')
 pl.xscale('log')
 
-pl.fill_between(data1[0], data1[1], y2=0,color='blue', label='SHiP (QCD)')
+"""pl.fill(data1[0], data1[1], 'b', label='SHiP (QCD)')
 #pl.fill_between(data3[0], data3[1], where=data3[0] > y3  , color='green', label="SHiP (Brem)")
-pl.fill_between(data3[0], data3[1], y2=0, color='green', label="SHiP (Brem)") 
-pl.fill_between(data2[0], data2[1], y2=0, color='red', label="SHiP (Mesons)")
+pl.fill(data3[0], data3[1], 'g', label="SHiP (Brem)") 
+pl.fill(data2[0], data2[1], 'r', label="SHiP (Mesons)")"""
+
+pl.fill_between(data1[0], data1[1], y2=0, color='red', hatch='.', label='SHiP (QCD)')
+pl.fill_between(data3[0], data3[1], y2=0, color='blue', label="SHiP (Brem)") 
+pl.fill_between(data2[0], data2[1], y2=0, color='green', label="SHiP (Mesons)")
+
+#pl.fill_between(data3[0], data3[1], where=data3[0] > y3  , color='green', label="SHiP (Brem)")
+
 pl.fill_between(dataC1[0], dataC1[1], y2=y2, color="grey", label="Excluded Region")
 pl.fill_between(dataC2[0], dataC2[1], y2=0, color="grey")
 pl.xlabel("M [MeV]",fontsize=18)
