@@ -58,12 +58,14 @@ for i in line_2:#pbrem just in case
         #N2 = find_N( line_s2, float(i[0]), float(i[1]) )
         #Rate_tot = (float(i[2])*N3 + p*N2)/(N3+N2)
         Rate_tot = float(i[2]) + p
-    else:
-        Rate_tot = float(i[2])
-    Rate.write('%.4g %.8g %.8g' %(float(i[0]), float(i[1]), Rate_tot))
-    Rate.write('\n')
+        Rate.write('%.4g %.8g %.8g' %(float(i[0]), float(i[1]), Rate_tot))
+        Rate.write('\n')
+    #else:
+        #Rate_tot = float(i[2])
+    #Rate.write('%.4g %.8g %.8g' %(float(i[0]), float(i[1]), Rate_tot))
+    #Rate.write('\n')
 
-for i in line_3:#qcd rates with pbrem shared
+"""for i in line_3:#qcd rates with pbrem shared
     i = i.replace('\n','')
     i = i.split(' ')
     m = find_Rate( line_2, float(i[0]), float(i[1]) )
@@ -71,8 +73,8 @@ for i in line_3:#qcd rates with pbrem shared
     if not q and not m:
         Rate_tot = float(i[2])
         Rate.write('%.4g %.8g %.8g' %(float(i[0]), float(i[1]), Rate_tot))
-        Rate.write('\n')
- 
+        Rate.write('\n')"""
+
 for i in line_1:#meson rates with pbrem shared
     #Rate_tot=0.
     i = i.replace('\n','')
@@ -84,10 +86,12 @@ for i in line_1:#meson rates with pbrem shared
         #N2 = find_N( line_s2, float(i[0]), float(i[1]) )
         #Rate_tot = (float(i[2])*N1 + p*N2)/(N1+N2)
         Rate_tot = float(i[2]) + p
-    else:
-        Rate_tot = float(i[2])
-    Rate.write('%.4g %.8g %.8g' %(float(i[0]), float(i[1]), Rate_tot))
-    Rate.write('\n')
+        Rate.write('%.4g %.8g %.8g' %(float(i[0]), float(i[1]), Rate_tot))
+        Rate.write('\n')
+    #else:
+        #Rate_tot = float(i[2])
+    #Rate.write('%.4g %.8g %.8g' %(float(i[0]), float(i[1]), Rate_tot))
+    #Rate.write('\n')
 
 
 data1.close()
