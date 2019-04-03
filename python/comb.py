@@ -15,9 +15,9 @@ for o,a in opts:
 
 pathW = "../data/"+date+"/"
 
-data1  = open(pathW+'qcd_Ana_rate.dat')
-data2  = open(pathW+'meson_Ana_rate.dat')
-data3  = open(pathW+'pbrem_Ana_rate.dat')
+data1  = open(pathW+'qcd_Ana_rate1.dat')
+data2  = open(pathW+'meson_Ana_rate1.dat')
+data3  = open(pathW+'pbrem_Ana_rate1.dat')
 
 sum1   = open(pathW+'meson_Ana_sum.dat','r')
 sum2   = open(pathW+'pbrem_Ana_sum.dat','r')
@@ -80,6 +80,7 @@ for i in line_1:#meson rates with pbrem shared
     i = i.replace('\n','')
     #print i
     i = i.split(' ')
+    print i[0], i[1]
     p = find_Rate( line_3, float(i[0]), float(i[1]) )
     if p:
         #N1 = find_N( line_s1, float(i[0]),float(i[1]) )

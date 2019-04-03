@@ -24,9 +24,9 @@ if leptophilic:
     data3 = pd.read_csv(pathW+'pbrem_Ana_rate2.csv', header=None)
     dataC = pd.read_csv(pathW+'Rate2.csv', header=None)
 else:
-    data1 = pd.read_csv(pathW+'qcd_Ana_rate.csv', header=None)
-    data2 = pd.read_csv(pathW+'meson_Ana_rate.csv', header=None)
-    data3 = pd.read_csv(pathW+'pbrem_Ana_rate.csv', header=None)
+    data1 = pd.read_csv(pathW+'qcd_Ana_rate1.csv', header=None)
+    data2 = pd.read_csv(pathW+'meson_Ana_rate1.csv', header=None)
+    data3 = pd.read_csv(pathW+'pbrem_Ana_rate1.csv', header=None)
     dataC = pd.read_csv(pathW+'comb_Ana_rate1.csv', header=None)
     #dataC = pd.read_csv(pathW+'comb.csv', header=None)
 ##### Constraints
@@ -44,10 +44,10 @@ import matplotlib.pyplot as pl
 pl.yscale('log')
 pl.xscale('log')
 
-pl.plot(data1[0], data1[1], 'b', label='SHiP (QCD)')
-pl.plot(data3[0], data3[1], 'g', label='SHiP (Pbrem)')
-pl.plot(data2[0], data2[1], 'r', label='SHiP (Mesons)')
-pl.plot(dataC[0], dataC[1], 'black', label='SHiP (Combined)')
+pl.plot(data1[0], data1[1], 'b', linewidth=2, label='SHiP (QCD)')
+pl.plot(data3[0], data3[1], 'g', linewidth=2,label='SHiP (Pbrem)')
+pl.plot(data2[0], data2[1], 'r', linewidth=2,label='SHiP (Mesons)')
+pl.plot(dataC[0], dataC[1], 'black', linewidth=2, label='SHiP (Combined)')
 
 #pl.fill_between(data1[0], data1[1], y2=0, color='red', hatch='.', label='SHiP (QCD)')
 #pl.fill_between(data3[0], data3[1], y2=0, color='blue', label="SHiP (Brem)") 
