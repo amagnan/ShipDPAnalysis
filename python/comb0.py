@@ -37,7 +37,7 @@ def find_Rate(lines,mass,eps):
         k = i.replace('\n','')
         #print k
         k = k.split(' ')
-        if abs(math.log10(float(k[1])) - math.log10(eps)) <0.1 and abs(float(k[0]) - mass)<0.0001 and float(k[1])!=0.0: return float(k[2])
+        if abs(math.log10(float(k[1])) - math.log10(eps)) <0.1 and abs(float(k[0]) - mass)<0.0001 and float(k[2])!=0.0: return float(k[2])
     else: return 0
 
 def find_N(lines,eps,mass):
