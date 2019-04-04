@@ -52,8 +52,8 @@ def find_N(lines,eps,mass):
 for i in line_2:#pbrem just in case
     i = i.replace('\n','')
     i = i.split(' ')
-    if float(i[1])!=0.0: p = find_Rate( line_3, float(i[0]), float(i[1]) )
-    if float(i[1])==0.0:p=0
+    if float(i[2])!=0.0: p = find_Rate( line_3, float(i[0]), float(i[1]) )
+    if float(i[2])==0.0:p=0
     if p:
         #N3 = find_N( line_s3, float(i[0]),float(i[1]) )
         #N2 = find_N( line_s2, float(i[0]), float(i[1]) )
