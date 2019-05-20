@@ -1,9 +1,17 @@
 <<<<<<< HEAD
 
-\LATEST DATAS ARE ON data/190216/
+\LATEST DATAS ARE ON data/190516/
 
-# _rate1 for all SM products(mass, epsilon, 3rd column expected rate)
-# _rate2 for leptophilic(mass, epsilon, expected rate)
+#plots folder has the necessary plots and histograms for the paper, and it has a plots.root which includes the plots and histograms as canvas, and also has 3 trees for each production
+
+#Combined _Rate1 Combined rates for all SM products(mass, epsilon, 3rd column expected rate)
+#Combined _Rate2 Combined rates for leptophilic(mass, epsilon, expected rate)
+
+#Ana _rate1 for all SM products(mass, epsilon, 3rd column expected rate)
+#Ana _rate2 for leptophilic(mass, epsilon, expected rate)
+#_Rate1 ZERO rates excluded for all SM products(mass, epsilon, 3rd column expected rate)
+#_Rate2 ZERO rates excluded for leptophilic(mass, epsilon, expected rate)
+
 
 # _e,_mu,_tau,_had; mass, epsilon, BR(mode/all_events), Ves_Prob(Ves_weighted/mode), Reco_Eff(Final_Select_weighted/Ves_weighted)
 

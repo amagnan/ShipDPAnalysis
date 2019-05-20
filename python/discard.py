@@ -1,4 +1,5 @@
 from array import array
+from decimal import Decimal
 import os,sys,getopt
 lept= False
 try:
@@ -18,10 +19,10 @@ m=[]
 e=[]
 for x in l:
     y=x.split(" ")
-    if int(y[3])<1000 or (float(y[3])-float(y[4]))>= float(y[3])/5.: 
+    if (Decimal(y[3])-Decimal(y[4]))/Decimal(y[3])>Decimal(0.3): 
         m.append(y[0])
         e.append(y[1])
-        #print y[0], y[1]
+        print y[0], y[1], y[4]
     else:
         m.append(0)
         e.append(0)
@@ -31,9 +32,9 @@ g=open(inp2,'r')
 
 k=g.readlines()
 #print 'new rate file'
-i=0
+"""i=0
 for x in k:
     x=x.replace("\n","")
     y=x.split(" ")
     i+=1
-    if not (float(y[2])==0 or (y[0]==m[i-1] and y[1]==e[i-1])): print y[0], y[1], y[2]
+    if not (Decimal(y[2])==0 or (y[0]==m[i-1] and y[1]==e[i-1])): print y[0], y[1], y[2]"""
