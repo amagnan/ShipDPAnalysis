@@ -6,28 +6,26 @@ from array import array
 leptophilic=0 
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "d:l:")
+    opts, args = getopt.getopt(sys.argv[1:], "l:")
 
 except getopt.GetoptError:
     print 'decay to all SM particles'
 
 for o,a in opts:
     if o in ('-l',): leptophilic = a 
-    if o in ('-d',): date = a
 
-pathW = "../data/"+date+"/"
 pathR = "../Exclusion/"
 
 if leptophilic:
-    data1 = pd.read_csv(pathW+'qcd_Ana_rate2.csv', header=None)
-    data2 = pd.read_csv(pathW+'meson_Ana_rate2.csv', header=None)
-    data3 = pd.read_csv(pathW+'pbrem_Ana_rate2.csv', header=None)
-    dataC = pd.read_csv(pathW+'Rate2.csv', header=None)
+    data1 = pd.read_csv(pathR+'qcd_Rate2.csv', header=None)
+    data2 = pd.read_csv(pathR+'meson_Rate2.csv', header=None)
+    data3 = pd.read_csv(pathR+'pbrem_Rate2.csv', header=None)
+    dataC = pd.read_csv(pathR+'comb_Rate2.csv', header=None)
 else:
-    data1 = pd.read_csv(pathW+'qcd_Ana_rate.csv', header=None)
-    data2 = pd.read_csv(pathW+'meson_Ana_rate.csv', header=None)
-    data3 = pd.read_csv(pathW+'pbrem_Ana_rate.csv', header=None)
-    dataC = pd.read_csv(pathW+'comb_Ana_rate1.csv', header=None)
+    data1 = pd.read_csv(pathR+'qcd_Rate1.csv', header=None)
+    data2 = pd.read_csv(pathR+'meson_Rate1.csv', header=None)
+    data3 = pd.read_csv(pathR+'pbrem_Rate1.csv', header=None)
+    dataC = pd.read_csv(pathR+'comb_Rate1.csv', header=None)
     #dataC = pd.read_csv(pathW+'comb.csv', header=None)
 ##### Constraints
 dataC1 = pd.read_csv(pathR+'Dataset_DP_excluded_u.csv', header=None)
@@ -44,10 +42,10 @@ import matplotlib.pyplot as pl
 pl.yscale('log')
 pl.xscale('log')
 
-pl.plot(data1[0], data1[1], 'b', linewidth=2, label='SHiP (QCD)')
-pl.plot(data3[0], data3[1], 'g', linewidth=2,label='SHiP (Pbrem)')
-pl.plot(data2[0], data2[1], 'r', linewidth=2,label='SHiP (Mesons)')
-pl.plot(dataC[0], dataC[1], 'black', linewidth=2, label='SHiP (Combined)')
+pl.plot(data1[0], data1[1], 'b', linewidth=1.5, label='SHiP (QCD)')
+pl.plot(data3[0], data3[1], 'g', linewidth=1.5,label='SHiP (Pbrem)')
+pl.plot(data2[0], data2[1], 'r', linewidth=1.5,label='SHiP (Mesons)')
+pl.plot(dataC[0], dataC[1], 'black', linewidth=1.0, label='SHiP (Combined)')
 
 #pl.fill_between(data1[0], data1[1], y2=0, color='red', hatch='.', label='SHiP (QCD)')
 #pl.fill_between(data3[0], data3[1], y2=0, color='blue', label="SHiP (Brem)") 
@@ -63,4 +61,5 @@ pl.ylim(1e-10, 1e-2)
 pl.xlim(13, 1e4)
 pl.ylabel(r"$\epsilon$", fontsize=18)
 pl.legend(prop={'size': 10})
+pl.savefig(pathR+"excl_"+str(leptophilic)+".pdf")
 pl.show()
