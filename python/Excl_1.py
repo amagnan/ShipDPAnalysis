@@ -42,10 +42,10 @@ import matplotlib.pyplot as pl
 pl.yscale('log')
 pl.xscale('log')
 
-pl.plot(data1[0], data1[1], 'b', linewidth=1.5, label='SHiP (QCD)')
-pl.plot(data3[0], data3[1], 'g', linewidth=1.5,label='SHiP (Pbrem)')
-pl.plot(data2[0], data2[1], 'r', linewidth=1.5,label='SHiP (Mesons)')
-pl.plot(dataC[0], dataC[1], 'black', linewidth=1.0, label='SHiP (Combined)')
+pl.plot(data1[0], data1[1], 'b', linewidth=2.0, label='SHiP (QCD)', labelsize=20)
+pl.plot(data3[0], data3[1], 'g', linewidth=2.0,label='SHiP (Pbrem)', labelsize=20)
+pl.plot(data2[0], data2[1], 'r', linewidth=2.0,label='SHiP (Mesons)', labelsize=20)
+pl.plot(dataC[0], dataC[1], 'black', linewidth=1.8, label='SHiP (Combined)', labelsize=20)
 
 #pl.fill_between(data1[0], data1[1], y2=0, color='red', hatch='.', label='SHiP (QCD)')
 #pl.fill_between(data3[0], data3[1], y2=0, color='blue', label="SHiP (Brem)") 
@@ -53,13 +53,13 @@ pl.plot(dataC[0], dataC[1], 'black', linewidth=1.0, label='SHiP (Combined)')
 
 #pl.fill_between(data3[0], data3[1], where=data3[0] > y3  , color='green', label="SHiP (Brem)")
 
-pl.fill_between(dataC1[0], dataC1[1], y2=y2, color="grey", label="Excluded Region")
+pl.fill_between(dataC1[0], dataC1[1], y2=y2, color="grey", label="Excluded Region", labelsize=20)
 pl.fill_between(dataC2[0], dataC2[1], y2=0, color="grey")
  
-pl.xlabel("M [MeV]",fontsize=18)
+pl.xlabel("M [MeV]",fontsize=20)
 pl.ylim(1e-10, 1e-2)
 pl.xlim(13, 1e4)
-pl.ylabel(r"$\epsilon$", fontsize=18)
+pl.ylabel(r"$\epsilon$", fontsize=20)
 pl.legend(prop={'size': 10})
 pl.savefig(pathR+"excl_"+str(leptophilic)+".pdf")
 pl.show()

@@ -23,7 +23,7 @@ for x in l:
         m.append(y[0])
         e.append(y[1])
         print y[0], y[1], y[4]
-    else:
+"""    else:
         m.append(0)
         e.append(0)
 if not lept: inp2="../data/"+date+"/"+prod+"_Ana_rate1.dat"
@@ -32,7 +32,7 @@ g=open(inp2,'r')
 
 k=g.readlines()
 #print 'new rate file'
-"""i=0
+i=0
 for x in k:
     x=x.replace("\n","")
     y=x.split(" ")

@@ -70,7 +70,7 @@ for i in line_3:#meson rates with pbrem shared
     i = i.replace('\n','')
     #print i
     i = i.split(' ')
-    print i[0], i[1]
+    #print i[0], i[1]
     p = find_Rate( line_2, Decimal(i[0]), Decimal(i[1]) )
     if p:
         Rate_tot = Decimal(i[2]) + p
