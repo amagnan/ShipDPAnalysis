@@ -12,8 +12,9 @@ for o,a in opts:
     if o in ('-l','--leptophilic',): lepto = a
     if o in ('-d','--date',): date = a
 
-prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','meson','pbrem','qcd']
-prods=['meson','pbrem','qcd']
+#prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','meson','pbrem','qcd']
+#prods=['meson','pbrem','qcd']
+prods = ['pbrem1']
 for prod in prods:
 
     if not lepto: 
