@@ -75,7 +75,7 @@ for i,dummy in enumerate(a):
         if len(Ru)!=0:
             Iu = Ru.index(min(Ru))
             print 'lowest error', Mass, Eu[Iu]
-            k.write('%.13g,  %.13g, %.13g' %(Mass*1000.,Eu[Iu], min(Ru)))
+            k.write('%.13g, %.13g' %(Mass*1000.,Eu[Iu]))
             k.write('\n')
             bU=np.argsort(Ru) 
             for i,n in enumerate(bU):
@@ -89,7 +89,7 @@ for i,dummy in enumerate(a):
         if len(Rl)!=0:
             Il = Rl.index(min(Rl))
             print 'lowest error', Mass, El[Il]
-            k.write('%.13g,  %.13g, %.13g' %(Mass*1000.,El[Il], min(Rl)))
+            k.write('%.13g, %.13g' %(Mass*1000.,El[Il]))
             k.write('\n')
             bL=np.argsort(Rl)
             for i,n in enumerate(bL):
