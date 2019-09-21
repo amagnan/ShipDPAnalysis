@@ -14,7 +14,7 @@ for o,a in opts:
 
 #prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','meson','pbrem','qcd']
 #prods=['meson','pbrem','qcd']
-prods = ['pbrem1']
+prods = ['meson1']
 for prod in prods:
 
     if not lepto: 
