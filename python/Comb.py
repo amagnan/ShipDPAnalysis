@@ -24,7 +24,7 @@ if not wo:
         data3  = open(pathW+'qcd_Ana_rate1.dat')
         data1  = open(pathW+'meson_Ana_rate1.dat')
         data2  = open(pathW+'pbrem1_Ana_rate1.dat')
-        Rate   = open(pathW+'comb_Ana_rate1.dat','w')
+        Rate   = open(pathW+'comb1_Ana_rate1.dat','w')
     if lepto:
         data3  = open(pathW+'qcd_Ana_rate2.dat')
         data1  = open(pathW+'meson_Ana_rate2.dat')

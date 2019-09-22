@@ -1,40 +1,41 @@
 from array import array
-from decimal import Decimal
 import os,sys,getopt
-lept= False
+from decimal import Decimal
+
+lepto= False
+
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "d:p:l", ["date=","production="]) 
+    opts, args = getopt.getopt(sys.argv[1:], "d:l:", ["date=","leptophilic="]) 
 except getopt.GetoptError:
     sys.exit()
 for o,a in opts:
-    if o in ('-l','--leptophilic',): lept = a
+    if o in ('-l','--leptophilic',): lepto = a
     if o in ('-d','--date',): date = a
-    if o in ('-p', '--production',): prod = a 
-#n=raw_input("please enter the production: ")
-#d=raw_input("please enter the date: ")
-inp="../data/"+date+"/"+prod+"_Ana_sum.dat"
-f=open(inp,'r')
-l=f.readlines()
-m=[]
-e=[]
-for x in l:
-    y=x.split(" ")
-    if (Decimal(y[3])-Decimal(y[4]))/Decimal(y[3])>Decimal(0.3): 
-        m.append(y[0])
-        e.append(y[1])
-        print y[0], y[1], y[4]
-"""    else:
-        m.append(0)
-        e.append(0)
-if not lept: inp2="../data/"+date+"/"+prod+"_Ana_rate1.dat"
-else: inp2="../data/"+date+"/"+prod+"_Ana_rate2.dat"
-g=open(inp2,'r') 
 
-k=g.readlines()
-#print 'new rate file'
-i=0
-for x in k:
-    x=x.replace("\n","")
-    y=x.split(" ")
-    i+=1
-    if not (Decimal(y[2])==0 or (y[0]==m[i-1] and y[1]==e[i-1])): print y[0], y[1], y[2]"""
+#prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','meson','pbrem','qcd']
+#prods=['meson','pbrem','qcd']
+prods = ['meson1']
+for prod in prods:
+
+    if not lepto: 
+        outp="../data/"+date+"/"+prod+"_Rate1.dat"
+        inp="../data/"+date+"/"+prod+"_Ana_rate1.dat"
+    if lepto:
+        outp="../data/"+date+"/"+prod+"_Rate2.dat"
+        inp="../data/"+date+"/"+prod+"_Ana_rate2.dat"
+    
+    f=open(inp,'r')
+    k=f.readlines()
+    l=open(outp,'w')
+
+    for x in k:
+        x=x.replace("\n","")
+        x=x.split(" ")
+        if prod=='meson_eta1' and (Decimal(x[2]) or Decimal(x[3])):
+            l.write('%.5E %.9E %.9E %.9E' %(Decimal(x[0]),Decimal(x[1]),Decimal(x[2]),Decimal(x[3])))
+            l.write('\n')
+        if prod!='meson_eta1' and Decimal(x[2]):
+            l.write('%.5E %.9E %.9E' %(Decimal(x[0]),Decimal(x[1]),Decimal(x[2])))
+            l.write('\n')
+    f.close()
+    l.close()
