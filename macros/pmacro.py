@@ -17,21 +17,21 @@ def find_ratios(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.1 and abs(float(i[0]) - mass)<0.0001: return float(i[2]), float(i[3]), float(i[4])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.0001 and abs(float(i[0]) - mass)<0.0001: return float(i[2]), float(i[3]), float(i[4])
     else: return 0 
 
 def find_allratios(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.1 and abs(float(i[0]) - mass)<0.0001: return float(i[3]), float(i[4]), float(i[5])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.0001 and abs(float(i[0]) - mass)<0.0001: return float(i[3]), float(i[4]), float(i[5])
     else: return 0
 
 def find_mass(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.1 and abs(float(i[0]) - mass)<0.0001: return float(i[0])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.0001 and abs(float(i[0]) - mass)<0.0001: return float(i[0])
     else: return 0
 
 
@@ -39,14 +39,14 @@ def find_dau(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.1 and abs(float(i[0]) - mass)<0.0001: return float(i[2])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.0001 and abs(float(i[0]) - mass)<0.0001: return float(i[2])
     else: return 0
 
 def find_N(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.1 and abs(float(i[0]) - mass)<0.0001: return float(i[4])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.0001 and abs(float(i[0]) - mass)<0.0001: return float(i[4])
     else: return 0
 
 def looping(line,itsmass,itseps,itsbr,itsves,itsreco):
@@ -133,6 +133,7 @@ def combined_mode(mode,eps,l_meson_mode,l_pbrem_mode,l_qcd_mode,combined_mode_ma
         if not float(l[0]) in combined_mode_mass:
             if mode!='all': R3 = find_ratios(l_qcd_mode,float(l[0]),eps)
             if mode=='all': R3 = find_allratios(l_qcd_mode,float(l[0]),eps)
+            print R3
             BR = R3[0]
             combined_mode_mass.append(float(l[0]))
             combined_mode_br.append(BR)
@@ -412,6 +413,7 @@ for i,prod in enumerate(prods):
     c1.Write()
     exec('c1.Print(pathW+"%s_all_dau.pdf")'%prod)
 for n,mode in enumerate(modes):
+    print n,mode
     exec('combined_mode(mode,1e-06,l_meson_%s,l_pbrem_%s,l_qcd_%s,combined_%s_mass,combined_%s_br)'%(mode,mode,mode,mode,mode))
 plots('combined',combined_e_mass,combined_mu_mass,combined_tau_mass,combined_hadron_mass,combined_all_mass,combined_e_br,combined_mu_br,combined_tau_br,combined_hadron_br,combined_all_br)
 hfile.Write()

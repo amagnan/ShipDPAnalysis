@@ -128,7 +128,17 @@ def isInFiducial(X,Y,Z):
     if dist2InnerWall(X,Y,Z)<5*u.cm: return False
     return True 
  
-def findmum():
+def ImpactParameter(point,tPos,tMom):
+    t = 0
+    if hasattr(tMom,'P'): P = tMom.P()
+    else:                 P = tMom.Mag()
+    for i in range(3):   t += tMom(i)/P*(point(i)-tPos(i))
+    dist = 0
+    for i in range(3):   dist += (point(i)-tPos(i)-t*tMom(i)/P)**2
+    dist = r.TMath.Sqrt(dist)
+    return dist
+
+def findmum():#this function finds the mother of DP with weight,xs,momentum etc. USED for finding DP event
     for dp_ind,dp_tr in enumerate(sTree.MCTrack):
         if dp_tr.GetPdgCode()==9900015 or dp_tr.GetPdgCode()==4900023:
             mum_id=dp_tr.GetMotherId()
@@ -155,26 +165,10 @@ def findmum():
     if dpMom=='eta1': return xsw,xsw1,wg,dp_id,dp_mom,dp_mag
     if not dpMom=='eta1': return xsw,wg,dp_id,dp_mom,dp_mag
 
-def ImpactParameter(point,tPos,tMom):
-    t = 0
-    if hasattr(tMom,'P'): P = tMom.P()
-    else:                 P = tMom.Mag()
-    for i in range(3):   t += tMom(i)/P*(point(i)-tPos(i))
-    dist = 0
-    for i in range(3):   dist += (point(i)-tPos(i)-t*tMom(i)/P)**2
-    dist = r.TMath.Sqrt(dist)
-    return dist
-
-def find_signal(pdg):
-    if abs(pdg)== 11 or abs(pdg)== 13 or abs(pdg)== 111 or abs(pdg)== 321 or abs(pdg)== 211 or abs(pdg) == 2112 or abs(pdg)== 22 or abs(pdg)== 2212: return True
-
-def find_lepton(pdg):
-    if abs(pdg) == 11 or abs(pdg) == 13 or abs(pdg) == 15: return True
-
-def find_stablehadron(pdg):
-    if abs(pdg) == 111 or abs(pdg) == 211 or abs(pdg) == 321 or abs(pdg) == 2212 or abs(pdg) == 2112: return True
-
-def checkTrue(sTree, dp_id):
+def find_signal(pdg):# this function finds the signal tracks. USED for finding signals in fittracks.. It is also looks for pi0 and gamma BUT no gamma or pi0 in FitTracks. So, signals are proton+-, pion+-, kaon+-, electron +- muon +-
+    #if abs(pdg)== 11 or abs(pdg)== 13 or abs(pdg)== 111 or abs(pdg)== 321 or abs(pdg)== 211 or abs(pdg)== 22 or abs(pdg)== 2212: return True
+    if abs(pdg)== 11 or abs(pdg)== 13 or abs(pdg)== 111 or abs(pdg)== 321 or abs(pdg)== 211 or abs(pdg)== 2212: return True
+def checkTrue(sTree, dp_id):# this function gives the DP with its direct decay channel USED for finding the DP events with at least two e,mu,tau channel or any hadronic channel from MCTracks.
     #lepto=0
     PID=[]
     for mc,tr in enumerate(sTree.MCTrack):
@@ -186,8 +180,7 @@ def checkTrue(sTree, dp_id):
                 if mom==dp_id:#leptons in all process and/or hadrons in meson process
                     PID.append(mc)
                 elif (abs(pid)>6 or abs(pid)!=21) and (abs(mom_pid)<7 or abs(mom_pid)==21):#hadrons in qcd and pbrem
-                    PID.append(mc)
-
+                    PID.append(mc)#I NEED TO THINK OF SMT TO SPLIT NEUTRAL CHANNELS
     return PID
 
 h={}
@@ -246,7 +239,7 @@ ut.bookHist(h,'DOCA','Doca between two tracks',100,0.,100)
 
 ut.bookHist(h,'IP','Impact Parameter',100,0.,10.)
 
-def myEventLoop(n):
+def myEventLoop(n):# Analysis is starting here
     #print n
     rc=sTree.GetEntry(n)
     fm=findmum()
@@ -297,6 +290,10 @@ def myEventLoop(n):
         else:
             doca=sTree.MCTrack[xxx].GetStartT() 
             had+=1
+            """if abs(sTree.MCTrack[xxx].GetPdgCode())==111:
+                print n, sTree.MCTrack[xxx].GetPdgCode()
+            if abs(sTree.MCTrack[xxx].GetPdgCode())==211:
+                print n, sTree.MCTrack[xxx].GetPdgCode()"""
 
     for F,FIT in enumerate(sTree.FitTracks):
         fitStatus = FIT.getFitStatus()
@@ -318,7 +315,7 @@ def myEventLoop(n):
         #print "ftrack"
         if not isInFiducial(vtx.X(),vtx.Y(),vtx.Z()): continue
         #print "ftrack vessel"
-        if find_signal(xx.getPDG()):
+        if find_signal(xx.getPDG()):#This is VESSEL Cut
             #print "ftrack signal"
             f_track+=1
         else:
@@ -334,62 +331,62 @@ def myEventLoop(n):
         h['DOCA'].Fill(mc.GetStartT()-doca)
         if not (mc.GetStartT()-doca)<=1.: continue
         if not dist<10.: continue
-        if find_signal(xx.getPDG()):
+        if find_signal(xx.getPDG()):#This is RECO Cut
             RECO+=1
         else:
             oth_a+=1
             #print 'reco is rejected?', xx.getPDG()
 
-    if e>1: 
+    if e>1:#at least two electrons decay channel FOR BR
         h['DP_e'].Fill(mass_mc)
-    if mu>1:
+    if mu>1:#at least two muons decay channel FOR BR
         h['DP_mu'].Fill(mass_mc)
-    if tau>1:
+    if tau>1:#at least two taus decay channel FOR BR
         h['DP_tau'].Fill(mass_mc)
-    if had>0:
+    if had>0:#any hadronic decay channel for BR
         h['DP_had'].Fill(mass_mc)
 
-    if f_track>1:
-        if e>1:
+    if f_track>1:#at least two charged particle in the VESSEL
+        if e>1:#at least two electrons decay channel FOR VES_PROB
             h['DPvesW_e'].Fill(mass_mc,wg)
             h['DPves_e'].Fill(mass_mc)  
-        if mu>1:
+        if mu>1:#at least two muons decay channel FOR VES_PROB 
             h['DPvesW_mu'].Fill(mass_mc,wg)
             h['DPves_mu'].Fill(mass_mc) 
-        if had>0:
+        if had>0:#any hadronic decay channel for VES_PROB
             h['DPvesW_had'].Fill(mass_mc,wg)
             h['DPves_had'].Fill(mass_mc)         
-        if tau>1:
+        if tau>1:#at least two taus decay channel FOR VES_PROB
             h['DPvesW_tau'].Fill(mass_mc,wg)
             h['DPves_tau'].Fill(mass_mc)
 
-    if f_track>1 and RECO>1:
-        if e>1:
+    if f_track>1 and RECO>1:#at least two charged tracks in the FINAL CUT
+        if e>1:#at least two electrons decay channel FOR RECO_EFF
             h['DPang_e'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_e'].Fill(mass_mc,wg*xsw1)
             h['DPangW_e'].Fill(mass_mc,wg)  
-        if mu>1:
+        if mu>1:#at least two muons decay channel FOR RECO_EFF
             h['DPang_mu'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_mu'].Fill(mass_mc,wg*xsw1)
             h['DPangW_mu'].Fill(mass_mc,wg) 
-        if had>0:
+        if had>0:#any hadronic decay channel for RECO_EFF
             h['DPang_had'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_had'].Fill(mass_mc,wg*xsw1)
             h['DPangW_had'].Fill(mass_mc,wg)         
-        if tau>1:
+        if tau>1:#at least two taus decay channel FOR RECO_EFF
             h['DPang_tau'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_tau'].Fill(mass_mc,wg*xsw1)
             h['DPangW_tau'].Fill(mass_mc,wg)
 
-    if e>1 or mu>1 or tau>1 or had>0:
+    if e>1 or mu>1 or tau>1 or had>0:#at least two charged leptons decay channel and any hadronic decay channel FOR BR_TOT
         h['DP'].Fill(mass_mc)
-        if f_track>1:
+        if f_track>1:##at least two charged tracks in the VESL
             h['DPvesW'].Fill(mass_mc,wg)
             h['DPves'].Fill(mass_mc)
-            if RECO>1: 
+            if RECO>1:#at least two charged tracks in the FINAL CUT 
                 #print "reco"
                 h['DPangW'].Fill(mass_mc)       
-                h['DPang'].Fill(mass_mc,wg*xsw)
+                h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
                 if dpMom == 'eta1': h['DPang1'].Fill(mass_mc,wg*xsw1)
             else:
                 h['DPangW_oth'].Fill(mass_mc,wg)
