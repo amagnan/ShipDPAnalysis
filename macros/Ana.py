@@ -167,7 +167,9 @@ def findmum():#this function finds the mother of DP with weight,xs,momentum etc.
 
 def find_signal(pdg):# this function finds the signal tracks. USED for finding signals in fittracks.. It is also looks for pi0 and gamma BUT no gamma or pi0 in FitTracks. So, signals are proton+-, pion+-, kaon+-, electron +- muon +-
     #if abs(pdg)== 11 or abs(pdg)== 13 or abs(pdg)== 111 or abs(pdg)== 321 or abs(pdg)== 211 or abs(pdg)== 22 or abs(pdg)== 2212: return True
-    if abs(pdg)== 11 or abs(pdg)== 13 or abs(pdg)== 321 or abs(pdg)== 211 or abs(pdg)== 2212: return True
+    if abs(PDG.GetParticle(pdg).Charge())>0.0: return True
+    else: return False
+
 def checkTrue(sTree, dp_id):# this function gives the DP with its direct decay channel USED for finding the DP events with at least two e,mu,tau channel or any hadronic channel from MCTracks.
     #lepto=0
     PID=[]
@@ -184,8 +186,6 @@ def checkTrue(sTree, dp_id):# this function gives the DP with its direct decay c
     return PID
 
 h={}
-ut.bookHist(h,'DOCA','DOCA')
-
 ut.bookHist(h,'DPang1','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPang1_e','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPang1_mu','invariant Mass (GeV)',100,0.,mass_mc+5.)
@@ -201,6 +201,7 @@ ut.bookHist(h,'DPves','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPvesW','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPang','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPangW','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPangWe','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
 
 ut.bookHist(h,'DP_e','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPW_e','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
@@ -285,7 +286,7 @@ def myEventLoop(n):# Analysis is starting here
     f_track=0
     RECO=0
     debug=0
-    e, mu, tau, had, nhad, oth_a, oth_v  = 0, 0, 0, 0, 0, 0, 0
+    e, mu, tau, had, nhad, oth_v  = 0, 0, 0, 0, 0, 0
     #print "mom find"
     if xsw==0 and wg==0 and dp_id==0: return
     #print "mom found"
@@ -308,9 +309,11 @@ def myEventLoop(n):# Analysis is starting here
             doca=sTree.MCTrack[xxx].GetStartT() 
             if PDG.GetParticle(sTree.MCTrack[xxx].GetPdgCode()).Charge()==0.0:
                 nhad+=1
-            else:
-                if abs(PDG.GetParticle(sTree.MCTrack[xxx].GetPdgCode()).Charge())!=3.0: print sTree.MCTrack[xxx].GetPdgCode()
+            elif abs(PDG.GetParticle(sTree.MCTrack[xxx].GetPdgCode()).Charge())>0.0:
                 had+=1
+                #if abs(PDG.GetParticle(sTree.MCTrack[xxx].GetPdgCode()).Charge())!=3.0: print sTree.MCTrack[xxx].GetPdgCode()
+            else: print sTree.MCTrack[xxx].GetPdgCode()
+
     for F,FIT in enumerate(sTree.FitTracks):
         fitStatus = FIT.getFitStatus()
         if not fitStatus.isFitConverged(): continue
@@ -334,26 +337,20 @@ def myEventLoop(n):# Analysis is starting here
         if find_signal(xx.getPDG()):#This is VESSEL Cut
             #print "ftrack signal"
             f_track+=1
-        else:
+            if not checkFiducialVolume(sTree,F,dy): continue
+            nmeas = fitStatus.getNdf()
+            chi2 = fitStatus.getChi2()
+            if not nmeas>25.: continue
+            if not chi2/nmeas<5.: continue
+            if not xx.getMomMag()>1.: continue
+            #if not mc.GetStartT()<=1.:continue
+            h['DOCA'].Fill(mc.GetStartT()-doca)
+            if not (mc.GetStartT()-doca)<=1.: continue
+            if not dist<10.: continue
+            RECO+=1
+        if not find_signal(xx.getPDG()):
             oth_v+=1
             print xx.getPDG()
-            #print 'fit track is rejected?', xx.getPDG()
-        if not checkFiducialVolume(sTree,F,dy): continue
-        nmeas = fitStatus.getNdf()
-        chi2 = fitStatus.getChi2()
-        if not nmeas>25.: continue
-        if not chi2/nmeas<5.: continue
-        if not xx.getMomMag()>1.: continue
-        #if not mc.GetStartT()<=1.:continue
-        h['DOCA'].Fill(mc.GetStartT()-doca)
-        if not (mc.GetStartT()-doca)<=1.: continue
-        if not dist<10.: continue
-        if find_signal(xx.getPDG()):#This is RECO Cut
-            RECO+=1
-        else:
-            oth_a+=1
-            #print 'reco is rejected?', xx.getPDG()
-
     if e>1:#at least two electrons decay channel FOR BR
         h['DP_e'].Fill(mass_mc)
     if mu>1:#at least two muons decay channel FOR BR
@@ -362,11 +359,14 @@ def myEventLoop(n):# Analysis is starting here
         h['DP_tau'].Fill(mass_mc)
     if nhad>0 and had==0:
         h['DP_nhad'].Fill(mass_mc)
+        #print "neutral only", nhad, had
     if had>0 and nhad==0:#any hadronic decay channel for BR
+        #print "charged only", nhad, had
         h['DP_chad'].Fill(mass_mc)
-    if nhad >0 and had>0:
+    if nhad>0 and had>0:
+        #print "mix", nhad, had
         h['DP_had'].Fill(mass_mc)
-
+    #else: print "mc", e, mu, tau, had, nhad
     if f_track>1:#at least two charged particle in the VESSEL
         if e>1:#at least two electrons decay channel FOR VES_PROB
             h['DPvesW_e'].Fill(mass_mc,wg)
@@ -374,16 +374,13 @@ def myEventLoop(n):# Analysis is starting here
         if mu>1:#at least two muons decay channel FOR VES_PROB 
             h['DPvesW_mu'].Fill(mass_mc,wg)
             h['DPves_mu'].Fill(mass_mc) 
-        if had>0:#any hadronic decay channel for VES_PROB
-            h['DPvesW_had'].Fill(mass_mc,wg)
-            h['DPves_had'].Fill(mass_mc)         
         if nhad>0 and had==0:
             h['DPvesW_nhad'].Fill(mass_mc,wg)
             h['DPves_nhad'].Fill(mass_mc)
         if had>0 and nhad==0:#any hadronic decay channel for BR
             h['DPvesW_chad'].Fill(mass_mc,wg)
             h['DPves_chad'].Fill(mass_mc) 
-        if nhad >0 and had>0:
+        if nhad>0 and had>0:
             h['DPvesW_had'].Fill(mass_mc,wg)
             h['DPves_had'].Fill(mass_mc) 
         if tau>1:#at least two taus decay channel FOR VES_PROB
@@ -423,7 +420,8 @@ def myEventLoop(n):# Analysis is starting here
             h['DPves'].Fill(mass_mc)
             if RECO>1:#at least two charged tracks in the FINAL CUT 
                 #print "reco"
-                h['DPangW'].Fill(mass_mc)       
+                h['DPangW'].Fill(mass_mc)
+                h['DPangWe'].Fill(mass_mc,wg)
                 h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
                 if dpMom == 'eta1': h['DPang1'].Fill(mass_mc,wg*xsw1)
             else:
@@ -436,9 +434,6 @@ def myEventLoop(n):# Analysis is starting here
     elif TR<2 and had==0 and nhad==0: 
         #Dump(sTree.MCTrack)
         h['DP_oth'].Fill(mass_mc)
-        #print "one track", e, mu, tau, had
-    elif TR<2 and had==0 and nhad!=0:
-        h['DP_noth'].Fill(mass_mc)
 
 nEvents =sTree.GetEntries()
 for n in range(nEvents):
@@ -474,92 +469,125 @@ H=open(o8,'w+')
 k=open(o9,'w+')
 l=open(o10,'w+')
 
-
-Sum,ves_s,ang_s= 0., 0., 0.
-
-if float(h['DPvesW_e'].Integral())>0.:
-    ang_s+=float(h['DPangW_e'].Integral())
-    ves_s+=float(h['DPvesW_e'].Integral())
-    Sum+=float(h['DP_e'].Integral())
-    a.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_e'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_e'].Integral())/float(h['DP_e'].Integral()), float(h['DPangW_e'].Integral())/float(h['DPvesW_e'].Integral())))
-    a.write('\n')
-if float(h['DPvesW_mu'].Integral())!=0:
-    ang_s+=float(h['DPangW_mu'].Integral())
-    ves_s+=float(h['DPvesW_mu'].Integral())
-    Sum+=float(h['DP_mu'].Integral())
-    b.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_mu'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_mu'].Integral())/float(h['DP_mu'].Integral()), float(h['DPangW_mu'].Integral())/float(h['DPvesW_mu'].Integral())))
-    b.write('\n')
-if float(h['DPvesW_tau'].Integral())!=0:
-    ang_s+=float(h['DPangW_tau'].Integral())
-    ves_s+=float(h['DPvesW_tau'].Integral())
-    Sum+=float(h['DP_tau'].Integral())
-    c.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_tau'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_tau'].Integral())/float(h['DP_tau'].Integral()), float(h['DPangW_tau'].Integral())/float(h['DPvesW_tau'].Integral())))
-    c.write('\n')
-if float(h['DPvesW_had'].Integral())!=0:
-    ang_s+=float(h['DPangW_had'].Integral())
-    ves_s+=float(h['DPvesW_had'].Integral())
-    Sum+=float(h['DP_had'].Integral())
-    d.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_had'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_had'].Integral())/float(h['DP_had'].Integral()), float(h['DPangW_had'].Integral())/float(h['DPvesW_had'].Integral())))
-    d.write('\n')
-if float(h['DPvesW_nhad'].Integral())!=0:
-    ang_s+=float(h['DPangW_nhad'].Integral())
-    ves_s+=float(h['DPvesW_nhad'].Integral())
-    Sum+=float(h['DP_nhad'].Integral())
-    dn.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_nhad'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_nhad'].Integral())/float(h['DP_nhad'].Integral()), float(h['DPangW_nhad'].Integral())/float(h['DPvesW_nhad'].Integral())))
-    dn.write('\n')
-if float(h['DPvesW_chad'].Integral())!=0:
-    ang_s+=float(h['DPangW_chad'].Integral())
-    ves_s+=float(h['DPvesW_chad'].Integral())
-    Sum+=float(h['DP_chad'].Integral())
-    dc.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_chad'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_chad'].Integral())/float(h['DP_chad'].Integral()), float(h['DPangW_chad'].Integral())/float(h['DPvesW_chad'].Integral())))
-    dc.write('\n')
-
-if float(h['DPvesW'].Integral())!=0.: 
-    f.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_oth'].Integral())/float(h['DPW'].Integral()), float(h['DPvesW_oth'].Integral())/float(h['DP'].Integral()), float(h['DPangW_oth'].Integral())/float(h['DPvesW'].Integral()), float(h['DP_noth'].Integral())/float(h['DPW'].Integral())))
-    f.write('\n')#mass, epsilon, how much we lose from 2 track selection, how much we lose in vessel, how much we lose in final selection
-if float(ves_s)!=0:
-    g.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP'].Integral()/h['DPW'].Integral()), float(Sum/h['DP'].Integral()), float(ves_s/Sum), float(ang_s/ves_s)))
-    g.write('\n')
-
 if float(h['DP'].Integral())!=0:
+    NomL, NomL1, DenL  = 0., 0., 0.
+    Sum,ves_s,ang_s= 0., 0., 0.
+    DP_instance=darkphoton.DarkPhoton(float(mass_mc),float(eps))
     H.write('%.4g %s %.8g %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DPW'].Integral()), float(h['DP'].Integral()), float(h['DPves'].Integral()), float(h['DPangW'].Integral())))
     H.write('\n')
+    if float(h['DPvesW'].Integral())!=0.:
+        f.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_oth'].Integral())/float(h['DPW'].Integral()), float(h['DPvesW_oth'].Integral())/float(h['DP'].Integral()), float(h['DPangW_oth'].Integral())/float(h['DPvesW'].Integral())))
+        f.write('\n')#mass, epsilon, how much we lose from 2 track selection, how much we lose in vessel, how much we lose in final selection
+    if float(h['DPvesW'].Integral())==0.:
+        f.write('%.4g %s %.8g %.8g 0.0' %(mass_mc, eps, float(h['DP_oth'].Integral())/float(h['DPW'].Integral()), float(h['DPvesW_oth'].Integral())/float(h['DP'].Integral())))
+        f.write('\n')
+    if float(h['DP_e'].Integral())!=0:
+        Sum+=float(h['DP_e'].Integral())
+        BR1=DP_instance.findBranchingRatio('A -> e- e+')
+        DenL+=float(h['DP_e'].Integral())*BR1
+        if dpMom == "eta1":
+            NomL+=float(h['DPang_e'].Integral())
+            NomL1+=float(h['DPang1_e'].Integral())
+        if dpMom != "eta1":
+            NomL+=float(h['DPang_e'].Integral())
+        if float(h['DPvesW_e'].Integral())!=0: 
+            ang_s+=float(h['DPangW_e'].Integral())
+            ves_s+=float(h['DPvesW_e'].Integral())
+            a.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_e'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_e'].Integral())/float(h['DP_e'].Integral()), float(h['DPangW_e'].Integral())/float(h['DPvesW_e'].Integral())))  
+            a.write('\n')
+        if float(h['DPvesW_e'].Integral())==0:
+            a.write('%.4g %s %.8g %.8g 0.0' %(mass_mc, eps, float(h['DP_e'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_e'].Integral())/float(h['DP_e'].Integral())))  
+            a.write('\n')
+    if float(h['DP_mu'].Integral())!=0:
+        Sum+=float(h['DP_mu'].Integral())
+        BR2=DP_instance.findBranchingRatio('A -> mu- mu+')
+        DenL+=float(h['DP_mu'].Integral())*BR2 
+        if dpMom == "eta1":
+            NomL+=float(h['DPang_mu'].Integral())
+            NomL1+=float(h['DPang1_mu'].Integral())
+        if dpMom != "eta1":
+            NomL+=float(h['DPang_mu'].Integral()) 
+        if float(h['DPvesW_mu'].Integral())!=0:
+            ang_s+=float(h['DPangW_mu'].Integral())
+            ves_s+=float(h['DPvesW_mu'].Integral())
+            b.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_mu'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_mu'].Integral())/float(h['DP_mu'].Integral()), float(h['DPangW_mu'].Integral())/float(h['DPvesW_mu'].Integral())))
+            b.write('\n')
+        if float(h['DPvesW_mu'].Integral())==0:
+            b.write('%.4g %s %.8g %.8g 0.0' %(mass_mc, eps, float(h['DP_mu'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_mu'].Integral())/float(h['DP_mu'].Integral())))
+            b.write('\n')
+    if float(h['DP_tau'].Integral())!=0:
+        Sum+=float(h['DP_tau'].Integral())
+        BR3=DP_instance.findBranchingRatio('A -> tau- tau+')
+        DenL+=float(h['DP_tau'].Integral())*BR3
+        if dpMom == "eta1":
+            NomL+=float(h['DPang_tau'].Integral())
+            NomL1+=float(h['DPang1_tau'].Integral())
+        if dpMom != "eta1":
+            NomL+=float(h['DPang_tau'].Integral())
+        if float(h['DPvesW_tau'].Integral())!=0:
+            ang_s+=float(h['DPangW_tau'].Integral())
+            ves_s+=float(h['DPvesW_tau'].Integral())
+            c.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_tau'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_tau'].Integral())/float(h['DP_tau'].Integral()), float(h['DPangW_tau'].Integral())/float(h['DPvesW_tau'].Integral())))
+            c.write('\n')
+        if float(h['DPvesW_tau'].Integral())==0:
+            c.write('%.4g %s %.8g %.8g 0.0' %(mass_mc, eps, float(h['DP_tau'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_tau'].Integral())/float(h['DP_tau'].Integral())))
+            c.write('\n')
+    if float(h['DP_had'].Integral())!=0:
+        Sum+=float(h['DP_had'].Integral())
+        if float(h['DPvesW_had'].Integral())!=0:
+            ang_s+=float(h['DPangW_had'].Integral())
+            ves_s+=float(h['DPvesW_had'].Integral())
+            d.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_had'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_had'].Integral())/float(h['DP_had'].Integral()), float(h['DPangW_had'].Integral())/float(h['DPvesW_had'].Integral())))
+            d.write('\n')
+        else:
+            d.write('%.4g %s %.8g %.8g 0.0' %(mass_mc, eps, float(h['DP_had'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_had'].Integral())/float(h['DP_had'].Integral())))
+            d.write('\n')
+    if float(h['DP_nhad'].Integral())!=0:
+        Sum+=float(h['DP_nhad'].Integral())
+        if float(h['DPvesW_nhad'].Integral())!=0:
+            ang_s+=float(h['DPangW_nhad'].Integral())
+            ves_s+=float(h['DPvesW_nhad'].Integral())
+            dn.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_nhad'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_nhad'].Integral())/float(h['DP_nhad'].Integral()), float(h['DPangW_nhad'].Integral())/float(h['DPvesW_nhad'].Integral())))
+            dn.write('\n')
+        else:
+            dn.write('%.4g %s %.8g %.8g 0.0' %(mass_mc, eps, float(h['DP_nhad'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_nhad'].Integral())/float(h['DP_nhad'].Integral())))
+            dn.write('\n')
+    if float(h['DP_chad'].Integral())!=0:
+        Sum+=float(h['DP_chad'].Integral())
+        if float(h['DPvesW_chad'].Integral())!=0:
+            ang_s+=float(h['DPangW_chad'].Integral())
+            ves_s+=float(h['DPvesW_chad'].Integral())
+            dc.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_chad'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_chad'].Integral())/float(h['DP_chad'].Integral()), float(h['DPangW_chad'].Integral())/float(h['DPvesW_chad'].Integral())))
+            dc.write('\n')
+        else:
+            dc.write('%.4g %s %.8g %.8g 0.0' %(mass_mc, eps, float(h['DP_chad'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_chad'].Integral())/float(h['DP_chad'].Integral())))
+            dc.write('\n')
+    if float(Sum)!=0:
+        if float(ves_s)!=0:
+            print float(h['DP'].Integral()), float(h['DPvesW'].Integral()), float(h['DPangWe'].Integral())
+            g.write('%.4g %s %.8g %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP'].Integral()/h['DPW'].Integral()), float(Sum/h['DP'].Integral()), float(ves_s/Sum), float(ang_s/ves_s)))
+            g.write('\n')
+        else:
+            g.write('%.4g %s %.8g %.8g %.8g 0.0' %(mass_mc, eps, float(h['DP'].Integral()/h['DPW'].Integral()), float(Sum/h['DP'].Integral()), float(ves_s/Sum)))
+            g.write('\n')
 
-NomL  = 0.
-NomL1 = 0.
-DenL  = 0.
-DP_instance=darkphoton.DarkPhoton(float(mass_mc),float(eps))
-
-if float(h['DP_e'].Integral())!=0:
-    BR1=DP_instance.findBranchingRatio('A -> e- e+')
-    NomL+=float(h['DPang_e'].Integral())
-    if dpMom == "eta1": NomL1+=float(h['DPang1_e'].Integral())
-    DenL+=float(h['DP_e'].Integral())*BR1
-if float(h['DP_mu'].Integral())!=0:
-    BR2=DP_instance.findBranchingRatio('A -> mu- mu+')
-    NomL+=float(h['DPang_mu'].Integral())
-    if dpMom == "eta1": NomL1+=float(h['DPang1_mu'].Integral())
-    DenL+=float(h['DP_mu'].Integral())*BR2
-if float(h['DP_tau'].Integral())!=0:
-    BR3=DP_instance.findBranchingRatio('A -> tau- tau+')
-    NomL+=float(h['DPang_tau'].Integral())
-    if dpMom == "eta1": NomL1+=float(h['DPang1_tau'].Integral())
-    DenL+=float(h['DP_tau'].Integral())*BR3
-if float(h['DP'].Integral())!=0:
-    RecLW=NomL/DenL*2.0e+20
-    RecW=h['DPang'].Integral()/h['DP'].Integral()*2.0e+20#weighted Selected/weighted Vessel
     if dpMom=="eta1":
+        RecLW=NomL/DenL*2.0e+20
+        RecW=h['DPang'].Integral()/h['DP'].Integral()*2.0e+20#weighted Selected/weighted Vessel
         RecLW1=NomL1/DenL*2.0e+20
         RecW1=h['DPang1'].Integral()/h['DP'].Integral()*2.0e+20
         k.write('%.4g %s %.8g %.8g' %(mass_mc, eps, RecW1, RecW)) 
-        k.write('\n')       
+        k.write('\n')   
         l.write('%.4g %s %.8g %.8g' %(mass_mc, eps, RecLW1, RecLW)) 
         l.write('\n')
-    if not dpMom=="eta1":
+    if dpMom!="eta1":
+        RecLW=NomL/DenL*2.0e+20
+        RecW=h['DPang'].Integral()/h['DP'].Integral()*2.0e+20#weighted Selected/weighted Vessel
         k.write('%.4g %s %.8g' %(mass_mc, eps, RecW)) 
         k.write('\n')       
         l.write('%.4g %s %.8g' %(mass_mc, eps, RecLW)) 
         l.write('\n')
+
 print mass_mc, eps, RecW
 a.close()
 b.close()
