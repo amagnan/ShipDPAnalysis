@@ -21,15 +21,15 @@ pathW = "../data/"+date+"/"
 
 if not wo:
     if not lepto:
-        data3  = open(pathW+'qcd_Ana_rate1.dat')
-        data1  = open(pathW+'meson_Ana_rate1.dat')
-        data2  = open(pathW+'pbrem_Ana_rate1.dat')
-        Rate   = open(pathW+'comb_Ana_rate1.dat','w')
+        data3  = open(pathW+'qcd_rate1.dat')
+        data1  = open(pathW+'meson_rate1.dat')
+        data2  = open(pathW+'pbrem_rate1.dat')
+        Rate   = open(pathW+'comb_rate1.dat','w')
     if lepto:
-        data3  = open(pathW+'qcd_Ana_rate2.dat')
-        data1  = open(pathW+'meson_Ana_rate2.dat')
-        data2  = open(pathW+'pbrem_Ana_rate2.dat')
-        Rate   = open(pathW+'comb_Ana_rate2.dat','w')
+        data3  = open(pathW+'qcd_rate2.dat')
+        data1  = open(pathW+'meson_rate2.dat')
+        data2  = open(pathW+'pbrem_rate2.dat')
+        Rate   = open(pathW+'comb_rate2.dat','w')
 
 if wo:
     if not lepto:

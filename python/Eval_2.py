@@ -16,12 +16,12 @@ for o,a in opts:
     if o in ('-d',): date = a
 
 pathR = "../data/"+date+"/"
-pathW = "../Exclusion/"
+#pathW = "../Exclusion/"
 eps,rate=array('d'),array('d')
 
 if prod:
     f=open(pathR+prod+'_'+analysis+'.dat','r')
-    k=open(pathW+prod+'_'+analysis+'.csv','w')
+    k=open(pathR+prod+'_'+analysis+'.csv','w')
  
 a=f.readlines()
 c1  = r.TCanvas('c1', '',1920,1080)  
