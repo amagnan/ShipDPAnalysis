@@ -91,32 +91,32 @@ pl.yscale('log')
 pl.xscale('log')
 
 if comp==0:
-    pl.plot(data2[0], data2[1], 'red', linewidth=1.8,label='Secondary Meson Decays')
-    pl.plot(data3[0], data3[1], 'green', linewidth=1.8,label='Proton Bremsstrahlung')
-    pl.plot(data1[0], data1[1], 'blue', linewidth=1.8,label='Quantum ChromoDynamics')
-    pl.plot(dataC[0], dataC[1], 'black', linewidth=1.6, label='Combined Production')
+    pl.plot(data2[0], data2[1], 'red', linewidth=2.2,label='Secondary Meson Decays')
+    pl.plot(data3[0], data3[1], 'green', linewidth=2.2,label='Proton Bremsstrahlung')
+    pl.plot(data1[0], data1[1], 'blue', linewidth=2.2,label='Quantum ChromoDynamics')
+    pl.plot(dataC[0], dataC[1], 'black', linewidth=2.0, label='Combined Production')
 
 if comp=="pbrem":
-    pl.plot(data2[0], data2[1], 'red',      linewidth=1.8, label = 'Secondary Meson Decays')
-    pl.plot(data4[0], data4[1], 'yellow',   linewidth=1.8, label = 'Proton Bremsstrahlung-noFF')
-    pl.plot(data3[0], data3[1], 'green',    linewidth=1.8, label = 'Proton Bremsstrahlung-FF')
-    pl.plot(data1[0], data1[1], 'blue',     linewidth=1.8, label = 'Quantum ChromoDynamics')
-    pl.plot(dataO[0], dataO[1], 'purple',   linewidth=1.6, label = 'Combined Production-noFF')
-    pl.plot(dataC[0], dataC[1], 'black',    linewidth=1.6, label = 'Combined Production-FF')
+    pl.plot(data2[0], data2[1], 'red',      linewidth=2.2, label = 'Secondary Meson Decays')
+    pl.plot(data4[0], data4[1], 'orange',   linewidth=2.2, label = 'Proton Bremsstrahlung-noFF')
+    pl.plot(data3[0], data3[1], 'green',    linewidth=2.2, label = 'Proton Bremsstrahlung-FF')
+    pl.plot(data1[0], data1[1], 'blue',     linewidth=2.2, label = 'Quantum ChromoDynamics')
+    pl.plot(dataO[0], dataO[1], 'purple',   linewidth=2.0, label = 'Combined Production-noFF')
+    pl.plot(dataC[0], dataC[1], 'black',    linewidth=2.0, label = 'Combined Production-FF')
 
 if comp=='meson':
-    pl.plot(data2[0], data2[1], 'red', linewidth=1.8,label='Secondary Meson Decays')
-    pl.plot(data1[0], data1[1], 'yellow', linewidth=1.8,label='OLD(Secondary Meson Decays)')
+    pl.plot(data2[0], data2[1], 'red', linewidth=2.2,label='Secondary Meson Decays')
+    pl.plot(data1[0], data1[1], 'orange', linewidth=2.2,label='OLD(Secondary Meson Decays)')
 
 if comp=="pbremOnly":
-    pl.plot(data4[0], data4[1], 'yellow',   linewidth=1.8, label = 'Proton Bremsstrahlung-noFF')
-    pl.plot(data3[0], data3[1], 'green',    linewidth=1.8, label = 'Proton Bremsstrahlung-FF')
-    pl.plot(dataO[0], dataO[1], 'purple',   linewidth=1.6, label = 'Combined Production-noFF')
-    pl.plot(dataC[0], dataC[1], 'black',    linewidth=1.6, label = 'Combined Production-FF')
+    pl.plot(data4[0], data4[1], 'orange',   linewidth=2.2, label = 'Proton Bremsstrahlung-noFF')
+    pl.plot(data3[0], data3[1], 'green',    linewidth=2.2, label = 'Proton Bremsstrahlung-FF')
+    pl.plot(dataO[0], dataO[1], 'purple',   linewidth=2.0, label = 'Combined Production-noFF')
+    pl.plot(dataC[0], dataC[1], 'black',    linewidth=2.0, label = 'Combined Production-FF')
 
 if comp=="pbrem0":
-    pl.plot(data4[0], data4[1], 'yellow',   linewidth=1.8, label = 'Proton Bremsstrahlung-noFF')
-    pl.plot(data3[0], data3[1], 'green',    linewidth=1.8, label = 'Proton Bremsstrahlung-FF')
+    pl.plot(data4[0], data4[1], 'orange',   linewidth=2.2, label = 'Proton Bremsstrahlung-noFF')
+    pl.plot(data3[0], data3[1], 'green',    linewidth=2.2, label = 'Proton Bremsstrahlung-FF')
 
 pl.fill_between(dataC1[0], dataC1[1], y2=y2, color="grey", label="Excluded Region")
 pl.fill_between(dataC2[0], dataC2[1], y2=0, color="grey")
