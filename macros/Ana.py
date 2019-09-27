@@ -292,7 +292,7 @@ def myEventLoop(n):# Analysis is starting here
     T1,T2=[],[]
     VES=0 
     r_track=0
-    CHARGED=0
+    CHARGE=0
     f_track=0
     RECO=0
     debug=0
@@ -330,7 +330,7 @@ def myEventLoop(n):# Analysis is starting here
         if not fitStatus.isFitConverged(): continue
         xx = FIT.getFittedState()
         if not find_signal(xx.getPDG()): continue
-        CHARGED+=1
+        CHARGE+=1
         mc = sTree.MCTrack[sTree.fitTrack2MC[F]]
         print mc.GetPdgCode()
         vtx=r.TVector3(mc.GetStartX(), mc.GetStartY(), mc.GetStartZ())
