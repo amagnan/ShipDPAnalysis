@@ -76,7 +76,32 @@ elif comp=="pbrem0":
         data4 = pd.read_csv(pathR+'pbrem1_Rate1.csv', header=None)
 
 else: print comb,'something wrong!!'
+"""
+import ROOT
+#import rootUtils as ut
+c1  = TCanvas('c1', '',1920,1080)
+mulgr = TMultiGraph()
 
+if comp==0:
+    p2=TGraph(len(data2[1]), data2[0], data2[1]) 
+    p3=TGraph(len(data3[1]), data3[0], data3[1])
+    p1=TGraph(len(data1[1]), data1[0], data1[1])
+
+
+if comp=="pbrem":
+    p2=TGraph(len(data2[1]), data2[0], data2[1])
+    p4=TGraph(len(data4[1]), data4[0], data4[1])
+    p3=TGraph(len(data3[1]), data3[0], data3[1])
+    p1=TGraph(len(data1[1]), data1[0], data1[1])
+
+if comp=='meson':
+    p2=TGraph(len(data2[1]), data2[0], data2[1])
+    p1=TGraph(len(data1[1]), data1[0], data1[1])
+
+if comp=="pbremOnly":
+    p4=TGraph(len(data4[1]), data4[0], data4[1])
+    p3=TGraph(len(data3[1]), data3[0], data3[1])
+"""
 ##### Constraints
 dataC1 = pd.read_csv(pathR+'Dataset_DP_excluded_upper.csv', header=None)
 dataC2 = pd.read_csv(pathR+'Dataset_DP_excluded_left.csv', header=None)
