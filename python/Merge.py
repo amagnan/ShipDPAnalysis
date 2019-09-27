@@ -3,7 +3,7 @@ import os,sys,getopt
 import math
 lepto=0 
 modes = ['meson_pi0','meson_eta','meson_omega','meson_eta1']
-fracs = ['e','mu','tau','hadron','all','other','sum']
+fracs = ['e','mu','tau','pi0','nhadron','chadron','hadron','all','other','sum']
 #tots = ['other','sum']
 
 try:
@@ -20,11 +20,11 @@ pathW = "../data/"+date+"/"
 f0 = open("mr.txt","r")#dosya lazim
 l0 = f0.readlines()
 
-for frac in fracs: exec('l_%s  = open(pathW+"meson_Ana_%s.dat","w")'%(frac,frac))
+for frac in fracs: exec('l_%s  = open(pathW+"meson_%s.dat","w")'%(frac,frac))
 
 for mode in modes:
     for frac in fracs:
-        exec('%s_%s = open(pathW+"%s_Ana_%s.dat","r")'%(mode,frac,mode,frac))
+        exec('%s_%s = open(pathW+"%s_%s.dat","r")'%(mode,frac,mode,frac))
         exec('l_%s_%s = %s_%s.readlines()'%(mode,frac,mode,frac))
 
 def find(lines,mass,eps):
@@ -110,7 +110,7 @@ for l in l0:
             exec('r = looping(mode,frac,l00,l_%s_%s)'%(mode,frac))
             if r:
                 exec('k=l_%s'%(frac))
-                if  frac == 'e' or frac == 'mu' or frac == 'tau' or frac == 'hadron':
+                if  frac=='nhadron' or frac=='chadron' or frac=='pi0' or frac == 'e' or frac == 'mu' or frac == 'tau' or frac == 'hadron':
                     fl = 1
                     R += r[0]
                     V += r[1]
@@ -138,15 +138,16 @@ for l in l0:
         #print mass, eps, mode, frac
         if fl == 2:
             BR = R/Nr
-            VP = V/R
-            GA = G/V
-            Dau = Nr/D
+            if R: VP = V/R
+            if V: GA = G/V
+            if D: Dau = Nr/D
             k.write("%.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,Dau,BR,VP,GA))
             k.write("\n")
         if fl == 1:
             BR = R/Nr
-            VP = V/R
-            GA = G/V
+            if R: VP = V/R
+            #print frac,mode
+            if V: GA = G/V
             k.write("%.8g %.8g %.8g %.8g %.8g"%(mass,eps,BR,VP,GA))
             k.write("\n")
         if fl == -1:

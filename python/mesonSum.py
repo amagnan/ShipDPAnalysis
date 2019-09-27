@@ -1,9 +1,9 @@
-date='190918'
+date='190926'
 
 mothers=['pi0','eta','omega','eta1']
 for mother in mothers:
-    exec('f1_%s = open("../data/"+date+"/meson_%s"+"_Ana_rate1.dat","r")'%(mother,mother))
-    exec('f2_%s = open("../data/"+date+"/meson_%s"+"_Ana_rate2.dat","r")'%(mother,mother))
+    exec('f1_%s = open("../data/"+date+"/meson_%s"+"_rate1.dat","r")'%(mother,mother))
+    exec('f2_%s = open("../data/"+date+"/meson_%s"+"_rate2.dat","r")'%(mother,mother))
     exec('l1_%s = f1_%s.readlines() '%(mother,mother))
     exec('l2_%s = f2_%s.readlines() '%(mother,mother))
 
