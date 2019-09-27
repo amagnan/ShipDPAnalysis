@@ -292,6 +292,7 @@ def myEventLoop(n):# Analysis is starting here
     T1,T2=[],[]
     VES=0 
     r_track=0
+    CHARGED=0
     f_track=0
     RECO=0
     debug=0
@@ -328,52 +329,47 @@ def myEventLoop(n):# Analysis is starting here
         fitStatus = FIT.getFitStatus()
         if not fitStatus.isFitConverged(): continue
         xx = FIT.getFittedState()
+        if not find_signal(xx.getPDG()): continue
+        CHARGED+=1
         mc = sTree.MCTrack[sTree.fitTrack2MC[F]]
+        print mc.GetPdgCode()
         vtx=r.TVector3(mc.GetStartX(), mc.GetStartY(), mc.GetStartZ())
+        if not isInFiducial(vtx.X(),vtx.Y(),vtx.Z()): continue
+        f_track+=1
         mom=r.TVector3(mc.GetPx(), mc.GetPy(), mc.GetPz())
         trackDir = xx.getDir()
         trackPos = xx.getPos()
         vx = ROOT.TVector3()
-        mc.GetStartVertex(vx)
         t = 0
         for i in range(3):   t += trackDir(i)*(vx(i)-trackPos(i))
         dist = 0
         for i in range(3):   dist += (vx(i)-trackPos(i)-t*trackDir(i))**2
         dist = ROOT.TMath.Sqrt(dist)
-        h['IP'].Fill(dist)
-        #print "ftrack"
-        if not isInFiducial(vtx.X(),vtx.Y(),vtx.Z()): continue
-        #print "ftrack vessel"
-        if find_signal(xx.getPDG()):#This is VESSEL Cut
-            #print "ftrack signal"
-            f_track+=1
-            if not checkFiducialVolume(sTree,F,dy): continue
-            nmeas = fitStatus.getNdf()
-            chi2 = fitStatus.getChi2()
-            if not nmeas>25.: continue
-            if not chi2/nmeas<5.: continue
-            if not xx.getMomMag()>1.: continue
-            #if not mc.GetStartT()<=1.:continue
-            h['DOCA'].Fill(mc.GetStartT()-doca)
-            if not (mc.GetStartT()-doca)<=1.: continue
-            if not dist<10.: continue
-            RECO+=1
-        if not find_signal(xx.getPDG()):
-            oth_v+=1
-            print xx.getPDG()
-    if e>1:#at least two electrons decay channel FOR BR
+        h['IP'].Fill(dist)   
+        if not checkFiducialVolume(sTree,F,dy): continue
+        nmeas = fitStatus.getNdf()
+        chi2 = fitStatus.getChi2()
+        if not nmeas>25.: continue
+        if not chi2/nmeas<5.: continue
+        if not xx.getMomMag()>1.: continue
+        #if not mc.GetStartT()<=1.:continue
+        h['DOCA'].Fill(mc.GetStartT()-doca)
+        if not (mc.GetStartT()-doca)<=1.: continue
+        if not dist<10.: continue
+        RECO+=1
+    if e>1 and CHARGE>1:#at least two electrons decay channel FOR BR
         h['DP_e'].Fill(mass_mc)
-    if mu>1:#at least two muons decay channel FOR BR
+    if mu>1 and CHARGE>1:#at least two muons decay channel FOR BR
         h['DP_mu'].Fill(mass_mc)
-    if tau>1:#at least two taus decay channel FOR BR
+    if tau>1 and CHARGE>1:#at least two taus decay channel FOR BR
         h['DP_tau'].Fill(mass_mc)
-    if nhad>0 and had==0:
+    if nhad>0 and had==0 and CHARGE>1:
         h['DP_nhad'].Fill(mass_mc)
-    if had>0 and nhad==0 and pi0==0:#any hadronic decay channel for BR
+    if had>0 and nhad==0 and pi0==0 and CHARGE>1:#any hadronic decay channel for BR
         h['DP_chad'].Fill(mass_mc)
-    if( nhad>0 or pi0>0) and had>0: 
+    if( nhad>0 or pi0>0) and had>0 and CHARGE>1: 
         h['DP_had'].Fill(mass_mc)
-    if pi0>0 and had==0 and nhad==0:
+    if pi0>0 and had==0 and nhad==0 and CHARGE>1:
         h['DP_pi0'].Fill(mass_mc)
     if f_track>1:#at least two charged particle in the VESSEL
         if e>1:#at least two electrons decay channel FOR VES_PROB
@@ -428,7 +424,7 @@ def myEventLoop(n):# Analysis is starting here
             if dpMom == 'eta1': h['DPang1_tau'].Fill(mass_mc,wg*xsw1)
             h['DPangW_tau'].Fill(mass_mc,wg)
 
-    if e>1 or mu>1 or tau>1 or nhad>0 or had>0 or pi0>0:#at least two charged leptons decay channel and any hadronic decay channel FOR BR_TOT
+    if CHARGE>1 and (e>1 or mu>1 or tau>1 or nhad>0 or had>0 or pi0>0):#at least two charged leptons decay channel and any hadronic decay channel FOR BR_TOT
         h['DP'].Fill(mass_mc)
         if f_track>1:##at least two charged tracks in the VESL
             h['DPvesW'].Fill(mass_mc,wg)
