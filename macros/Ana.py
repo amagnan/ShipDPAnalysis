@@ -193,6 +193,8 @@ ut.bookHist(h,'DPang1_tau','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPang1_had','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPang1_chad','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPang1_nhad','invariant Mass (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPang1_pi0','invariant Mass (GeV)',100,0.,mass_mc+5.)
+
 ut.bookHist(h,'DPang1_oth','invariant Mass (GeV)',100,0.,mass_mc+5.)
 
 ut.bookHist(h,'DP','invariant Mass (GeV)',100,0.,mass_mc+5.)
@@ -237,6 +239,13 @@ ut.bookHist(h,'DPves_nhad','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPvesW_nhad','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPang_nhad','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPangW_nhad','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
+
+ut.bookHist(h,'DP_pi0','invariant Mass (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPW_pi0','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPves_pi0','invariant Mass (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPvesW_pi0','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPang_pi0','invariant Mass (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPangW_pi0','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
 
 ut.bookHist(h,'DP_chad','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPW_chad','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
@@ -286,7 +295,7 @@ def myEventLoop(n):# Analysis is starting here
     f_track=0
     RECO=0
     debug=0
-    e, mu, tau, had, nhad, oth_v  = 0, 0, 0, 0, 0, 0
+    e, mu, tau, had, nhad, oth_v, pi0  = 0, 0, 0, 0, 0, 0, 0
     #print "mom find"
     if xsw==0 and wg==0 and dp_id==0: return
     #print "mom found"
@@ -308,7 +317,8 @@ def myEventLoop(n):# Analysis is starting here
         else:
             doca=sTree.MCTrack[xxx].GetStartT() 
             if PDG.GetParticle(sTree.MCTrack[xxx].GetPdgCode()).Charge()==0.0:
-                nhad+=1
+                if sTree.MCTrack[xxx].GetPdgCode()==111: pi0 +=1
+                else: nhad+=1
             elif abs(PDG.GetParticle(sTree.MCTrack[xxx].GetPdgCode()).Charge())>0.0:
                 had+=1
                 #if abs(PDG.GetParticle(sTree.MCTrack[xxx].GetPdgCode()).Charge())!=3.0: print sTree.MCTrack[xxx].GetPdgCode()
@@ -359,14 +369,12 @@ def myEventLoop(n):# Analysis is starting here
         h['DP_tau'].Fill(mass_mc)
     if nhad>0 and had==0:
         h['DP_nhad'].Fill(mass_mc)
-        #print "neutral only", nhad, had
-    if had>0 and nhad==0:#any hadronic decay channel for BR
-        #print "charged only", nhad, had
+    if had>0 and nhad==0 and pi0==0:#any hadronic decay channel for BR
         h['DP_chad'].Fill(mass_mc)
-    if nhad>0 and had>0:
-        #print "mix", nhad, had
+    if( nhad>0 or pi0>0) and had>0: 
         h['DP_had'].Fill(mass_mc)
-    #else: print "mc", e, mu, tau, had, nhad
+    if pi0>0 and had==0 and nhad==0:
+        h['DP_pi0'].Fill(mass_mc)
     if f_track>1:#at least two charged particle in the VESSEL
         if e>1:#at least two electrons decay channel FOR VES_PROB
             h['DPvesW_e'].Fill(mass_mc,wg)
@@ -377,12 +385,15 @@ def myEventLoop(n):# Analysis is starting here
         if nhad>0 and had==0:
             h['DPvesW_nhad'].Fill(mass_mc,wg)
             h['DPves_nhad'].Fill(mass_mc)
-        if had>0 and nhad==0:#any hadronic decay channel for BR
+        if had>0 and nhad==0 and pi0==0:#any hadronic decay channel for BR
             h['DPvesW_chad'].Fill(mass_mc,wg)
             h['DPves_chad'].Fill(mass_mc) 
-        if nhad>0 and had>0:
+        if (nhad>0 or pi0>0) and had>0:
             h['DPvesW_had'].Fill(mass_mc,wg)
             h['DPves_had'].Fill(mass_mc) 
+        if pi0>0 and had==0 and nhad==0:
+            h['DPvesW_pi0'].Fill(mass_mc,wg)
+            h['DPves_pi0'].Fill(mass_mc)
         if tau>1:#at least two taus decay channel FOR VES_PROB
             h['DPvesW_tau'].Fill(mass_mc,wg)
             h['DPves_tau'].Fill(mass_mc)
@@ -396,7 +407,7 @@ def myEventLoop(n):# Analysis is starting here
             h['DPang_mu'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_mu'].Fill(mass_mc,wg*xsw1)
             h['DPangW_mu'].Fill(mass_mc,wg) 
-        if had>0 and nhad>0:#any hadronic decay channel for RECO_EFF
+        if had>0 and (nhad>0 or pi0>0):#any hadronic decay channel for RECO_EFF
             h['DPang_had'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_had'].Fill(mass_mc,wg*xsw1)
             h['DPangW_had'].Fill(mass_mc,wg) 
@@ -404,16 +415,20 @@ def myEventLoop(n):# Analysis is starting here
             h['DPang_nhad'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_nhad'].Fill(mass_mc,wg*xsw1)
             h['DPangW_nhad'].Fill(mass_mc,wg)
-        if had>0 and nhad==0:#any hadronic decay channel for RECO_EFF
+        if had>0 and nhad==0 and pi0==0:#any hadronic decay channel for RECO_EFF
             h['DPang_chad'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_chad'].Fill(mass_mc,wg*xsw1)
-            h['DPangW_chad'].Fill(mass_mc,wg) 
+            h['DPangW_chad'].Fill(mass_mc,wg)
+        if pi0>0 and nhad==0 and had==0:#any hadronic decay channel for RECO_EFF
+            h['DPang_pi0'].Fill(mass_mc,wg*xsw)
+            if dpMom == 'eta1': h['DPang1_pi0'].Fill(mass_mc,wg*xsw1)
+            h['DPangW_pi0'].Fill(mass_mc,wg) 
         if tau>1:#at least two taus decay channel FOR RECO_EFF
             h['DPang_tau'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_tau'].Fill(mass_mc,wg*xsw1)
             h['DPangW_tau'].Fill(mass_mc,wg)
 
-    if e>1 or mu>1 or tau>1 or nhad>0 or had>0:#at least two charged leptons decay channel and any hadronic decay channel FOR BR_TOT
+    if e>1 or mu>1 or tau>1 or nhad>0 or had>0 or pi0>0:#at least two charged leptons decay channel and any hadronic decay channel FOR BR_TOT
         h['DP'].Fill(mass_mc)
         if f_track>1:##at least two charged tracks in the VESL
             h['DPvesW'].Fill(mass_mc,wg)
@@ -431,13 +446,14 @@ def myEventLoop(n):# Analysis is starting here
         else: 
             h['DPves_oth'].Fill(mass_mc)
             h['DPvesW_oth'].Fill(mass_mc,wg) 
-    elif TR<2 and had==0 and nhad==0: 
+    elif TR<2 and had==0 and nhad==0 and pi0==0: 
         #Dump(sTree.MCTrack)
         h['DP_oth'].Fill(mass_mc)
 
 nEvents =sTree.GetEntries()
 for n in range(nEvents):
     myEventLoop(n)
+
 tmp1=tmp1.replace("reco","ana/dat")
 tmp1=tmp1.replace(date,dest)
 o1  = tmp1+"_e.dat"
@@ -445,27 +461,23 @@ o2  = tmp1+"_mu.dat"
 o3  = tmp1+"_tau.dat" 
 o4  = tmp1+"_hadron.dat"
 o4n = tmp1+"_nhadron.dat" 
+o4p = tmp1+"_pi0.dat"
 o4c = tmp1+"_chadron.dat"
 o6  = tmp1+"_other.dat"
 o7  = tmp1+"_all.dat"
-
 o8  = tmp1+"_sum.dat"
-
 o9  = tmp1+"_rate1.dat"
 o10 = tmp1+"_rate2.dat"
-
 a=open(o1,'w+')
 b=open(o2,'w+')
 c=open(o3,'w+')
 d=open(o4,'w+')
 dn=open(o4n,'w+')
 dc=open(o4c,'w+')
-
+d0=open(o4p,'w=')
 f=open(o6,'w+')
 g=open(o7,'w+')
-
 H=open(o8,'w+')
-
 k=open(o9,'w+')
 l=open(o10,'w+')
 
@@ -552,6 +564,16 @@ if float(h['DP'].Integral())!=0:
         else:
             dn.write('%.4g %s %.8g %.8g 0.0' %(mass_mc, eps, float(h['DP_nhad'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_nhad'].Integral())/float(h['DP_nhad'].Integral())))
             dn.write('\n')
+    if float(h['DP_pi0'].Integral())!=0:
+        Sum+=float(h['DP_pi0'].Integral())
+        if float(h['DPvesW_pi0'].Integral())!=0:
+            ang_s+=float(h['DPangW_pi0'].Integral())
+            ves_s+=float(h['DPvesW_pi0'].Integral())
+            d0.write('%.4g %s %.8g %.8g %.8g' %(mass_mc, eps, float(h['DP_pi0'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_pi0'].Integral())/float(h['DP_pi0'].Integral()), float(h['DPangW_pi0'].Integral())/float(h['DPvesW_pi0'].Integral())))
+            d0.write('\n')
+        else:
+            d0.write('%.4g %s %.8g %.8g 0.0' %(mass_mc, eps, float(h['DP_pi0'].Integral())/float(h['DP'].Integral()), float(h['DPvesW_pi0'].Integral())/float(h['DP_pi0'].Integral())))
+            d0.write('\n')
     if float(h['DP_chad'].Integral())!=0:
         Sum+=float(h['DP_chad'].Integral())
         if float(h['DPvesW_chad'].Integral())!=0:
@@ -588,13 +610,15 @@ if float(h['DP'].Integral())!=0:
         l.write('%.4g %s %.8g' %(mass_mc, eps, RecLW)) 
         l.write('\n')
 
-print mass_mc, eps, RecW
+if dpMom!="eta1": print mass_mc, eps, RecW
+if dpMom=="eta1": print mass_mc, eps, RecW, RecW1
 a.close()
 b.close()
 c.close()
 d.close()
 dc.close()
 dn.close()
+d0.close()
 f.close()
 g.close()
 H.close()
