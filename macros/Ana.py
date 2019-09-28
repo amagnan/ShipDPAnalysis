@@ -371,55 +371,55 @@ def myEventLoop(n):# Analysis is starting here
         h['DP_had'].Fill(mass_mc)
     if pi0>0 and had==0 and nhad==0 and CHARGE>1:
         h['DP_pi0'].Fill(mass_mc)
-    if f_track>1:#at least two charged particle in the VESSEL
-        if e>1:#at least two electrons decay channel FOR VES_PROB
+    if f_track>1 and CHARGE>1:#at least two charged particle in the VESSEL
+        if e>1 and CHARGE>1:#at least two electrons decay channel FOR VES_PROB
             h['DPvesW_e'].Fill(mass_mc,wg)
             h['DPves_e'].Fill(mass_mc)  
-        if mu>1:#at least two muons decay channel FOR VES_PROB 
+        if mu>1 and CHARGE>1:#at least two muons decay channel FOR VES_PROB 
             h['DPvesW_mu'].Fill(mass_mc,wg)
             h['DPves_mu'].Fill(mass_mc) 
-        if nhad>0 and had==0:
+        if nhad>0 and had==0 and CHARGE>1:
             h['DPvesW_nhad'].Fill(mass_mc,wg)
             h['DPves_nhad'].Fill(mass_mc)
-        if had>0 and nhad==0 and pi0==0:#any hadronic decay channel for BR
+        if had>0 and nhad==0 and pi0==0 and CHARGE>1:#any hadronic decay channel for BR
             h['DPvesW_chad'].Fill(mass_mc,wg)
             h['DPves_chad'].Fill(mass_mc) 
-        if (nhad>0 or pi0>0) and had>0:
+        if (nhad>0 or pi0>0) and had>0 and CHARGE>1:
             h['DPvesW_had'].Fill(mass_mc,wg)
             h['DPves_had'].Fill(mass_mc) 
-        if pi0>0 and had==0 and nhad==0:
+        if pi0>0 and had==0 and nhad==0 and CHARGE>1:
             h['DPvesW_pi0'].Fill(mass_mc,wg)
             h['DPves_pi0'].Fill(mass_mc)
-        if tau>1:#at least two taus decay channel FOR VES_PROB
+        if tau>1 and CHARGE>1:#at least two taus decay channel FOR VES_PROB
             h['DPvesW_tau'].Fill(mass_mc,wg)
             h['DPves_tau'].Fill(mass_mc)
 
-    if f_track>1 and RECO>1:#at least two charged tracks in the FINAL CUT
-        if e>1:#at least two electrons decay channel FOR RECO_EFF
+    if f_track>1 and RECO>1 and CHARGE>1:#at least two charged tracks in the FINAL CUT
+        if e>1 and CHARGE>1:#at least two electrons decay channel FOR RECO_EFF
             h['DPang_e'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_e'].Fill(mass_mc,wg*xsw1)
             h['DPangW_e'].Fill(mass_mc,wg)  
-        if mu>1:#at least two muons decay channel FOR RECO_EFF
+        if mu>1 and CHARGE>1:#at least two muons decay channel FOR RECO_EFF
             h['DPang_mu'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_mu'].Fill(mass_mc,wg*xsw1)
             h['DPangW_mu'].Fill(mass_mc,wg) 
-        if had>0 and (nhad>0 or pi0>0):#any hadronic decay channel for RECO_EFF
+        if had>0 and (nhad>0 or pi0>0) and CHARGE>1:#any hadronic decay channel for RECO_EFF
             h['DPang_had'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_had'].Fill(mass_mc,wg*xsw1)
             h['DPangW_had'].Fill(mass_mc,wg) 
-        if nhad>0 and had==0:#any hadronic decay channel for RECO_EFF
+        if nhad>0 and had==0 and CHARGE>1:#any hadronic decay channel for RECO_EFF
             h['DPang_nhad'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_nhad'].Fill(mass_mc,wg*xsw1)
             h['DPangW_nhad'].Fill(mass_mc,wg)
-        if had>0 and nhad==0 and pi0==0:#any hadronic decay channel for RECO_EFF
+        if had>0 and nhad==0 and pi0==0 and CHARGE>1:#any hadronic decay channel for RECO_EFF
             h['DPang_chad'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_chad'].Fill(mass_mc,wg*xsw1)
             h['DPangW_chad'].Fill(mass_mc,wg)
-        if pi0>0 and nhad==0 and had==0:#any hadronic decay channel for RECO_EFF
+        if pi0>0 and nhad==0 and had==0 and CHARGE>1:#any hadronic decay channel for RECO_EFF
             h['DPang_pi0'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_pi0'].Fill(mass_mc,wg*xsw1)
             h['DPangW_pi0'].Fill(mass_mc,wg) 
-        if tau>1:#at least two taus decay channel FOR RECO_EFF
+        if tau>1 and CHARGE>1:#at least two taus decay channel FOR RECO_EFF
             h['DPang_tau'].Fill(mass_mc,wg*xsw)
             if dpMom == 'eta1': h['DPang1_tau'].Fill(mass_mc,wg*xsw1)
             h['DPangW_tau'].Fill(mass_mc,wg)
@@ -442,7 +442,7 @@ def myEventLoop(n):# Analysis is starting here
         else: 
             h['DPves_oth'].Fill(mass_mc)
             h['DPvesW_oth'].Fill(mass_mc,wg) 
-    elif TR<2 and had==0 and nhad==0 and pi0==0: 
+    elif TR<2 and had==0 and nhad==0 and pi0==0 and CHARGE<2: 
         #Dump(sTree.MCTrack)
         h['DP_oth'].Fill(mass_mc)
 
@@ -481,6 +481,13 @@ if float(h['DP'].Integral())!=0:
     NomL, NomL1, DenL  = 0., 0., 0.
     Sum,ves_s,ang_s= 0., 0., 0.
     DP_instance=darkphoton.DarkPhoton(float(mass_mc),float(eps))
+    BR1=DP_instance.findBranchingRatio('A -> e- e+')
+    BR2=DP_instance.findBranchingRatio('A -> mu- mu+')
+    BR3=DP_instance.findBranchingRatio('A -> tau- tau+')
+    BR=BR1+BR2+BR3
+    BRe=BR1/BR
+    BRm=BR2/BR
+    BRt=BR3/BR
     H.write('%.4g %s %.8g %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DPW'].Integral()), float(h['DP'].Integral()), float(h['DPves'].Integral()), float(h['DPangW'].Integral())))
     H.write('\n')
     if float(h['DPvesW'].Integral())!=0.:
@@ -490,9 +497,8 @@ if float(h['DP'].Integral())!=0:
         f.write('%.4g %s %.8g %.8g 0.0' %(mass_mc, eps, float(h['DP_oth'].Integral())/float(h['DPW'].Integral()), float(h['DPvesW_oth'].Integral())/float(h['DP'].Integral())))
         f.write('\n')
     if float(h['DP_e'].Integral())!=0:
-        Sum+=float(h['DP_e'].Integral())
-        BR1=DP_instance.findBranchingRatio('A -> e- e+')
-        DenL+=float(h['DP_e'].Integral())*BR1
+        Sum+=float(h['DP_e'].Integral()) 
+        DenL+=float(h['DP_e'].Integral())*BRe
         if dpMom == "eta1":
             NomL+=float(h['DPang_e'].Integral())
             NomL1+=float(h['DPang1_e'].Integral())
@@ -508,8 +514,8 @@ if float(h['DP'].Integral())!=0:
             a.write('\n')
     if float(h['DP_mu'].Integral())!=0:
         Sum+=float(h['DP_mu'].Integral())
-        BR2=DP_instance.findBranchingRatio('A -> mu- mu+')
-        DenL+=float(h['DP_mu'].Integral())*BR2 
+        
+        DenL+=float(h['DP_mu'].Integral())*BRm
         if dpMom == "eta1":
             NomL+=float(h['DPang_mu'].Integral())
             NomL1+=float(h['DPang1_mu'].Integral())
@@ -525,8 +531,7 @@ if float(h['DP'].Integral())!=0:
             b.write('\n')
     if float(h['DP_tau'].Integral())!=0:
         Sum+=float(h['DP_tau'].Integral())
-        BR3=DP_instance.findBranchingRatio('A -> tau- tau+')
-        DenL+=float(h['DP_tau'].Integral())*BR3
+        DenL+=float(h['DP_tau'].Integral())*BRt
         if dpMom == "eta1":
             NomL+=float(h['DPang_tau'].Integral())
             NomL1+=float(h['DPang1_tau'].Integral())
