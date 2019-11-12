@@ -4,10 +4,11 @@ f=open(n,'r')
 l=f.readlines()
 s=[]
 for x in l:
-    #a=x.replace(","," ")
-    y=x.split(",")
-    res=pow(float(y[1]),1/2.)
-    s.append(res)
-    m=float(y[0])
-    print m,",",res
+    #a=x.replace(""," ")
+    x=x.split(" ")
+    #res=pow(float(y[1]),1/2.)
+    r = float(x[2])*40.6
+    #s.append(res)
+    #m=float(x[0])
+    print x[0], x[1], r
     #print res
