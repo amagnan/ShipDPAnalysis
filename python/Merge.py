@@ -53,14 +53,14 @@ def find_dau(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[2]), float(i[3]), float(i[4])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[2]), float(i[3]), float(i[4]), float(i[5])
     return 0
 
 def find_N(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[2]), float(i[3]), float(i[4]), float(i[5]), float(i[6])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[2]), float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[7]) 
     return 0
 
 def looping(mode,frac,l0,l1):
