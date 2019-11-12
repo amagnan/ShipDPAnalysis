@@ -12,17 +12,17 @@ for o,a in opts:
     if o in ('-l','--leptophilic',): lepto = a
     if o in ('-d','--date',): date = a
 
-#prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','meson','pbrem','qcd']
+prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','meson','pbrem','qcd']
 #prods=['meson','pbrem','qcd']
-prods = ['meson1']
+#prods = ['meson1']
 for prod in prods:
 
     if not lepto: 
         outp="../data/"+date+"/"+prod+"_Rate1.dat"
-        inp="../data/"+date+"/"+prod+"_Ana_rate1.dat"
+        inp="../data/"+date+"/"+prod+"_rate1.dat"
     if lepto:
         outp="../data/"+date+"/"+prod+"_Rate2.dat"
-        inp="../data/"+date+"/"+prod+"_Ana_rate2.dat"
+        inp="../data/"+date+"/"+prod+"_rate2.dat"
     
     f=open(inp,'r')
     k=f.readlines()
