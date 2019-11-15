@@ -39,14 +39,14 @@ def find_ratios(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[2]), float(i[3]), float(i[4])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[2]), float(i[3]), float(i[4]), float(i[5])
     return 0 
 
 def find_allratios(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[3]), float(i[4]), float(i[5]), float(i[2])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[2])
     return 0
 
 def find_dau(lines,mass,eps):
@@ -72,19 +72,21 @@ def looping(mode,frac,l0,l1):
         if R and N:
             #print N
             BRn   = R[0]*N[2]
-            VPbr  = R[1]*BRn
-            GAvp  = R[2]*VPbr
-            return BRn, VPbr, GAvp, N[2]
+            PGn   = R[1]*BRn
+            VPbr  = R[2]*BRn
+            GAvp  = R[3]*VPbr
+            return BRn, PGn, VPbr, GAvp, N[2]
     if frac=='all':
         R  = find_allratios(l1, float(x[0]), float(x[1]))
         #exec('D  = find_dau(%s_other, float(x[0]), float(x[1]))'%(mode)) 
         exec('N  = find_N(l_%s_sum, float(x[0]), float(x[1]))'%(mode))
         if R and N:
             #DAUo  = R[3]*D[0]
-            BRn   = R[0]*N[2]
-            VPbr  = R[1]*BRn
-            GAvp  = R[2]*VPbr
-            return BRn, VPbr, GAvp, N[2], N[1]
+            BRn   = R[1]*N[2]
+            PGn   = R[0]*BRn
+            VPbr  = R[2]*BRn
+            GAvp  = R[3]*VPbr
+            return BRn, PGn, VPbr, GAvp, N[2], N[1], N[3]
     if frac=='sum':
         R = find_N(l1, float(x[0]), float(x[1]))
         if R: return R
@@ -95,7 +97,7 @@ def looping(mode,frac,l0,l1):
 
 #other ve sum kaldi
 #all'un dau'su kaldi.
-BR,VP,GA,Dau = 0., 0., 0., 0.
+BR,VP,GA,Dau,PUR = 0., 0., 0., 0., 0.
 for l in l0:
     l00=l
     l = l.replace('\n','')
@@ -103,8 +105,8 @@ for l in l0:
     mass, eps =float(l[0]), float(l[1])
     for frac in fracs:
         R, V, G, Nr, D = 0., 0., 0., 0., 0.
-        NR, DPn, Pnr, Vn, Gn = 0., 0., 0., 0., 0.
-        Lp, Lv, Lg = 0., 0., 0.
+        NR, DPn, Pg, PgNr, Pnr,PurNr, Vn, Gn = 0., 0., 0., 0., 0., 0., 0., 0.
+        Lp, Lv, Lg, Lpur = 0., 0., 0., 0.
         for mode in modes:
             fl = 0
             #print mode
@@ -114,48 +116,59 @@ for l in l0:
                 if  frac=='nhadron' or frac=='chadron' or frac=='pi0' or frac == 'e' or frac == 'mu' or frac == 'tau' or frac == 'hadron':
                     fl = 1
                     R += r[0]
-                    V += r[1]
-                    G += r[2]
-                    Nr += r[3]
+                    V += r[2]
+                    G += r[3]
+                    Pg += r[1]
+                    Nr += r[4]
                 if frac == 'all':
                     fl = 2
                     R += r[0]
-                    V += r[1]
-                    G += r[2]
-                    Nr += r[3]
-                    D += r[4]
+                    V += r[2]
+                    G += r[3]
+                    Nr += r[4]
+                    D += r[5]
+                    Pg += r[1]
+                    PgNr += r[6]
                 if frac == 'sum':
                     fl = -1
                     NR  += r[0]
                     DPn += r[1]
                     Pnr += r[2]
-                    Vn  += r[3]
-                    Gn  += r[4]
+                    PurNr  += r[3]
+                    Vn  += r[4]
+                    Gn  += r[5]
                 if frac == 'other':
                     fl = -2
                     Lp += r[0]
-                    Lv += r[1]
-                    Lg += r[2]
+                    Lpur += r[1]
+                    Lv += r[2]
+                    Lg += r[3]
         #print mass, eps, mode, frac
         if fl == 2:
             BR = R/Nr
-            if R: VP = V/R
+            if R:
+                VP = V/R
+                PUR = Pg/R
             if V: GA = G/V
             if D: Dau = Nr/D
-            k.write("%.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,Dau,BR,VP,GA))
+            if PgNr: PURN = PgNr/Nr
+            k.write("%.8g %.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,Dau,PURN,BR,VP,GA))
             k.write("\n")
+            if abs(PURN - PUR)>0.00001: print PURN, PUR
         if fl == 1:
             BR = R/Nr
-            if R: VP = V/R
+            if R:
+                PUR = Pg/R
+                VP = V/R
             #print frac,mode
             if V: GA = G/V
-            k.write("%.8g %.8g %.8g %.8g %.8g"%(mass,eps,BR,VP,GA))
+            k.write("%.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,BR,PUR,VP,GA))
             k.write("\n")
         if fl == -1:
-            k.write("%.8g %.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,NR,DPn,Pnr,Vn,Gn))
+            k.write("%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,NR,DPn,Pnr,PurNr,Vn,Gn))
             k.write("\n")
         if fl == -2:
-            k.write("%.8g %.8g %.8g %.8g %.8g"%(mass,eps,Lp,Lv,Lg))
+            k.write("%.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,Lp,Lpur,Lv,Lg))
             k.write("\n")
 
 for frac in fracs: exec('l_%s.close()'%(frac))
