@@ -2,8 +2,8 @@ from array import array
 import os,sys,getopt
 import math
 lepto=0 
-#modes = ['meson_pi0','meson_eta','meson_omega','meson_eta1']
-modes = ['meson_eta','meson_omega','meson_eta1']
+modes = ['meson_pi0','meson_eta','meson_omega','meson_eta1']
+#modes = ['meson_eta','meson_omega','meson_eta1']
 fracs = ['e','mu','tau','pi0','nhadron','chadron','hadron','all','other','sum']
 #tots = ['other','sum']
 
@@ -32,41 +32,41 @@ def find(lines,mass,eps):
     for i in lines:
         k = i.replace('\n','')
         k = k.split(' ')
-        if abs(math.log10(float(k[1])) - math.log10(eps)) <0.01 and abs(float(k[0]) - mass)<0.0001: return True
+        if abs(math.log10(float(k[1])) - math.log10(eps)) <0.01 and abs(float(k[0]) - mass)<0.00001: return True
     return False
 
 def find_ratios(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[2]), float(i[3]), float(i[4]), float(i[5])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.00001: return float(i[2]), float(i[3]), float(i[4]), float(i[5])
     return 0 
 
 def find_allratios(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[2])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.00001: return float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[2])
     return 0
 
 def find_dau(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[2]), float(i[3]), float(i[4]), float(i[5])
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.00001: return float(i[2]), float(i[3]), float(i[4]), float(i[5])
     return 0
 
 def find_N(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.0001: return float(i[2]), float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[7]) 
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.00001: return float(i[2]), float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[7]) 
     return 0
 
 def looping(mode,frac,l0,l1):
     l0 = l0.replace('\n','')
     x = l0.split(' ')
-    if frac=='e' or frac=='mu' or frac=='tau' or frac=='hadron':
+    if frac=='e' or frac=='mu' or frac=='tau' or frac=='nhadron' or frac=='chadron' or frac=='pi0' or frac=='hadron':
         R  = find_ratios(l1, float(x[0]), float(x[1]))
         exec('N  = find_N(l_%s_sum, float(x[0]), float(x[1]))'%(mode))
         if R and N:
