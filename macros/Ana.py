@@ -13,6 +13,7 @@ import math as m
 import numpy as np
 shipRoot_conf.configure()
 dpMom = False
+pbremFF = False
 try:
     opts, args = getopt.getopt(sys.argv[1:], "d:p:m:e:A:g:f:", ["date=","production=","mass=","epsilon=","motherID=","geoFile=","final_dest="])
 except getopt.GetoptError:
@@ -29,6 +30,7 @@ for o,a in opts:
 
 if dpMom: tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_"+dpMom+"_mass"+mass_mc+"_eps"+eps
 if not dpMom: tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_mass"+mass_mc+"_eps"+eps
+if not (dpMom and pbremFF):tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"1_mass"+mass_mc+"_eps"+eps
 inputFile = tmp1+"_rec.root"
 #print inputFile
 mass_mc=float(mass_mc)
@@ -153,7 +155,8 @@ def findmum():#this function finds the mother of DP with weight,xs,momentum etc.
                 if dpMom=='eta1' and xsw!=0:
                     xsw1=xsw[1]
                     xsw=xsw[0]
-            else: xsw = dputil.getDPprodRate(mass_mc,eps,pro,0) 
+            if pro=='pbrem' and pbremFF==False: xsw = dputil.getDPprodRate(mass_mc,eps,'pbrem1',0)
+            if pro=='qcd' or (pro=='pbrem' and pbremFF==True): xsw = dputil.getDPprodRate(mass_mc,eps,pro,0) 
             wg = sTree.MCTrack[dp_id].GetWeight()
             #print dp_id 
             dp_mom=r.TVector3(sTree.MCTrack[dp_id].GetPx(),sTree.MCTrack[dp_id].GetPy(),sTree.MCTrack[dp_id].GetPz())
