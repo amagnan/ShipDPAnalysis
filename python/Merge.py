@@ -146,9 +146,11 @@ for l in l0:
         #print mass, eps, mode, frac
         if fl == 2:
             BR = R/Nr
-            if R:
-                VP = V/R
-                PUR = Pg/R
+            PUR = Pg/Nr
+            if Pg: VP=V/Pg
+            #if R:
+                #VP = V/R
+                #PUR = Pg/R
             if V: GA = G/V
             if D: Dau = Nr/D
             if PgNr: PURN = PgNr/Nr
@@ -157,9 +159,11 @@ for l in l0:
             if abs(PURN - PUR)>0.00001: print PURN, PUR
         if fl == 1:
             BR = R/Nr
-            if R:
-                PUR = Pg/R
-                VP = V/R
+            PUR=Pg/Nr
+            if Pg: VP=V/Pg
+            #if R:
+                #PUR = Pg/R
+                #VP = V/R
             #print frac,mode
             if V: GA = G/V
             k.write("%.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,BR,PUR,VP,GA))
