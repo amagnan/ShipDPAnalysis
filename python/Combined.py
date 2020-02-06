@@ -53,7 +53,7 @@ def find_Rate(lines,mass,eps):
         k = i.replace('\n','')
         #print k
         k = k.split(' ')
-        if abs(math.log10(Decimal(k[1])) - math.log10(eps)) <0.1 and abs(Decimal(k[0]) - mass)<0.0001: return Decimal(k[2])
+        if abs(math.log10(Decimal(k[1])) - math.log10(eps)) <0.1 and abs(Decimal(k[0]) - mass)<0.00001: return Decimal(k[2])
     else: return 0
 
 for i in line_1:#pbrem just in case
