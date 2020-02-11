@@ -77,6 +77,9 @@ for i,dummy in enumerate(a):
             print 'lowest error', Mass, Eu[Iu]
             k.write('%.13g,  %.13g, %.13g' %(Mass*1000.,Eu[Iu], min(Ru)))
             k.write('\n')
+            line2=r.TLine(r.TMath.Log10(Eu[Iu]),-10,r.TMath.Log10(Eu[Iu]),10)
+            line2.SetLineColor(3)
+            line2.Draw("same")
             bU=np.argsort(Ru) 
             for i,n in enumerate(bU):
                 print Mass, Eu[n], Ru[n]
@@ -91,6 +94,9 @@ for i,dummy in enumerate(a):
             print 'lowest error', Mass, El[Il]
             k.write('%.13g,  %.13g, %.13g' %(Mass*1000.,El[Il], min(Rl)))
             k.write('\n')
+            line3=r.TLine(r.TMath.Log10(El[Il]),-10,r.TMath.Log10(El[Il]),10)
+            line3.SetLineColor(3)
+            line3.Draw("same")
             bL=np.argsort(Rl)
             for i,n in enumerate(bL):
                 print Mass, El[n], Rl[n]

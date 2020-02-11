@@ -3,45 +3,45 @@ import math
 from decimal import Decimal
 import os,sys,getopt
 
-lepto=0 
+pbremOld=0 
 wo=0
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "d:l:w:")
+    opts, args = getopt.getopt(sys.argv[1:], "d:p:w:")
 
 except getopt.GetoptError:
     print 'decay to all SM particles'
 
 for o,a in opts:
     if o in ('-d',): date = a
-    if o in ('-l'): lepto = a
+    if o in ('-p'): pbremOld = a
     if o in ('-w'): wo = a
 
 pathW = "../data/"+date+"/"
 
 if not wo:
-    if not lepto:
+    if not pbremOld:
         data3  = open(pathW+'qcd_rate1.dat')
         data1  = open(pathW+'meson_rate1.dat')
         data2  = open(pathW+'pbrem_rate1.dat')
         Rate   = open(pathW+'comb_rate1.dat','w')
-    if lepto:
-        data3  = open(pathW+'qcd_rate2.dat')
-        data1  = open(pathW+'meson_rate2.dat')
-        data2  = open(pathW+'pbrem_rate2.dat')
-        Rate   = open(pathW+'comb_rate2.dat','w')
+    if pbremOld:
+        data3  = open(pathW+'qcd_rate1.dat')
+        data1  = open(pathW+'meson_rate1.dat')
+        data2  = open(pathW+'pbrem1_rate1.dat')
+        Rate   = open(pathW+'comb1_rate1.dat','w')
 
 if wo:
-    if not lepto:
+    if not pbremOld:
         data3  = open(pathW+'qcd_Rate1.dat')
         data1  = open(pathW+'meson_Rate1.dat')
         data2  = open(pathW+'pbrem_Rate1.dat')
         Rate   = open(pathW+'comb_Rate1.dat','w')
-    if lepto:
-        data3  = open(pathW+'qcd_Rate2.dat')
-        data1  = open(pathW+'meson_Rate2.dat')
-        data2  = open(pathW+'pbrem_Rate2.dat')
-        Rate   = open(pathW+'comb_Rate2.dat','w')
+    if pbremOld:
+        data3  = open(pathW+'qcd_Rate1.dat')
+        data1  = open(pathW+'meson_Rate1.dat')
+        data2  = open(pathW+'pbrem1_Rate1.dat')
+        Rate   = open(pathW+'comb1_Rate1.dat','w')
 
 
 line_1 = data1.readlines()

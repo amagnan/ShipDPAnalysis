@@ -4,7 +4,7 @@ import math
 lepto=0 
 modes = ['meson_pi0','meson_eta','meson_omega','meson_eta1']
 #modes = ['meson_eta','meson_omega','meson_eta1']
-fracs = ['e','mu','tau','pi0','nhadron','chadron','hadron','all','other','sum']
+fracs = ['e','mu','tau','nhadron','chadron','all','other','sum']
 #tots = ['other','sum']
 
 try:
@@ -66,7 +66,7 @@ def find_N(lines,mass,eps):
 def looping(mode,frac,l0,l1):
     l0 = l0.replace('\n','')
     x = l0.split(' ')
-    if frac=='e' or frac=='mu' or frac=='tau' or frac=='nhadron' or frac=='chadron' or frac=='pi0' or frac=='hadron':
+    if frac=='e' or frac=='mu' or frac=='tau' or frac=='nhadron' or frac=='chadron':
         R  = find_ratios(l1, float(x[0]), float(x[1]))
         exec('N  = find_N(l_%s_sum, float(x[0]), float(x[1]))'%(mode))
         if R and N:
@@ -113,7 +113,7 @@ for l in l0:
             exec('r = looping(mode,frac,l00,l_%s_%s)'%(mode,frac))
             if r:
                 exec('k=l_%s'%(frac))
-                if  frac=='nhadron' or frac=='chadron' or frac=='pi0' or frac == 'e' or frac == 'mu' or frac == 'tau' or frac == 'hadron':
+                if  frac=='nhadron' or frac=='chadron' or frac == 'e' or frac == 'mu' or frac == 'tau':
                     fl = 1
                     R += r[0]
                     V += r[2]

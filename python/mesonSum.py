@@ -1,4 +1,4 @@
-date='200205'
+date='200211'
 import math
 
 mothers=['pi0','eta','omega','eta1']
@@ -28,7 +28,7 @@ for i in l0:
     i=i.split(' ')
     for mother in mothers:
         exec('s1 += find("%s",i,l1_%s)'%(mother,mother))
-    #if s1:
-        #f1.write('%s %s %s'%(i[0],i[1],s1))
+    if s1:
+        f1.write('%s %s %s'%(i[0],i[1],s1))
         #f1.write('%s %s %s'%(i[0],i[1],s1*0.6))
-        #f1.write('\n')
+        f1.write('\n')
