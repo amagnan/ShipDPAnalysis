@@ -72,8 +72,8 @@ def looping(mode,frac,l0,l1):
         if R and N:
             #print N
             BRn   = R[0]*N[2]
-            PGn   = R[1]*BRn
-            VPbr  = R[2]*BRn
+            PGn   = R[1]*N[2]
+            VPbr  = R[2]*PGn
             GAvp  = R[3]*VPbr
             return BRn, PGn, VPbr, GAvp, N[2]
     if frac=='all':
@@ -83,8 +83,8 @@ def looping(mode,frac,l0,l1):
         if R and N:
             #DAUo  = R[3]*D[0]
             BRn   = R[1]*N[2]
-            PGn   = R[0]*BRn
-            VPbr  = R[2]*BRn
+            PGn   = R[0]*N[2]
+            VPbr  = R[2]*PGn
             GAvp  = R[3]*VPbr
             return BRn, PGn, VPbr, GAvp, N[2], N[1], N[3]
     if frac=='sum':

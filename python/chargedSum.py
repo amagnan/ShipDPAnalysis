@@ -26,5 +26,5 @@ for i in l0:
     for mother in mothers:
         exec('s1 += find(i,l1_%s)'%(mother))
     if s1:
-        f1.write('%s %s %s'%(i[0],i[1],s1[0],s1[1]))
+        f1.write('%s %s %s %s'%(i[0],i[1],s1[0],s1[1]))
         f1.write('\n')
