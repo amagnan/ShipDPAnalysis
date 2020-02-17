@@ -51,7 +51,7 @@ for i,dummy in enumerate(a):
         line=r.TLine(max(eps),r.TMath.Log10(2.3),min(eps),r.TMath.Log10(2.3))
         line.SetLineColor(3)
         line.Draw("same")
-        c1.Print(pathR+'pdf/'+prod+'_'+analysis+'_'+str(h)+".pdf")
+        #c1.Print(pathR+'pdf/'+prod+'_'+analysis+'_'+str(h)+".pdf")
         ind=rate.index(max(rate))
         for mc in range(-10000000,int(eps[ind]*1000000+1)): 
             mc=mc/1000000.
@@ -108,6 +108,7 @@ for i,dummy in enumerate(a):
  
         Ml,Mu,El,Eu,Rl,Ru=[],[],[],[],[],[]
         #c1.Update()
+        c1.Print(pathR+'pdf/'+prod+'_'+analysis+'_'+str(h)+".pdf")
         h+=1
         eps,rate=array('d'),array('d')
         eps.append(r.TMath.Log10(float(j[1])))
