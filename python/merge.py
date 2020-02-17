@@ -60,7 +60,7 @@ def find_N(lines,mass,eps):
     for i in lines:
         i = i.replace('\n','')
         i = i.split(' ')
-        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.00001: return float(i[2]), float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[7]) 
+        if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.00001: return float(i[2]), float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[7])
     return 0
 
 def looping(mode,frac,l0,l1):
@@ -151,7 +151,8 @@ for l in l0:
             #if R:
                 #VP = V/R
                 #PUR = Pg/R
-            if V: GA = G/V
+            if V!=0.: GA = G/V
+            if V==0.: GA=0.
             if D: Dau = Nr/D
             if PgNr: PURN = PgNr/Nr
             k.write("%.8g %.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,Dau,PURN,BR,VP,GA))
@@ -165,7 +166,8 @@ for l in l0:
                 #PUR = Pg/R
                 #VP = V/R
             #print frac,mode
-            if V: GA = G/V
+            if V!=0.: GA = G/V
+            if V==0.: GA=0
             k.write("%.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,BR,PUR,VP,GA))
             k.write("\n")
         if fl == -1:
