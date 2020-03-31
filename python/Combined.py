@@ -4,7 +4,7 @@ from decimal import Decimal
 import os,sys,getopt
 
 pbremOld=0 
-wo=0
+wo=1
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], "d:p:w:")
@@ -53,7 +53,8 @@ def find_Rate(lines,mass,eps):
         k = i.replace('\n','')
         #print k
         k = k.split(' ')
-        if abs(math.log10(Decimal(k[1])) - math.log10(eps)) <0.01 and abs(Decimal(k[0]) - mass)<0.00001: 
+        #if abs(math.log10(Decimal(k[1])) - math.log10(eps)) <0.01 and abs(Decimal(k[0]) - mass)<0.00001: 
+        if abs(math.log10(Decimal(k[1])) - math.log10(eps)) <0.001 and abs(Decimal(k[0]) - mass)<0.00001:
             #print math.log10(Decimal(k[1])), math.log10(eps), Decimal(k[0]), mass
             return Decimal(k[2])
         #elif abs(math.log10(Decimal(k[1])) - math.log10(eps)) <0.01 and abs(Decimal(k[0]) - mass)<0.0001: print math.log10(Decimal(k[1])), math.log10(eps), Decimal(k[0]), mass
