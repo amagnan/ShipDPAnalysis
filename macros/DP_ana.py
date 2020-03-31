@@ -561,7 +561,7 @@ tmp2=tmp2.replace("reco","ana")
 tmp1=tmp1.replace("reco","ana/dat")
 tmp1=tmp1.replace(date,dest)
 
-if not pbremFF:
+if pro=="pbrem1":
     tmp1=tmp1.replace("pbrem","pbrem1")
     tmp2=tmp2.replace("pbrem","pbrem1")
 
