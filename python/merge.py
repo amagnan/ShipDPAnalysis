@@ -2,7 +2,7 @@ from array import array
 import os,sys,getopt
 import math
 lepto=0 
-modes = ['meson_pi0','meson_eta','meson_omega','meson_eta1']
+modes = ['meson_pi0','meson_eta11','meson_eta','meson_omega','meson_eta1']
 #modes = ['meson_eta','meson_omega','meson_eta1']
 fracs = ['e','mu','tau','neutral','charged','all','other','sum']
 #tots = ['other','sum']
