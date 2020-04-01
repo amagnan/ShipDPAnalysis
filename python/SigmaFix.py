@@ -1,7 +1,8 @@
 #date='200213'
 date='200331'
 import math
-prods=['comb','comb1','meson','meson_pi0','meson_omega','meson_eta','meson_eta1','pbrem','pbrem1','qcd']
+#prods=['comb','comb1','meson','meson_pi0','meson_omega','meson_eta','meson_eta1','pbrem','pbrem1','qcd']
+prods=['meson','meson_pi0','meson_omega','meson_eta','meson_eta1','meson_eta11']
 for prod in prods:
     exec('f1 = open("../data/"+date+"/%s"+"_FixedRate1.dat","w")'%(prod))
     exec('f0_%s = open("../data/"+date+"/%s"+"_Rate1.dat","r")'%(prod,prod))
