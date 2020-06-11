@@ -95,13 +95,22 @@ targ=r.TVector3(0,0,ShipGeo.target.z0)
 h={}
 hs={}
 ut.bookHist(hs,'DPpz','',100,0.,400.)
-ut.bookHist(hs,'DPrapidity','',100,-3.,9)
 ut.bookHist(hs,'DPp','',40,0.,400.)
 ut.bookHist(hs,'DPtheta','',160,0.,1.6)
-ut.bookHist(hs,'DPpt2','',100,0.,10.)
-ut.bookHist(hs,'DPxf','',40,0.,1.)
-ut.bookHist(hs,'DP1theta','',160,0.,1.6)
-ut.bookHist(hs,'DP1pt2','',100,0.,10.)
+
+ut.bookHist(hs,'DP_xf','',40,0.,1.)
+ut.bookHist(hs,'DPmom_xf','',40,0.,1.)
+
+ut.bookHist(hs,'DPmom_rapidity','',100,-3.,9)
+ut.bookHist(hs,'DPmom_pt2','',100,0.,10.)
+ut.bookHist(hs,'DPmomR_rapidity','',100,-3.,9.)
+ut.bookHist(hs,'DPmomR_pt2','',100,0.,10.)
+
+ut.bookHist(hs,'DP_rapidity','',100,-3.,9)
+ut.bookHist(hs,'DP_pt2','',100,0.,10.)
+ut.bookHist(hs,'DPr_rapidity','',100,-3.,9.)
+ut.bookHist(hs,'DPr_pt2','',100,0.,10.)
+
 
 ut.bookHist(h,'DauPDG','PDG OF Primaries')
 ut.bookHist(h,'DPang1','invariant Mass (GeV)',100,0.,mass_mc+5.)
@@ -362,17 +371,16 @@ def myEventLoop(n):# Analysis is starting here
     if xsw==0 and wg==0 and dp_id==0: 
         #Dump(sTree.MCTrack)
         return 0
-    hs['DPpt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
-    hs['DPtheta'].Fill(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))
-    hs['DPxf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
-    if sTree.MCTrack[mum].GetPz()/400*m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())>0.025 and sTree.MCTrack[mum].GetPz()/400*m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())<0.3:
-        hs['DP1pt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
-        hs['DP1theta'].Fill(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))
+    hs['DPmom_pt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
+    hs['DPmom_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
+    hs['DPmom_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
+    if sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))<0.3 and sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))>0.025:
+        hs['DPmomR_pt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
+        hs['DPmomR_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
     if sTree.MCTrack[mum].GetPz()/400*m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())>1.: print "xfbig",sTree.MCTrack[mum].GetPz()/400*m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())
     if sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt()>10.: print "ptbig",sTree.MCTrack[mum].GetPt()
     hs['DPpz'].Fill(sTree.MCTrack[mum].GetPz())
     hs['DPp'].Fill(sTree.MCTrack[mum].GetP())
-    hs['DPrapidity'].Fill(0.5*m.log((sTree.MCTrack[mum].GetEnergy()+sTree.MCTrack[mum].GetPz())/(sTree.MCTrack[mum].GetEnergy()-sTree.MCTrack[mum].GetPz())))
     h['DPW'].Fill(mass_mc) 
     dau=checkLepMode(sTree,dp_id) 
     for xxx in dau:
@@ -543,6 +551,12 @@ def myEventLoop(n):# Analysis is starting here
                 h['DPves'].Fill(mass_mc)
                 if RECO>1:#at least two charged tracks in the FINAL CUT 
                     #print "reco"
+                    hs['DP_pt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
+                    hs['DP_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
+                    hs['DP_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
+                    if sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))<0.3 and sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))>0.025:
+                        hs['DPr_pt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
+                        hs['DPr_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
                     h['DPangW'].Fill(mass_mc)
                     h['DPangWe'].Fill(mass_mc,wg)
                     h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
