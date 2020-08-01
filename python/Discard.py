@@ -11,7 +11,8 @@ for o,a in opts:
     if o in ('-d','--date',): date = a
 
 #prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','meson_eta11','pbrem','pbrem1','qcd']
-prods = ['pbrem','meson','qcd']
+#prods = ['pbrem','meson','qcd']
+prods = ['pbrem','pbrem1']
 for prod in prods:
     outp="../data/"+date+"/"+prod+"_Rate1.dat"
     inp="../data/"+date+"/"+prod+"_rate1.dat"

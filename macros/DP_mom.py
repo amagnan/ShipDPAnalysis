@@ -375,6 +375,7 @@ def myEventLoop(n):# Analysis is starting here
     hs['DPmom_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
     hs['DPmom_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
     if sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))<0.3 and sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))>0.025:
+        #print sTree.MCTrack[mum].GetRapidity()
         hs['DPmomR_pt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
         hs['DPmomR_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
     if sTree.MCTrack[mum].GetPz()/400*m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())>1.: print "xfbig",sTree.MCTrack[mum].GetPz()/400*m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())
@@ -555,6 +556,7 @@ def myEventLoop(n):# Analysis is starting here
                     hs['DP_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
                     hs['DP_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
                     if sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))<0.3 and sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))>0.025:
+                        print sTree.MCTrack[mum].GetRapidity()
                         hs['DPr_pt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
                         hs['DPr_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
                     h['DPangW'].Fill(mass_mc)
