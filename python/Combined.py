@@ -44,9 +44,9 @@ if wo:
         Rate   = open(pathW+'comb1_Rate1.dat','w')
 
 
-line_1 = data1.readlines()
-line_2 = data2.readlines()
-line_3 = data3.readlines()
+line_1 = data1.readlines()#meson
+line_2 = data2.readlines()#pbrem
+line_3 = data3.readlines()#qcd
 
 def find_Rate(lines,mass,eps):
     for i in lines:

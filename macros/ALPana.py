@@ -9,34 +9,40 @@ import shipRoot_conf
 import math as m
 import numpy as np
 from array import array
+import subprocess
 shipRoot_conf.configure()
+sim=0
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "d:m:G:g:f:", ["date=","mass=","coupling=","geoFile=","final_dest="])
+    opts, args = getopt.getopt(sys.argv[1:], "d:m:G:g:f:s:", ["date=","mass=","coupling=","geoFile=","final_dest=","sim="])
+
 except getopt.GetoptError:
     print 'no file'
     sys.exit()
+
 for o,a in opts:
     if o in ('-d',): date = a
     if o in ('-m',): mass_mc = a
     if o in ('-G',): gax = a
     if o in ('-g', '--geoFile',): geoFile = a
     if o in ('-f',): dest = a
+    if o in ('-s',): sim = int(a)
 
-tmp1 = "/eos/experiment/ship/data/ALP/"+date+"/reco/ALPACA_mass"+mass_mc+"_g"+gax
-inputFile = tmp1+"_rec.root"
+tmp1 = "/eos/experiment/ship/data/ALP/"+date+"/runs/ALPACA_mass"+mass_mc+"_g"+gax
+gax=gax.replace(".000000","")
+pipe = subprocess.Popen("ls /eos/experiment/ship/data/ALP/"+date+"/ntuples/alp_m"+mass_mc+"_g"+gax+"*.root", shell=True, stdout=subprocess.PIPE).stdout
+xs=pipe.read()
+xs=xs.replace("/eos/experiment/ship/data/ALP/"+date+"/ntuples/alp_m"+mass_mc+"_g"+gax+"_xs","")
+xs=xs.replace(".root","")
+print xs
 #inputFile = tmp1+".root"
-print inputFile
 mass_mc=float(mass_mc)
 gax=float(gax)
 
 eosship =  ROOT.gSystem.Getenv("EOSSHIP")
-eospath = eosship+inputFile
-f = ROOT.TFile.Open(eospath)
-sTree=f.cbmsim
 eospath = eosship+geoFile
-fgeo = ROOT.TFile.Open(eospath)
-#fgeo = ROOT.TFile.Open(geoFile)
+#fgeo = ROOT.TFile.Open(eospath)
+fgeo = ROOT.TFile.Open(geoFile)
 #sGeo = ROOT.gGeoManager
 
 upkl    = Unpickler(fgeo)
@@ -135,7 +141,7 @@ def findMom():#this function finds the mother of ALP with weight,xs,momentum etc
         if tr.GetPdgCode()==9900015:
             alp_ind = ind
             #xsw = dputil.getALPprodRate(mass_mc,eps)
-            xsw=0.
+            xsw=float(xs)*10**-9
             wg = sTree.MCTrack[alp_ind].GetWeight()
             alp_P=ROOT.TVector3(sTree.MCTrack[alp_ind].GetPx(),sTree.MCTrack[alp_ind].GetPy(),sTree.MCTrack[alp_ind].GetPz())
             alp_Mag=sTree.MCTrack[alp_ind].GetP()
@@ -159,22 +165,39 @@ def findDau(sTree, alp_ind):
 
 def firstProd(sTree,dauPID):
     for mc,tr in enumerate(sTree.MCTrack):
+        #if tr.GetMotherId()==dauPID and abs(tr.GetPdgCode())==11:
         if tr.GetMotherId()==dauPID:
             vtx=ROOT.TVector3()
             tr.GetStartVertex(vtx)
-            return vtx
+            #if abs(tr.GetPdgCode())==11 and vtx.Z()<=ShipGeo.SplitCal.SplitCalThickness+ShipGeo.SplitCal.ZStart and  vtx.Z()>=ShipGeo.SplitCal.ZStart and abs(vtx.X())<=ShipGeo.SplitCal.XMax and abs(vtx.Y())<=ShipGeo.SplitCal.YMax: return True
+            if abs(tr.GetPdgCode())==11 and vtx.Z()<=ShipGeo.SplitCal.SplitCalThickness+ShipGeo.SplitCal.ZStart and  vtx.Z()>=ShipGeo.TrackStation1.z and abs(vtx.X())<=ShipGeo.SplitCal.XMax and abs(vtx.Y())<=ShipGeo.SplitCal.YMax: return True
+    return False
+
+def MCextrapolate(vtx,mom):
+    lam=(ShipGeo.SplitCal.ZStart-vtx.Z())/mom.Z()
+    if abs(vtx.X()+lam*mom.X())<=ShipGeo.SplitCal.XMax and abs(vtx.Y()+lam*mom.Y())<=ShipGeo.SplitCal.YMax: return True
 
 def findSignal(sTree,xxx):
     PID=[]
     for mc,tr in enumerate(sTree.MCTrack):
         if tr.GetMotherId()==xxx and abs(tr.GetPdgCode())==11: PID.append(mc)
     return PID
+def inDet(vtx):
+    if vtx.Z()<=ShipGeo.SplitCal.SplitCalThickness+ShipGeo.SplitCal.ZStart and  vtx.Z()>=ShipGeo.SplitCal.ZStart and abs(vtx.X())<=ShipGeo.SplitCal.XMax and abs(vtx.Y())<=ShipGeo.SplitCal.YMax: return True
+    else: return False
 
+def IPtoTarget(vtx, mom, Avtx):
+    p = mom.P()
+    delta = 0.
+    for i in range(3):
+        delta += (Avtx(i) - vtx(i)) * mom(i)/p
+    ip = 0.
+    for i in range(3):
+        ip += (Avtx(i) - vtx(i) - delta*mom(i)/p)**2.
+    return ROOT.TMath.Sqrt(ip)
 h={}
 
 ut.bookHist(h,'ALPangWxs','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
-
-
 ut.bookHist(h,'ALP','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'ALPW','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'ALPpur','invariant Mass (GeV)',100,0.,mass_mc+5.)
@@ -192,6 +215,7 @@ ut.bookHist(h,'ALPves_oth','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'ALPvesW_oth','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'ALPang_oth','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'ALPangW_oth','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'IP','',100,0.,1000.)
 
 def myEventLoop(n):# Analysis is starting here
     DAU=0
@@ -215,22 +239,20 @@ def myEventLoop(n):# Analysis is starting here
     for xxx in dau:
         if sTree.MCTrack[xxx].GetPdgCode()==22:
             DAU+=1
-            doca=sTree.MCTrack[xxx].GetStartT()
-            if isInFiducial(sTree.MCTrack[xxx].GetStartX(), sTree.MCTrack[xxx].GetStartY(), sTree.MCTrack[xxx].GetStartZ()):
+            vtx=ROOT.TVector3(sTree.MCTrack[xxx].GetStartX(), sTree.MCTrack[xxx].GetStartY(), sTree.MCTrack[xxx].GetStartZ())
+            mom=ROOT.TVector3(sTree.MCTrack[xxx].GetPx(), sTree.MCTrack[xxx].GetPy(), sTree.MCTrack[xxx].GetPz())
+            Mom=ROOT.TLorentzVector()
+            sTree.MCTrack[xxx].Get4Momentum(Mom)
+            Vtx=ROOT.TLorentzVector(sTree.MCTrack[xxx].GetStartX(), sTree.MCTrack[xxx].GetStartY(), sTree.MCTrack[xxx].GetStartZ(), sTree.MCTrack[xxx].GetStartT())
+            Avtx=ROOT.TLorentzVector(sTree.MCTrack[0].GetStartX(), sTree.MCTrack[0].GetStartY(), sTree.MCTrack[0].GetStartZ(), sTree.MCTrack[0].GetStartT())
+            if isInFiducial(vtx.X(),vtx.Y(),vtx.Z()):
                 VES+=1
-                vtx1=firstProd(sTree,xxx)
-                print(n)
-                #print(vtx1.X(), vtx1.Y(), vtx1.Z())
-                sig=findSignal(sTree,xxx)
-                for xx in sig: 
-                    sTree.MCTrack[xx].GetStartX(), sTree.MCTrack[xx].GetStartY(), sTree.MCTrack[xx].GetStartZ()
-                    if checkFiducialVolume(sTree,xx,dy): REC+=1
-
+                IP=IPtoTarget(Vtx, Mom,Avtx)
+                h['IP'].Fill(IP)
+                if firstProd(sTree,xxx) and sTree.MCTrack[0].GetStartT()-sTree.MCTrack[xxx].GetStartT()<=1. and MCextrapolate(vtx,mom) and mom.Mag()>=1.:
+                    REC+=1
     """for tr, rec in enumerate(sTree.Reco_SplitcalClusters):
-        print(n, tr)
-        print(sTree.MCTrack[dau[0]].GetStartX(), sTree.MCTrack[dau[0]].GetStartY(), sTree.MCTrack[dau[0]].GetStartZ())
-        print(sTree.MCTrack[dau[1]].GetStartX(), sTree.MCTrack[dau[1]].GetStartY(), sTree.MCTrack[dau[1]].GetStartZ())
-        rec.Print()""" 
+        e=+rec.GetEnergy()"""
 
     if DAU>1:
         h['ALPpur'].Fill(mass_mc) 
@@ -240,11 +262,12 @@ def myEventLoop(n):# Analysis is starting here
             h['ALPvesW'].Fill(mass_mc,wg)
             if REC>1:
                 h['ALPang'].Fill(mass_mc) 
-                h['ALPangsW'].Fill(mass_mc,wg)
+                h['ALPangW'].Fill(mass_mc,wg)
+                h['ALPangWxs'].Fill(mass_mc,wg*xsw)
             elif REC<2:
                 h['ALPang_oth'].Fill(mass_mc) 
                 h['ALPangW_oth'].Fill(mass_mc,wg)
-            else: print("WRONG REC")
+            #else: print("WRONG REC")
         elif VES<2:
             h['ALPves_oth'].Fill(mass_mc) 
             h['ALPvesW_oth'].Fill(mass_mc,wg)
@@ -254,17 +277,40 @@ def myEventLoop(n):# Analysis is starting here
         h['ALPpurW_oth'].Fill(mass_mc,wg)
     else: print("WRONG")
 
-nEvents =sTree.GetEntries()
-#nEvents=100
-for n in range(nEvents):
-    myEventLoop(n)
+if not sim:
+    for i in range(1,6):
+        inputFile = tmp1+"_"+str(i)+".root"
+        print inputFile
+        eospath = eosship+inputFile
+        try:
+            f = ROOT.TFile.Open(eospath)
+            sTree=f.cbmsim
+            nEvents =sTree.GetEntries()
+            #nEvents=100
+            for n in range(nEvents):
+                myEventLoop(n)
+        except: continue
+
+if sim:
+    inputFile = tmp1+".root"
+    print inputFile
+    eospath = eosship+inputFile
+    f = ROOT.TFile.Open(eospath)
+    sTree=f.cbmsim
+    nEvents =sTree.GetEntries()
+    #nEvents=100
+    for n in range(nEvents):
+        myEventLoop(n)
+
 
 print(h['ALP'].Integral(), h['ALPW'].Integral(), h['ALPpur'].Integral(), h['ALPpurW'].Integral(), h['ALPves'].Integral(), h['ALPvesW'].Integral(), h['ALPang'].Integral(), h['ALPangW'].Integral())
 print(h['ALP_oth'].Integral(), h['ALPW_oth'].Integral(), h['ALPpur_oth'].Integral(), h['ALPpurW_oth'].Integral(), h['ALPves_oth'].Integral(), h['ALPvesW_oth'].Integral(), h['ALPang_oth'].Integral(), h['ALPangW_oth'].Integral())
 
 tmp2=tmp1.replace(date,dest)
-tmp2=tmp2.replace("reco","ana")
-tmp1=tmp1.replace("reco","ana/dat")
+#tmp2=tmp2.replace("hadd","ana")
+#tmp1=tmp1.replace("hadd","ana/dat")
+tmp2=tmp2.replace("runs","ana")
+tmp1=tmp1.replace("runs","ana/dat")
 tmp1=tmp1.replace(date,dest)
 
 o1  = tmp1+"_ratio.dat"
