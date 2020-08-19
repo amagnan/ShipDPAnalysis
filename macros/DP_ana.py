@@ -12,8 +12,7 @@ import dpProductionRates as dputil
 import math as m
 import numpy as np
 shipRoot_conf.configure()
-dpMom = False
-pbremFF =  True
+dpMom = '' 
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], "d:p:m:e:A:g:f:", ["date=","production=","mass=","epsilon=","motherID=","geoFile=","final_dest="])
@@ -29,12 +28,9 @@ for o,a in opts:
     if o in ('-g', '--geoFile',): geoFile = a
     if o in ('-f',): dest = a
 
-if dpMom: 
-    tmp3 = pro+"_"+dpMom+"_mass"+mass_mc+"_eps"+eps
-    tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_"+dpMom+"_mass"+mass_mc+"_eps"+eps
-if not dpMom: 
-    tmp3 = pro+"_mass"+mass_mc+"_eps"+eps
-    tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_mass"+mass_mc+"_eps"+eps
+if dpMom!='': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_"+dpMom+"_mass"+mass_mc+"_eps"+eps
+if dpMom=='': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_mass"+mass_mc+"_eps"+eps
+if pro=="pbrem1": tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/pbrem_mass"+mass_mc+"_eps"+eps
 inputFile = tmp1+"_rec.root"
 print inputFile
 mass_mc=float(mass_mc)
@@ -57,14 +53,14 @@ dy = ShipGeo.Yheight/u.m
 MeasCut=25
 
 # -----Create geometry----------------------------------------------
-import shipDet_conf
-run = r.FairRunSim()
-run.SetName("TGeant4")  # Transport engine
-run.SetOutputFile(ROOT.TMemFile('output', 'recreate'))  # Output file
-run.SetUserConfig("g4Config_basic.C") # geant4 transport not used, only needed for the mag field
-rtdb = run.GetRuntimeDb()
+#import shipDet_conf
+#run = r.FairRunSim()
+#run.SetName("TGeant4")  # Transport engine
+#run.SetOutputFile(ROOT.TMemFile('output', 'recreate'))  # Output file
+#run.SetUserConfig("g4Config_basic.C") # geant4 transport not used, only needed for the mag field
+
 # -----Create geometry----------------------------------------------
-modules = shipDet_conf.configure(run,ShipGeo)
+#modules = shipDet_conf.configure(run,ShipGeo)
 
 import geomGeant4
 if hasattr(ShipGeo.Bfield,"fieldMap"):
@@ -97,10 +93,6 @@ import TrackExtrapolateTool
 targ=r.TVector3(0,0,ShipGeo.target.z0)
 
 h={}
-hs={}
-ut.bookHist(hs,'DPmomentum','',100,50.,400.)
-ut.bookHist(hs,'DPtheta','',100,0.,1.6)
-ut.bookHist(hs,'DPTP','',100,0.,1.6,100,50.,400.)
 
 ut.bookHist(h,'DauPDG','PDG OF Primaries')
 ut.bookHist(h,'DPang1','invariant Mass (GeV)',100,0.,mass_mc+5.)
@@ -219,28 +211,21 @@ def findmum():#this function finds the mother of DP with weight,xs,momentum etc.
             #print mum_pdg
             if pro=='meson':
                 xsw = dputil.getDPprodRate(mass_mc,eps,'meson',mum_pdg)
-                if dpMom=='eta1' and xsw!=0:
+                if 'eta1' in dpMom and xsw!=0:
                     xsw1=xsw[1]
                     xsw=xsw[0]
-            #if pro=='pbrem' and (not pbremFF):
-                #pro1='pbrem1'
-                #print type(pro),type(pro1)
-                #xsw = dputil.getDPprodRate(mass_mc,eps,pro1,0)
-                #print "YETER", xsw
-            #if pro=='qcd' or (pro=='pbrem' and pbremFF==True): 
             else: xsw = dputil.getDPprodRate(mass_mc,eps,pro,0) 
             #print "bu da farkli", xsw
             wg = sTree.MCTrack[dp_id].GetWeight()
             #print dp_id 
             dp_mom=r.TVector3(sTree.MCTrack[dp_id].GetPx(),sTree.MCTrack[dp_id].GetPy(),sTree.MCTrack[dp_id].GetPz())
             dp_mag=sTree.MCTrack[dp_id].GetP()
-            dp_theta=m.asin(sTree.MCTrack[dp_id].GetPt() /dp_mag)   
             break
         else:
-            if dpMom=='eta1': xsw,xsw1,wg,dp_id,dp_mom,dp_mag,dp_theta=0,0,0,0,0,0,0
-            if not dpMom=='eta1':xsw,wg,dp_id,dp_mom,dp_mag,dp_theta=0,0,0,0,0,0
-    if dpMom=='eta1': return xsw,xsw1,wg,dp_id,dp_mom,dp_mag,dp_theta
-    if not dpMom=='eta1': return xsw,wg,dp_id,dp_mom,dp_mag,dp_theta
+            if 'eta1' in dpMom: xsw,xsw1,wg,dp_id,dp_mom,dp_mag=0,0,0,0,0,0
+            if not 'eta1' in dpMom:xsw,wg,dp_id,dp_mom,dp_mag=0,0,0,0,0
+    if 'eta1' in dpMom: return xsw,xsw1,wg,dp_id,dp_mom,dp_mag
+    if not 'eta1' in dpMom: return xsw,wg,dp_id,dp_mom,dp_mag
 
 def find_signal(pdg):# this function finds the signal tracks. USED for finding signals in fittracks.. It is also looks for pi0 and gamma BUT no gamma or pi0 in FitTracks. So, signals are proton+-, pion+-, kaon+-, electron +- muon +-
     try:
@@ -325,21 +310,19 @@ def myEventLoop(n):# Analysis is starting here
     #print n
     rc=sTree.GetEntry(n) 
     fm=findmum()
-    if dpMom == 'eta1':
+    if 'eta1' in dpMom:
         xsw=fm[0]
         xsw1=fm[1]
         wg=fm[2]
         dp_id=fm[3]
         dp_M=fm[4]
         dp_Mag=fm[5]
-        dp_Theta=fm[6]
-    if not dpMom == 'eta1':
+    if not 'eta1' in dpMom:
         xsw=fm[0]
         wg=fm[1]
         dp_id=fm[2]
         dp_M=fm[3]
         dp_Mag=fm[4]
-        dp_Theta=fm[5]
     MA,MAS=[],[] 
     DPmom=r.TLorentzVector(0.,0.,0.,0.)
     DPma=r.TLorentzVector(0.,0.,0.,0.) 
@@ -359,9 +342,6 @@ def myEventLoop(n):# Analysis is starting here
         #Dump(sTree.MCTrack)
         return 0
     h['DPW'].Fill(mass_mc) 
-    hs['DPmomentum'].Fill(dp_Mag)
-    hs['DPtheta'].Fill(dp_Theta)
-    hs['DPTP'].Fill(dp_Theta,dp_Mag)
     dau=checkLepMode(sTree,dp_id) 
     for xxx in dau:
         pid = sTree.MCTrack[xxx].GetPdgCode()
@@ -474,7 +454,7 @@ def myEventLoop(n):# Analysis is starting here
         if neut>0 and charg==0.0:
             h['DPpur_neut'].Fill(mass_mc)
     
-    if f_track>1:#at least two charged particle in the VESSEL
+    if CHARGE>1 and f_track>1:#at least two charged particle in the VESSEL
         if e>1 and CE==0.0:#at least two electrons decay channel FOR VES_PROB
             h['DPvesW_e'].Fill(mass_mc,wg)
             h['DPves_e'].Fill(mass_mc)
@@ -495,34 +475,35 @@ def myEventLoop(n):# Analysis is starting here
             h['DPvesW_neut'].Fill(mass_mc,wg)
             h['DPves_neut'].Fill(mass_mc)
             
-    if f_track>1 and RECO>1:#at least two charged tracks in the FINAL CUT
+    if f_track>1 and CHARGE>1 and RECO>1:#at least two charged tracks in the FINAL CUT
         if e>1 and CE==0.0:#at least two electrons decay channel FOR RECO_EFF
             h['DPang_e'].Fill(mass_mc,wg*xsw)
-            if dpMom == 'eta1': h['DPang1_e'].Fill(mass_mc,wg*xsw1)
+            if 'eta1' in dpMom: h['DPang1_e'].Fill(mass_mc,wg*xsw1)
             h['DPangW_e'].Fill(mass_mc,wg)  
 
         if mu>1 and CM==0.0:#at least two muons decay channel FOR RECO_EFF
             h['DPang_mu'].Fill(mass_mc,wg*xsw)
-            if dpMom == 'eta1': h['DPang1_mu'].Fill(mass_mc,wg*xsw1)
+            if 'eta1' in dpMom: h['DPang1_mu'].Fill(mass_mc,wg*xsw1)
             h['DPangW_mu'].Fill(mass_mc,wg) 
 
         if neut>0 and charg==0:#any chargronic decay channel for RECO_EFF
             h['DPang_neut'].Fill(mass_mc,wg*xsw)
-            if dpMom == 'eta1': h['DPang1_neut'].Fill(mass_mc,wg*xsw1)
+            if 'eta1' in dpMom: h['DPang1_neut'].Fill(mass_mc,wg*xsw1)
             h['DPangW_neut'].Fill(mass_mc,wg)
 
         if charg>0:#any chargronic decay channel for RECO_EFF
             h['DPang_charg'].Fill(mass_mc,wg*xsw)
-            if dpMom == 'eta1': h['DPang1_charg'].Fill(mass_mc,wg*xsw1)
+            if 'eta1' in dpMom: h['DPang1_charg'].Fill(mass_mc,wg*xsw1)
             h['DPangW_charg'].Fill(mass_mc,wg)
 
         if tau>1 and CT==0:#at least two taus decay channel FOR RECO_EFF
             h['DPang_tau'].Fill(mass_mc,wg*xsw)
-            if dpMom == 'eta1': h['DPang1_tau'].Fill(mass_mc,wg*xsw1)
+            if 'eta1' in dpMom: h['DPang1_tau'].Fill(mass_mc,wg*xsw1)
             h['DPangW_tau'].Fill(mass_mc,wg)
 
     if (e>1 and CE==0) or (mu>1 and CM==0) or (tau>1 and CT==0) or (charg>0) or (neut>0 and charg==0):#at least two charged leptons decay channel and any chargronic decay channel FOR BR_TOT
         h['DP'].Fill(mass_mc)
+        print e, mu, tau, charg, neut
         if CHARGE>1:
             h['DPpur'].Fill(mass_mc)
             if f_track>1:##at least two charged tracks in the VESL
@@ -533,11 +514,11 @@ def myEventLoop(n):# Analysis is starting here
                     h['DPangW'].Fill(mass_mc)
                     h['DPangWe'].Fill(mass_mc,wg)
                     h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
-                    if dpMom == 'eta1': h['DPang1'].Fill(mass_mc,wg*xsw1)
+                    if 'eta1' in dpMom: h['DPang1'].Fill(mass_mc,wg*xsw1)
                 else:
                     h['DPangW_oth'].Fill(mass_mc,wg)
                     h['DPang_oth'].Fill(mass_mc,wg*xsw)
-                    if dpMom == 'eta1': h['DPang1_oth'].Fill(mass_mc,wg*xsw1)
+                    if 'eta1' in dpMom: h['DPang1_oth'].Fill(mass_mc,wg*xsw1)
             else: 
                 h['DPves_oth'].Fill(mass_mc)
                 h['DPvesW_oth'].Fill(mass_mc,wg) 
@@ -561,7 +542,7 @@ tmp2=tmp2.replace("reco","ana")
 tmp1=tmp1.replace("reco","ana/dat")
 tmp1=tmp1.replace(date,dest)
 
-if pro=="pbrem1":
+if pro=='pbrem1':
     tmp1=tmp1.replace("pbrem","pbrem1")
     tmp2=tmp2.replace("pbrem","pbrem1")
 
@@ -683,19 +664,19 @@ if float(h['DP'].Integral())!=0.0:
                 g.write('%.4g %s %.8g %.8g %.8g 0.0 0.0' %(mass_mc, eps, float(h['DP'].Integral()/h['DPW'].Integral()), float(h['DPpur'].Integral()/h['DP'].Integral()), float(Sum/h['DP'].Integral())))
                 g.write('\n')
 
-    if dpMom=="eta1":
+    if 'eta1' in dpMom:
         RecW=h['DPang'].Integral()/h['DP'].Integral()*2.0e+20#weighted Selected/weighted Vessel
         RecW1=h['DPang1'].Integral()/h['DP'].Integral()*2.0e+20
         k.write('%.4g %s %.8g %.8g' %(mass_mc, eps, RecW1, RecW)) 
         k.write('\n')
 
-    if dpMom!="eta1":
+    if not 'eta1' in dpMom:
         RecW=h['DPang'].Integral()/h['DP'].Integral()*2.0e+20#weighted Selected/weighted Vessel
         k.write('%.4g %s %.8g' %(mass_mc, eps, RecW)) 
         k.write('\n')
 
-    if dpMom!="eta1": print mass_mc, eps, RecW
-    if dpMom=="eta1": print mass_mc, eps, RecW, RecW1
+    if not 'eta1' in dpMom: print mass_mc, eps, RecW
+    if 'eta1' in dpMom: print mass_mc, eps, RecW, RecW1
 
 a.close()
 b.close()
@@ -709,8 +690,5 @@ k.close()
 
 tmp1=tmp1.replace("dat/","")
 hfile =tmp2+"_ana.root" 
-hsfile = "/afs/cern.ch/user/t/takmete/"+tmp3+"_xs.root" 
-
 r.gROOT.cd()
 ut.writeHists(h,hfile)
-ut.writeHists(hs,hsfile)

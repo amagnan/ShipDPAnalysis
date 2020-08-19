@@ -94,23 +94,94 @@ targ=r.TVector3(0,0,ShipGeo.target.z0)
 
 h={}
 hs={}
-ut.bookHist(hs,'DPpz','',100,0.,400.)
-ut.bookHist(hs,'DPp','',40,0.,400.)
-ut.bookHist(hs,'DPtheta','',160,0.,1.6)
 
-ut.bookHist(hs,'DP_xf','',40,0.,1.)
 ut.bookHist(hs,'DPmom_xf','',40,0.,1.)
-
 ut.bookHist(hs,'DPmom_rapidity','',100,-3.,9)
-ut.bookHist(hs,'DPmom_pt2','',100,0.,10.)
-ut.bookHist(hs,'DPmomR_rapidity','',100,-3.,9.)
-ut.bookHist(hs,'DPmomR_pt2','',100,0.,10.)
-
+ut.bookHist(hs,'DPmom_pt2','',400,0.,400.)
+ut.bookHist(hs,'DPmom_pz','',100,0.,400.)
+ut.bookHist(hs,'DPmom_p','',100,0.,400.)
+ 
+ut.bookHist(hs,'DP_xf','',40,0.,1.)
 ut.bookHist(hs,'DP_rapidity','',100,-3.,9)
-ut.bookHist(hs,'DP_pt2','',100,0.,10.)
+ut.bookHist(hs,'DP_pt2','',400,0.,400.)
+ut.bookHist(hs,'DP_pz','',100,0.,400.)
+ut.bookHist(hs,'DP_p','',40,0.,400.)
+ 
+ut.bookHist(hs,'DPmomR_rapidity','',100,-3.,9.)
+ut.bookHist(hs,'DPmomR_pt2','',400,0.,400.)
+ut.bookHist(hs,'DPmomR_pz','',100,0.,400.)
+ut.bookHist(hs,'DPmomR_p','',100,0.,400.)
+ 
 ut.bookHist(hs,'DPr_rapidity','',100,-3.,9.)
-ut.bookHist(hs,'DPr_pt2','',100,0.,10.)
+ut.bookHist(hs,'DPr_pt2','',400,0.,400.)
+ut.bookHist(hs,'DPr_pz','',100,0.,400.)
+ut.bookHist(hs,'DPr_p','',100,0.,400.)
 
+ut.bookHist(hs,'DPmomC3_xf','',40,0.,1.)
+ut.bookHist(hs,'DPmomC3_rapidity','',100,-3.,9.)
+ut.bookHist(hs,'DPmomC3_pz','',100,0.,400.)
+ut.bookHist(hs,'DPmomC3_p','',100,0.,400.)
+ 
+ut.bookHist(hs,'DPc3_xf','',40,0.,1.)
+ut.bookHist(hs,'DPc3_rapidity','',100,-3.,9.)
+ut.bookHist(hs,'DPc3_pz','',100,0.,400.)
+ut.bookHist(hs,'DPc3_p','',100,0.,400.)
+ 
+ut.bookHist(hs,'DPmomC2_xf','',40,0.,1.)
+ut.bookHist(hs,'DPmomC2_rapidity','',100,-3.,9.)
+ut.bookHist(hs,'DPmomC2_pz','',100,0.,400.)
+ut.bookHist(hs,'DPmomC2_p','',100,0.,400.)
+ 
+ut.bookHist(hs,'DPc2_xf','',40,0.,1.)
+ut.bookHist(hs,'DPc2_rapidity','',100,-3.,9.)
+ut.bookHist(hs,'DPc2_pz','',100,0.,400.)
+ut.bookHist(hs,'DPc2_p','',100,0.,400.)
+
+ut.bookHist(hs,'DPmomC1_xf','',40,0.,1.)
+ut.bookHist(hs,'DPmomC1_rapidity','',100,-3.,9.)
+ut.bookHist(hs,'DPmomC1_pz','',100,0.,400.)
+ut.bookHist(hs,'DPmomC1_p','',100,0.,400.)
+ 
+ut.bookHist(hs,'DPc1_xf','',40,0.,1.)
+ut.bookHist(hs,'DPc1_rapidity','',100,-3.,9.)
+ut.bookHist(hs,'DPc1_pz','',100,0.,400.)
+ut.bookHist(hs,'DPc1_p','',100,0.,400.)
+ 
+tmp1=tmp1.replace(date,dest)
+ 
+tmp2=tmp1.replace("reco","ana")
+tmp1=tmp1.replace("reco","ana/dat")
+
+if pro=='pbrem1':
+    tmp1=tmp1.replace("pbrem","pbrem1")
+    tmp2=tmp2.replace("pbrem","pbrem1")
+
+ 
+TreeFile=r.TFile(tmp2+"_ProdAna.root",'recreate')
+ProdAna=r.TTree("ProdAna","results of the productions")
+
+
+DP_Pt          =r.std.vector(float)()
+DPmom_Pt       =r.std.vector(float)() 
+DP_Pz          =r.std.vector(float)()
+DPmom_Pz       =r.std.vector(float)()
+DP_P          =r.std.vector(float)()
+DPmom_P       =r.std.vector(float)()
+DP_Rapidity     =r.std.vector(float)()
+DPmom_Rapidity  =r.std.vector(float)()
+DP_Xf          =r.std.vector(float)()
+DPmom_Xf       =r.std.vector(float)()
+ 
+ProdAna.Branch('DP_Xf',DP_Xf) 
+ProdAna.Branch('DPmom_Xf',DPmom_Xf) 
+ProdAna.Branch('DP_Pt',DP_Pt) 
+ProdAna.Branch('DPmom_Pt',DPmom_Pt) 
+ProdAna.Branch('DP_P',DP_P) 
+ProdAna.Branch('DPmom_P',DPmom_P) 
+ProdAna.Branch('DP_Pz',DP_Pz) 
+ProdAna.Branch('DPmom_Pz',DPmom_Pz) 
+ProdAna.Branch('DP_Rapidity',DP_Rapidity) 
+ProdAna.Branch('DPmom_Rapidity',DPmom_Rapidity) 
 
 ut.bookHist(h,'DauPDG','PDG OF Primaries')
 ut.bookHist(h,'DPang1','invariant Mass (GeV)',100,0.,mass_mc+5.)
@@ -335,6 +406,17 @@ def checkHadMode(sTree):
     return PID
 
 def myEventLoop(n):# Analysis is starting here
+    DP_Xf.clear()
+    DP_Pt.clear()
+    DPmom_Pt.clear()
+    DP_P.clear()
+    DPmom_P.clear()
+    DP_Pz.clear()
+    DPmom_Pz.clear()
+    DP_Rapidity.clear()
+    DPmom_Xf.clear()
+    DPmom_Rapidity.clear()
+
     #print n
     rc=sTree.GetEntry(n) 
     fm=findmum()
@@ -371,17 +453,40 @@ def myEventLoop(n):# Analysis is starting here
     if xsw==0 and wg==0 and dp_id==0: 
         #Dump(sTree.MCTrack)
         return 0
+    DPmom_P.push_back(sTree.MCTrack[mum].GetP())
+    DPmom_Pz.push_back(sTree.MCTrack[mum].GetPz())
+    DPmom_Pt.push_back(sTree.MCTrack[mum].GetPt())
+    DPmom_Rapidity.push_back(sTree.MCTrack[mum].GetRapidity())
+    DPmom_Xf.push_back(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
+
     hs['DPmom_pt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
     hs['DPmom_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
     hs['DPmom_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
+    hs['DPmom_pz'].Fill(sTree.MCTrack[mum].GetPz())
+    hs['DPmom_p'].Fill(sTree.MCTrack[mum].GetP())
     if sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))<0.3 and sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))>0.025:
         #print sTree.MCTrack[mum].GetRapidity()
+        hs['DPmomR_pz'].Fill(sTree.MCTrack[mum].GetPz())
+        hs['DPmomR_p'].Fill(sTree.MCTrack[mum].GetP())
         hs['DPmomR_pt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
         hs['DPmomR_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
-    if sTree.MCTrack[mum].GetPz()/400*m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())>1.: print "xfbig",sTree.MCTrack[mum].GetPz()/400*m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())
-    if sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt()>10.: print "ptbig",sTree.MCTrack[mum].GetPt()
-    hs['DPpz'].Fill(sTree.MCTrack[mum].GetPz())
-    hs['DPp'].Fill(sTree.MCTrack[mum].GetP())
+    if sTree.MCTrack[mum].GetPt()>3.5:
+        hs['DPmomC3_pz'].Fill(sTree.MCTrack[mum].GetPz())
+        hs['DPmomC3_p'].Fill(sTree.MCTrack[mum].GetP())
+        hs['DPmomC3_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
+        hs['DPmomC3_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
+    if sTree.MCTrack[mum].GetPt()>2.0:
+        hs['DPmomC2_pz'].Fill(sTree.MCTrack[mum].GetPz())
+        hs['DPmomC2_p'].Fill(sTree.MCTrack[mum].GetP())
+        hs['DPmomC2_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
+        hs['DPmomC2_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
+    if sTree.MCTrack[mum].GetPt()>1.0:
+        hs['DPmomC1_pz'].Fill(sTree.MCTrack[mum].GetPz())
+        hs['DPmomC1_p'].Fill(sTree.MCTrack[mum].GetP())
+        hs['DPmomC1_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
+        hs['DPmomC1_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
+
+
     h['DPW'].Fill(mass_mc) 
     dau=checkLepMode(sTree,dp_id) 
     for xxx in dau:
@@ -552,13 +657,38 @@ def myEventLoop(n):# Analysis is starting here
                 h['DPves'].Fill(mass_mc)
                 if RECO>1:#at least two charged tracks in the FINAL CUT 
                     #print "reco"
+                    DP_P.push_back(sTree.MCTrack[mum].GetP())
+                    DP_Pz.push_back(sTree.MCTrack[mum].GetPz())
+                    DP_Pt.push_back(sTree.MCTrack[mum].GetPt())
+                    DP_Rapidity.push_back(sTree.MCTrack[mum].GetRapidity())
+                    DP_Xf.push_back(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
+                    hs['DP_pz'].Fill(sTree.MCTrack[mum].GetPz())
+                    hs['DP_p'].Fill(sTree.MCTrack[mum].GetP())
                     hs['DP_pt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
                     hs['DP_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
                     hs['DP_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
                     if sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))<0.3 and sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP()))>0.025:
-                        print sTree.MCTrack[mum].GetRapidity()
+                        #print sTree.MCTrack[mum].GetRapidity()
+                        hs['DPr_pz'].Fill(sTree.MCTrack[mum].GetPz())
+                        hs['DPr_p'].Fill(sTree.MCTrack[mum].GetP())
                         hs['DPr_pt2'].Fill(sTree.MCTrack[mum].GetPt()*sTree.MCTrack[mum].GetPt())
                         hs['DPr_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
+                    if sTree.MCTrack[mum].GetPt()>3.5:
+                        hs['DPc3_pz'].Fill(sTree.MCTrack[mum].GetPz())
+                        hs['DPc3_p'].Fill(sTree.MCTrack[mum].GetP())
+                        hs['DPc3_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
+                        hs['DPc3_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
+                    if sTree.MCTrack[mum].GetPt()>2.0:
+                        hs['DPc2_pz'].Fill(sTree.MCTrack[mum].GetPz())
+                        hs['DPc2_p'].Fill(sTree.MCTrack[mum].GetP())
+                        hs['DPc2_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
+                        hs['DPc2_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
+                    if sTree.MCTrack[mum].GetPt()>1.0:
+                        hs['DPc1_pz'].Fill(sTree.MCTrack[mum].GetPz())
+                        hs['DPc1_p'].Fill(sTree.MCTrack[mum].GetP())
+                        hs['DPc1_xf'].Fill(sTree.MCTrack[mum].GetPz()/400*m.cos(m.asin(sTree.MCTrack[mum].GetPt()/sTree.MCTrack[mum].GetP())))
+                        hs['DPc1_rapidity'].Fill(sTree.MCTrack[mum].GetRapidity())
+
                     h['DPangW'].Fill(mass_mc)
                     h['DPangWe'].Fill(mass_mc,wg)
                     h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
@@ -580,19 +710,11 @@ def myEventLoop(n):# Analysis is starting here
     else: 
         #Dump(sTree.MCTrack)
         h['DP_oth'].Fill(mass_mc)
-
+    ProdAna.Fill()
 nEvents =sTree.GetEntries()
 for n in range(nEvents):
     myEventLoop(n)
 
-tmp2=tmp1.replace(date,dest)
-tmp2=tmp2.replace("reco","ana")
-tmp1=tmp1.replace("reco","ana/dat")
-tmp1=tmp1.replace(date,dest)
-
-if pro=='pbrem1':
-    tmp1=tmp1.replace("pbrem","pbrem1")
-    tmp2=tmp2.replace("pbrem","pbrem1")
 
 o1  = tmp1+"_e.dat"
 o2  = tmp1+"_mu.dat"
@@ -736,9 +858,11 @@ g.close()
 H.close()
 k.close()
 
-tmp1=tmp1.replace("dat/","")
 hfile =tmp2+"_ana.root" 
 hsfile = tmp2+"_xs.root" 
+ 
+TreeFile.Write()
+TreeFile.Close()
 
 r.gROOT.cd()
 ut.writeHists(h,hfile)

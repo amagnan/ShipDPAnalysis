@@ -1,9 +1,13 @@
 from array import array
-n=raw_input("please enter the name of squared file: ")
-n="../data/200213/"+n+"_FixedRate1.csv"
-f=open(n,'r')
-l=f.readlines()
-s=[]
-for x in l:
-    x=x.split(",")
-    print float(x[1])**2.
+
+for i in {'meson','pbrem','pbrem1','comb','comb1','qcd'}:
+    for j in {'P','M'}:
+        f=open("../data/200731/"+i+"_ErrorRate"+j+".csv","r")
+        g=open("../data/200731/"+i+"_Error"+j+".csv","w")
+        l=f.readlines()
+        s=[]
+        for x in l:
+            x=x.split(",")
+            g.write("%s,%s\n"%(x[0],str(float(x[1])**2.)))
+        f.close()
+        g.close()

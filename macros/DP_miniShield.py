@@ -28,10 +28,10 @@ for o,a in opts:
     if o in ('-g', '--geoFile',): geoFile = a
     if o in ('-f',): dest = a
 
-if dpMom!='': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_"+dpMom+"_mass"+mass_mc+"_eps"+eps
-if dpMom=='': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_mass"+mass_mc+"_eps"+eps
-if pro=="pbrem1": tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/pbrem_mass"+mass_mc+"_eps"+eps
-inputFile = tmp1+"_rec.root"
+if dpMom!='': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/sim/"+pro+"_"+dpMom+"_mass"+mass_mc+"_eps"+eps
+if dpMom=='': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/sim/"+pro+"_mass"+mass_mc+"_eps"+eps
+if pro=="pbrem1": tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/sim/pbrem_mass"+mass_mc+"_eps"+eps
+inputFile = tmp1+".root"
 print inputFile
 mass_mc=float(mass_mc)
 eps=float(eps)
@@ -91,7 +91,8 @@ def dist2InnerWall(X,Y,Z):
     if ShipGeo.tankDesign < 5:
         if not 'cave' in node.GetName(): return dist  # TP 
     else:
-        if not 'decayVol' in node.GetName(): return dist
+        #if not 'decayVol' in node.GetName(): return dist
+        if not 'DecayVolume' in node.GetName(): return dist
     start = array('d',[X,Y,Z])
     nsteps = 8
     dalpha = 2*r.TMath.Pi()/nsteps
@@ -177,7 +178,7 @@ def checkLepMode(sTree, dp_id):
     return PID
 
 tmp1=tmp1.replace(date,dest)
-tmp1=tmp1.replace("reco","ana")
+tmp1=tmp1.replace("sim","ana")
 
 if pro=='pbrem1':
     tmp1=tmp1.replace("pbrem","pbrem1")
@@ -211,20 +212,20 @@ P_ves_x=r.std.vector(float)()
 P_ves_y=r.std.vector(float)()
 P_ves_z=r.std.vector(float)()
 
-#Vtx_2_x =r.std.vector(float)()
-#Vtx_2_y =r.std.vector(float)()
-#Vtx_2_z =r.std.vector(float)()
-#P_2_x   =r.std.vector(float)()
-#P_2_y   =r.std.vector(float)()
-#P_2_z   =r.std.vector(float)()
-  
-#Vtx_2_ves_x =r.std.vector(float)()
-#Vtx_2_ves_y =r.std.vector(float)()
-#Vtx_2_ves_z =r.std.vector(float)()
-#P_2_ves_x   =r.std.vector(float)()
-#P_2_ves_y   =r.std.vector(float)()
-#P_2_ves_z   =r.std.vector(float)()
+Vtx_W_x =r.std.vector(float)()
+Vtx_W_y =r.std.vector(float)()
+Vtx_W_z =r.std.vector(float)()
+P_W_x   =r.std.vector(float)()
+P_W_y   =r.std.vector(float)()
+P_W_z   =r.std.vector(float)()
  
+Vtx_W_ves_x =r.std.vector(float)()
+Vtx_W_ves_y =r.std.vector(float)()
+Vtx_W_ves_z =r.std.vector(float)()
+P_W_ves_x   =r.std.vector(float)()
+P_W_ves_y   =r.std.vector(float)()
+P_W_ves_z   =r.std.vector(float)()
+
 miniShield.Branch('Vtx_x',Vtx_x)
 miniShield.Branch('Vtx_y',Vtx_y)
 miniShield.Branch('Vtx_z',Vtx_z)
@@ -239,19 +240,19 @@ miniShield.Branch('P_ves_x',P_ves_x)
 miniShield.Branch('P_ves_y',P_ves_y)
 miniShield.Branch('P_ves_z',P_ves_z)
 
-#miniShield.Branch('Vtx_2_x',Vtx_2_x)
-#miniShield.Branch('Vtx_2_y',Vtx_2_y)
-#miniShield.Branch('Vtx_2_z',Vtx_2_z)
-#miniShield.Branch('P_2_x',P_2_x)
-#miniShield.Branch('P_2_y',P_2_y)
-#miniShield.Branch('P_2_z',P_2_z)
+miniShield.Branch('Vtx_W_x',Vtx_W_x)
+miniShield.Branch('Vtx_W_y',Vtx_W_y)
+miniShield.Branch('Vtx_W_z',Vtx_W_z)
+miniShield.Branch('P_W_x',P_W_x)
+miniShield.Branch('P_W_y',P_W_y)
+miniShield.Branch('P_W_z',P_W_z)
 
-#miniShield.Branch('Vtx_2_ves_x',Vtx_2_ves_x)
-#miniShield.Branch('Vtx_2_ves_y',Vtx_2_ves_y)
-#miniShield.Branch('Vtx_2_ves_z',Vtx_2_ves_z)
-#miniShield.Branch('P_2_ves_x',P_2_ves_x)
-#miniShield.Branch('P_2_ves_y',P_2_ves_y)
-#miniShield.Branch('P_2_ves_z',P_2_ves_z)
+miniShield.Branch('Vtx_W_ves_x',Vtx_W_ves_x)
+miniShield.Branch('Vtx_W_ves_y',Vtx_W_ves_y)
+miniShield.Branch('Vtx_W_ves_z',Vtx_W_ves_z)
+miniShield.Branch('P_W_ves_x',P_W_ves_x)
+miniShield.Branch('P_W_ves_y',P_W_ves_y)
+miniShield.Branch('P_W_ves_z',P_W_ves_z)
 
 h={}
 
@@ -300,19 +301,18 @@ def myEventLoop(n):# Analysis is starting here
     P_ves_x.clear()
     P_ves_y.clear()
     P_ves_z.clear()
-
-    #Vtx_2_x.clear()
-    #Vtx_2_y.clear()
-    #Vtx_2_z.clear()
-    #P_2_x.clear()
-    #P_2_y.clear()
-    #P_2_z.clear()
-    #Vtx_2_ves_x.clear()
-    #Vtx_2_ves_y.clear()
-    #Vtx_2_ves_z.clear()
-    #P_2_ves_x.clear()
-    #P_2_ves_y.clear()
-    #P_2_ves_z.clear()
+    Vtx_W_x.clear()
+    Vtx_W_y.clear()
+    Vtx_W_z.clear()
+    P_W_x.clear()
+    P_W_y.clear()
+    P_W_z.clear()
+    Vtx_W_ves_x.clear()
+    Vtx_W_ves_y.clear()
+    Vtx_W_ves_z.clear()
+    P_W_ves_x.clear()
+    P_W_ves_y.clear()
+    P_W_ves_z.clear()
 
     rc=sTree.GetEntry(n)
     fm=findmum()
@@ -365,6 +365,12 @@ def myEventLoop(n):# Analysis is starting here
             P_x.push_back(pX[m])
             P_y.push_back(pY[m])
             P_z.push_back(pZ[m])
+            Vtx_W_x.push_back(vtxX[m]*wg)
+            Vtx_W_y.push_back(vtxY[m]*wg)
+            Vtx_W_z.push_back(vtxZ[m]*wg)
+            P_W_x.push_back(pX[m]*wg)
+            P_W_y.push_back(pY[m]*wg)
+            P_W_z.push_back(pZ[m]*wg)
             if vessel:
                 Vtx_ves_x.push_back(vtxX[m])
                 Vtx_ves_y.push_back(vtxY[m])
@@ -372,6 +378,12 @@ def myEventLoop(n):# Analysis is starting here
                 P_ves_x.push_back(pX[m])
                 P_ves_y.push_back(pY[m])
                 P_ves_z.push_back(pZ[m])
+                Vtx_W_ves_x.push_back(vtxX[m]*wg)
+                Vtx_W_ves_y.push_back(vtxY[m]*wg)
+                Vtx_W_ves_z.push_back(vtxZ[m]*wg)
+                P_W_ves_x.push_back(pX[m]*wg)
+                P_W_ves_y.push_back(pY[m]*wg)
+                P_W_ves_z.push_back(pZ[m]*wg)
         if mu==2:
             h['Vx'].Fill(vtxX[0])
             h['Vy'].Fill(vtxY[0])
@@ -397,18 +409,6 @@ def myEventLoop(n):# Analysis is starting here
             h['Px_W'].Fill(pX[1],wg)
             h['Py_W'].Fill(pY[1],wg)
             h['Pz_W'].Fill(pZ[1],wg)
-            #Vtx_2_x.push_back(vtxX[0])
-            #Vtx_2_y.push_back(vtxY[0])
-            #Vtx_2_z.push_back(vtxZ[0])
-            #P_2_x.push_back(pX[0])
-            #P_2_y.push_back(pY[0])
-            #P_2_z.push_back(pZ[0])
-            #Vtx_2_x.push_back(vtxX[1])
-            #Vtx_2_y.push_back(vtxY[1])
-            #Vtx_2_z.push_back(vtxZ[1])
-            #P_2_x.push_back(pX[1])
-            #P_2_y.push_back(pY[1])
-            #P_2_z.push_back(pZ[1])
             if vessel==2:
                 h['Vx_v'].Fill(vtxX[0])
                 h['Vy_v'].Fill(vtxY[0])
@@ -434,18 +434,6 @@ def myEventLoop(n):# Analysis is starting here
                 h['Px_Wv'].Fill(pX[1],wg)
                 h['Py_Wv'].Fill(pY[1],wg)
                 h['Pz_Wv'].Fill(pZ[1],wg)
-                #Vtx_2_ves_x.push_back(vtxX[0])
-                #Vtx_2_ves_y.push_back(vtxY[0])
-                #Vtx_2_ves_z.push_back(vtxZ[0])
-                #P_2_ves_x.push_back(pX[0])
-                #P_2_ves_y.push_back(pY[0])
-                #P_2_ves_z.push_back(pZ[0])
-                #Vtx_2_ves_x.push_back(vtxX[1])
-                #Vtx_2_ves_y.push_back(vtxY[1])
-                #Vtx_2_ves_z.push_back(vtxZ[1])
-                #P_2_ves_x.push_back(pX[1])
-                #P_2_ves_y.push_back(pY[1])
-                #P_2_ves_z.push_back(pZ[1])
         miniShield.Fill()
         if vessel==1 and mu==2: print vessel, mu, n, CM
     #if mu>2: Dump(sTree.MCTrack)

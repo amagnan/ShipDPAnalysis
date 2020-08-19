@@ -454,7 +454,7 @@ def myEventLoop(n):# Analysis is starting here
         if neut>0 and charg==0.0:
             h['DPpur_neut'].Fill(mass_mc)
     
-    if f_track>1:#at least two charged particle in the VESSEL
+    if CHARGE>1 and f_track>1:#at least two charged particle in the VESSEL
         if e>1 and CE==0.0:#at least two electrons decay channel FOR VES_PROB
             h['DPvesW_e'].Fill(mass_mc,wg)
             h['DPves_e'].Fill(mass_mc)
@@ -475,7 +475,7 @@ def myEventLoop(n):# Analysis is starting here
             h['DPvesW_neut'].Fill(mass_mc,wg)
             h['DPves_neut'].Fill(mass_mc)
             
-    if f_track>1 and RECO>1:#at least two charged tracks in the FINAL CUT
+    if f_track>1 and CHARGE>1 and RECO>1:#at least two charged tracks in the FINAL CUT
         if e>1 and CE==0.0:#at least two electrons decay channel FOR RECO_EFF
             h['DPang_e'].Fill(mass_mc,wg*xsw)
             if 'eta1' in dpMom: h['DPang1_e'].Fill(mass_mc,wg*xsw1)
@@ -503,6 +503,7 @@ def myEventLoop(n):# Analysis is starting here
 
     if (e>1 and CE==0) or (mu>1 and CM==0) or (tau>1 and CT==0) or (charg>0) or (neut>0 and charg==0):#at least two charged leptons decay channel and any chargronic decay channel FOR BR_TOT
         h['DP'].Fill(mass_mc)
+        print e, mu, tau, charg, neut
         if CHARGE>1:
             h['DPpur'].Fill(mass_mc)
             if f_track>1:##at least two charged tracks in the VESL
