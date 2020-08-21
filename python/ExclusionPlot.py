@@ -8,7 +8,7 @@ comp = "all"
 try:
         opts, args = getopt.getopt(sys.argv[1:], "d:c:", ["date=","comp="])
 
-except getopt.GetoptError:
+except getopt.GetoptErrorRate:
         print 'exit the system'
         sys.exit()
 
@@ -72,10 +72,10 @@ if comp=="alp":
 else:
     mulgr = ROOT.TMultiGraph()
     if comp=="prod":
-        data1 = pd.read_csv(pathR+'qcd_Rate1.csv', header=None)
-        data2 = pd.read_csv(pathR+'meson_Rate1.csv', header=None)
-        data3 = pd.read_csv(pathR+'pbrem_Rate1.csv', header=None)
-        data4 = pd.read_csv(pathR+'pbrem1_Rate1.csv', header=None)
+        data1 = pd.read_csv(pathR+'qcd_Rate1_Ordered.csv', header=None)
+        data2 = pd.read_csv(pathR+'meson_Rate1_Ordered.csv', header=None)
+        data3 = pd.read_csv(pathR+'pbrem_Rate1_Ordered.csv', header=None)
+        data4 = pd.read_csv(pathR+'pbrem1_Rate1_Ordered.csv', header=None)
         d20, d21 = array('f'), array('f')
         d30, d31 = array('f'), array('f')
         d10, d11 = array('f'), array('f')
@@ -112,10 +112,10 @@ else:
         mulgr.Add(p2)
         mulgr.Add(p4)
         mulgr.Add(p3)
-        data1P = pd.read_csv(pathR+'qcd_ErrorP.csv', header=None)
-        data2P = pd.read_csv(pathR+'meson_ErrorP.csv', header=None)
-        data3P = pd.read_csv(pathR+'pbrem_ErrorP.csv', header=None)
-        data4P = pd.read_csv(pathR+'pbrem1_ErrorP.csv', header=None)
+        data1P = pd.read_csv(pathR+'qcd_ErrorRateP_Ordered.csv', header=None)
+        data2P = pd.read_csv(pathR+'meson_ErrorRateP_Ordered.csv', header=None)
+        data3P = pd.read_csv(pathR+'pbrem_ErrorRateP_Ordered.csv', header=None)
+        data4P = pd.read_csv(pathR+'pbrem1_ErrorRateP_Ordered.csv', header=None)
         d20P, d21P = array('f'), array('f')
         d30P, d31P = array('f'), array('f')
         d10P, d11P = array('f'), array('f')
@@ -156,10 +156,10 @@ else:
         mulgr.Add(p2P)
         mulgr.Add(p4P)
         mulgr.Add(p3P)
-        data1M = pd.read_csv(pathR+'qcd_ErrorM.csv', header=None)
-        data2M = pd.read_csv(pathR+'meson_ErrorM.csv', header=None)
-        data3M = pd.read_csv(pathR+'pbrem_ErrorM.csv', header=None)
-        data4M = pd.read_csv(pathR+'pbrem1_ErrorM.csv', header=None)
+        data1M = pd.read_csv(pathR+'qcd_ErrorRateM_Ordered.csv', header=None)
+        data2M = pd.read_csv(pathR+'meson_ErrorRateM_Ordered.csv', header=None)
+        data3M = pd.read_csv(pathR+'pbrem_ErrorRateM_Ordered.csv', header=None)
+        data4M = pd.read_csv(pathR+'pbrem1_ErrorRateM_Ordered.csv', header=None)
         d20M, d21M = array('f'), array('f')
         d30M, d31M = array('f'), array('f')
         d10M, d11M = array('f'), array('f')
@@ -202,8 +202,8 @@ else:
         mulgr.Add(p3M)
 
     if comp=="comb":
-        dataC = pd.read_csv(pathR+'comb_Rate1.csv', header=None)
-        dataO = pd.read_csv(pathR+'comb1_Rate1.csv', header=None)
+        dataC = pd.read_csv(pathR+'comb_Rate1_Ordered.csv', header=None)
+        dataO = pd.read_csv(pathR+'comb1_Rate1_Ordered.csv', header=None)
         dC0, dC1 = array('f'), array('f')
         d00, d01 = array('f'), array('f')
         for i in dataO[0]: d00.append(float(i))
@@ -222,8 +222,8 @@ else:
         p0.SetTitle("Combined Dipole")
         mulgr.Add(p0)
         mulgr.Add(pC)
-        dataCP = pd.read_csv(pathR+'comb_ErrorP.csv', header=None)
-        dataOP = pd.read_csv(pathR+'comb1_ErrorP.csv', header=None)
+        dataCP = pd.read_csv(pathR+'comb_ErrorRateP_Ordered.csv', header=None)
+        dataOP = pd.read_csv(pathR+'comb1_ErrorRateP_Ordered.csv', header=None)
         dC0P, dC1P = array('f'), array('f')
         d00P, d01P = array('f'), array('f')
         for i in dataOP[0]: d00P.append(float(i))
@@ -244,8 +244,8 @@ else:
         p0P.SetTitle("")
         mulgr.Add(p0P)
         mulgr.Add(pCP)
-        dataCM = pd.read_csv(pathR+'comb_ErrorM.csv', header=None)
-        dataOM = pd.read_csv(pathR+'comb1_ErrorM.csv', header=None)
+        dataCM = pd.read_csv(pathR+'comb_ErrorRateM_Ordered.csv', header=None)
+        dataOM = pd.read_csv(pathR+'comb1_ErrorRateM_Ordered.csv', header=None)
         dC0M, dC1M = array('f'), array('f')
         d00M, d01M = array('f'), array('f')
         for i in dataOM[0]: d00M.append(float(i))
@@ -269,7 +269,7 @@ else:
 
     mulgr.SetTitle(";m_{#gamma^{D}}(MeV/c^{2});#varepsilon^{2}")
     xaxis=mulgr.GetXaxis()
-    xaxis.SetLimits(2,3105)
+    xaxis.SetLimits(1,3500)
     mulgr.SetMaximum(10**-5)
     mulgr.SetMinimum(10**-18)
     mulgr.Draw("AL")
