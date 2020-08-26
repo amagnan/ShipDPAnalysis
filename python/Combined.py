@@ -65,8 +65,8 @@ line_2 = data2.readlines()#pbrem
 line_3 = data3.readlines()#qcd
 
 err12=0.30
-err3P=0.05
-err3M=0.10
+err3P=0.10
+err3M=0.20
 
 errC12=(2*err12)**0.5
 errM3M=(err12*err12+err3M*err3M)**0.5
@@ -132,6 +132,12 @@ for i in line_3:#meson rates with pbrem shared
         RateP.write('\n')
         RateM.write('%.5E %.9E %.9E' %(Decimal(i[0]), Decimal(i[1]), RateM_tot))
         RateM.write('\n')
+    if float(i[0])>3.7:
+        RateP.write("%s %s %s"%(i[0],i[1],str(float(i[2])+float(i[2])*err3P)))
+        RateP.write("\n")
+        RateM.write("%s %s %s"%(i[0],i[1],str(float(i[2])-float(i[2])*err3M)))
+        RateM.write("\n")
+
 
 data1.close()
 data2.close()

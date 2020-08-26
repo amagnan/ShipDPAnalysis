@@ -503,7 +503,7 @@ def myEventLoop(n):# Analysis is starting here
 
     if (e>1 and CE==0) or (mu>1 and CM==0) or (tau>1 and CT==0) or (charg>0) or (neut>0 and charg==0):#at least two charged leptons decay channel and any chargronic decay channel FOR BR_TOT
         h['DP'].Fill(mass_mc)
-        print e, mu, tau, charg, neut
+        #print e, mu, tau, charg, neut
         if CHARGE>1:
             h['DPpur'].Fill(mass_mc)
             if f_track>1:##at least two charged tracks in the VESL

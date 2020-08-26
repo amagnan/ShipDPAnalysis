@@ -1,10 +1,11 @@
-#date='200213'
-date='alp'
+date='200826'
 import math
-date='200820'
+#date='ALPACA/200820'
 #prods=['meson','pbrem','pbrem1','qcd','comb','comb1']
-prods=['pbrem','pbrem1']
+prods=['comb','comb1','qcd']
 modes=['Rate1','ErrorRateP','ErrorRateM']
+#prods=['ALPACA']
+#modes =['rate']
 for mode in modes:
     for prod in prods:
         f0 = open("../data/"+date+"/"+prod+"_"+mode+".csv","r")
@@ -23,5 +24,6 @@ for mode in modes:
             i+=1
         for m in k:
             f1.write("%s, %s"%(str(m[0]),str(float(m[1])**2.)))
+            #f1.write("%s, %s"%(str(m[0]),str(float(m[1]))))
             f1.write("\n")
         f1.close()
