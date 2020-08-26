@@ -10,11 +10,11 @@ for o,a in opts:
 
 prods = ['pbrem','pbrem1','meson','qcd','comb','comb1']
 #prods = ['pbrem','meson','qcd','comb']
-for i in {"M","P"}:
+for i in {"Rate1","ErrorRateM","ErrorRateP"}:
     for prod in prods:
-        inp="../data/"+date+"/"+prod+"_ErrorRate"+i+".csv"
-        data = pd.read_csv(inp,header=None)
+        inp="../data/"+date+"/"+prod+"_"+i+".dat"
+        data = pd.read_csv(inp,header=None,sep="\s+")
         #data.head()
         #new=data.sort_values(by=[1,0],ascending=[False,True])
-        new=data.sort_values(by=1,ascending=False)
-        new.to_csv(inp,index=False) 
+        new=data.sort_values(by=0,ascending=False)
+        new.to_csv(inp,index=False,header=None,delimiter=' ') 
