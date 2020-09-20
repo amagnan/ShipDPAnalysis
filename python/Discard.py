@@ -11,11 +11,14 @@ for o,a in opts:
     if o in ('-d','--date',): date = a
 
 #prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','meson_eta11','pbrem','pbrem1','qcd']
-#prods = ['pbrem','meson','qcd']
-prods = ['pbrem','pbrem1']
+prods = ['pbrem','pbrem1','comb','comb1','meson','qcd']
+#prods = ['pbrem','pbrem1']
+#prods = ['ALPACA']
+#for i in {'Rate1','ErrorRateP','ErrorRateM'}:
 for prod in prods:
-    outp="../data/"+date+"/"+prod+"_Rate1.dat"
-    inp="../data/"+date+"/"+prod+"_rate1.dat"
+    #inp="../data/"+date+"/"+prod+"_"+i+".dat"
+    inp="../data/"+date+"/"+prod+"_Rate1.dat"
+    outp=inp.replace("Rate","rate")
     f=open(inp,'r')
     k=f.readlines()
     l=open(outp,'w')

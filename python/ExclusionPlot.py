@@ -269,7 +269,7 @@ else:
 
     mulgr.SetTitle(";m_{#gamma^{D}}(MeV/c^{2});#varepsilon^{2}")
     xaxis=mulgr.GetXaxis()
-    xaxis.SetLimits(2,4800)
+    xaxis.SetLimits(2,3500)
     mulgr.SetMaximum(10**-5)
     mulgr.SetMinimum(10**-18)
     mulgr.Draw("AL")
