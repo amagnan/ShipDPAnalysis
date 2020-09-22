@@ -9,7 +9,7 @@ from rootpyPickler import Unpickler
 from array import array
 import shipRoot_conf
 import dpProductionRates as dputil
-import math as m
+import math
 import numpy as np
 shipRoot_conf.configure()
 dpMom = ''
@@ -95,6 +95,20 @@ import TrackExtrapolateTool
 targ=r.TVector3(0,0,ShipGeo.target.z0)
 
 h={}
+hk={} 
+ 
+ut.bookHist(hk,'P_eps_z','',100,0.,400.,100,-9.,-4.)
+ut.bookHist(hk,'P_eps_z_ves','',100,0.,400.,100,-9.,-4.)
+ut.bookHist(hk,'P_eps_z_ang','',100,0.,400.,100,-9.,-4.)
+ut.bookHist(hk,'Rap_eps','',100,-10.,10.,100,-9.,-4.)
+ut.bookHist(hk,'Rap_eps_ves','',100,-10.,10.,100,-9.,-4.)
+ut.bookHist(hk,'Rap_eps_ang','',100,-10.,10.,100,-9.,-4.)
+ut.bookHist(hk,'P_eps','',100,0.,400.,100,-9.,-4.)
+ut.bookHist(hk,'P_eps_ves','',100,0.,400.,100,-9.,-4.)
+ut.bookHist(hk,'P_eps_ang','',100,0.,400.,100,-9.,-4.)
+ut.bookHist(hk,'Th_eps','',100,0.,1.6,100,-9.,-4.)
+ut.bookHist(hk,'Th_eps_ves','',100,0.,1.6,100,-9.,-4.)
+ut.bookHist(hk,'Th_eps_ang','',100,0.,1.6,100,-9.,-4.)
 
 ut.bookHist(h,'DauPDG','PDG OF Primaries')
 ut.bookHist(h,'DPang1','invariant Mass (GeV)',100,0.,mass_mc+5.)
@@ -203,38 +217,6 @@ kine.Branch('P_ang',P_ang)
 kine.Branch('Th',Th) 
 kine.Branch('Th_ves',Th_ves) 
 kine.Branch('Th_ang',Th_ang) 
-
-epsP_z     =r.std.vector(float)()
-epsP_z_ves =r.std.vector(float)()
-epsP_z_ang =r.std.vector(float)()
-
-epsRap     =r.std.vector(float)()
-epsRap_ves =r.std.vector(float)()
-epsRap_ang =r.std.vector(float)()
-
-epsP       =r.std.vector(float)()
-epsP_ves   =r.std.vector(float)()
-epsP_ang   =r.std.vector(float)()
-
-epsTh      =r.std.vector(float)()
-epsTh_ves  =r.std.vector(float)()
-epsTh_ang  =r.std.vector(float)()
- 
-kine.Branch('epsP_z',epsP_z) 
-kine.Branch('epsP_z_ves',epsP_z_ves) 
-kine.Branch('epsP_z_ang',epsP_z_ang) 
- 
-kine.Branch('epsRap',epsRap) 
-kine.Branch('epsRap_ves',epsRap_ves) 
-kine.Branch('epsRap_ang',epsRap_ang) 
- 
-kine.Branch('epsP',epsP) 
-kine.Branch('epsP_ves',epsP_ves) 
-kine.Branch('epsP_ang',epsP_ang) 
- 
-kine.Branch('epsTh',epsTh) 
-kine.Branch('epsTh_ves',epsTh_ves) 
-kine.Branch('epsTh_ang',epsTh_ang) 
  
 def dist2InnerWall(X,Y,Z):
     dist = 0 
@@ -397,18 +379,6 @@ def myEventLoop(n):# Analysis is starting here
     Th.clear()
     Th_ves.clear()
     Th_ang.clear()
-    epsP_z.clear()
-    epsP_z_ves.clear()
-    epsP_z_ang.clear()
-    epsRap.clear()
-    epsRap_ves.clear()
-    epsRap_ang.clear()
-    epsP.clear()
-    epsP_ves.clear()
-    epsP_ang.clear()
-    epsTh.clear()
-    epsTh_ves.clear()
-    epsTh_ang.clear()
     #print n
     rc=sTree.GetEntry(n) 
     fm=findmum()
@@ -557,11 +527,10 @@ def myEventLoop(n):# Analysis is starting here
                 P.push_back(Momentum[m])
                 Th.push_back(Theta[m])
                 Rap.push_back(Rapidity[m])
-                epsP_z.push_back(Pz[m],eps)
-                epsP.push_back(Momentum[m],eps)
-                epsTh.push_back(Theta[m],eps)
-                epsRap.push_back(Rapidity[m],eps)
-
+                hk['P_eps_z'].Fill(Pz[m],math.log10(eps)) 
+                hk['P_eps'].Fill(Momentum[m],math.log10(eps))                
+                hk['Rap_eps'].Fill(Rapidity[m],math.log10(eps)) 
+                hk['Th_eps'].Fill(Theta[m],math.log10(eps))
          
         if tau>1 and CT==0.0:#at least two taus decay channel FOR pur_PROB
             h['DPpur_tau'].Fill(mass_mc)
@@ -585,11 +554,11 @@ def myEventLoop(n):# Analysis is starting here
                 P_ves.push_back(Momentum[m])
                 Th_ves.push_back(Theta[m])
                 Rap_ves.push_back(Rapidity[m])
-                epsP_z_ves.push_back(Pz[m],eps)
-                epsP_ves.push_back(Momentum[m],eps)
-                epsTh_ves.push_back(Theta[m],eps)
-                epsRap_ves.push_back(Rapidity[m],eps)
-           
+                hk['P_eps_z_ves'].Fill(Pz[m],math.log10(eps)) 
+                hk['P_eps_ves'].Fill(Momentum[m],math.log10(eps))
+                hk['Rap_eps_ves'].Fill(Rapidity[m],math.log10(eps)) 
+                hk['Th_eps_ves'].Fill(Theta[m],math.log10(eps))
+          
         if tau>1 and CT==0.0:#at least two taus decay channel FOR VES_PROB
             h['DPvesW_tau'].Fill(mass_mc,wg)
             h['DPves_tau'].Fill(mass_mc)
@@ -617,10 +586,10 @@ def myEventLoop(n):# Analysis is starting here
                 P_ang.push_back(Momentum[m])
                 Th_ang.push_back(Theta[m])
                 Rap_ang.push_back(Rapidity[m])
-                epsP_z_ang.push_back(Pz[m],eps)
-                epsP_ang.push_back(Momentum[m],eps)
-                epsTh_ang.push_back(Theta[m],eps)
-                epsRap_ang.push_back(Rapidity[m],eps)
+                hk['P_eps_z_ang'].Fill(Pz[m],math.log10(eps)) 
+                hk['P_eps_ang'].Fill(Momentum[m],math.log10(eps))
+                hk['Rap_eps_ang'].Fill(Rapidity[m],math.log10(eps)) 
+                hk['Th_eps_ang'].Fill(Theta[m],math.log10(eps))
 
         if neut>0 and charg==0:#any chargronic decay channel for RECO_EFF
             h['DPang_neut'].Fill(mass_mc,wg*xsw)
@@ -837,5 +806,7 @@ Rfile.Write()
 Rfile.Close()
 tmp1=tmp1.replace("dat/","")
 hfile =tmp2+"_ana.root" 
+hkfile =tmp2+"_KinEps.root" 
 r.gROOT.cd()
 ut.writeHists(h,hfile)
+ut.writeHists(hk,hkfile)

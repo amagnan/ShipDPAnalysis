@@ -1,8 +1,8 @@
-date='200826'
+date='200922'
 import math
 #date='ALPACA/200820'
-#prods=['meson','pbrem','pbrem1','qcd','comb','comb1']
-prods=['comb','comb1','qcd']
+prods=['meson','pbrem','pbrem1','qcd','comb','comb1']
+#prods=['comb','comb1','qcd']
 modes=['Rate1','ErrorRateP','ErrorRateM']
 #prods=['ALPACA']
 #modes =['rate']

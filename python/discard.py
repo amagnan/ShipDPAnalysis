@@ -10,15 +10,17 @@ except getopt.GetoptError:
 for o,a in opts:
     if o in ('-d','--date',): date = a
 
+prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','pbrem','pbrem1','qcd']
 #prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','meson_eta11','pbrem','pbrem1','qcd']
-prods = ['pbrem','pbrem1','comb','comb1','meson','qcd']
+#prods = ['meson','pbrem','pbrem1','comb','comb1','meson','qcd']
+#prods = ['meson','pbrem','pbrem1','meson','qcd']
 #prods = ['pbrem','pbrem1']
 #prods = ['ALPACA']
 #for i in {'Rate1','ErrorRateP','ErrorRateM'}:
 for prod in prods:
     #inp="../data/"+date+"/"+prod+"_"+i+".dat"
     inp="../data/"+date+"/"+prod+"_Rate1.dat"
-    outp=inp.replace("Rate","rate")
+    outp=inp.replace("Rate1","Rate")
     f=open(inp,'r')
     k=f.readlines()
     l=open(outp,'w')

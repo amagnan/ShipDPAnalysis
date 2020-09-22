@@ -8,10 +8,10 @@ except getopt.GetoptError:
 for o,a in opts:
     if o in ('-d','--date',): date = a
 
-#prods = ['pbrem','pbrem1','meson','qcd','comb','comb1']
-prods = ['qcd']
-#for i in {"Rate1","ErrorRateM","ErrorRateP"}:
-for i in {"Rate"}:
+prods = ['pbrem','pbrem1','meson','qcd','comb','comb1']
+#prods = ['qcd']
+for i in {"Rate1","ErrorRateM","ErrorRateP"}:
+#for i in {"Rate"}:
     for prod in prods:
         inp="../data/"+date+"/"+prod+"_"+i+".dat"
         data = pd.read_csv(inp,header=None,sep="\s+")
