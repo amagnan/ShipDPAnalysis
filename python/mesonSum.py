@@ -1,7 +1,7 @@
-date='200331'
+date='200922'
 import math
 
-mothers=['pi0','eta','omega','eta1','eta11']
+mothers=['pi0','eta','omega','eta1']
 for mother in mothers:
     exec('f1_%s = open("../data/"+date+"/meson_%s"+"_Rate1.dat","r")'%(mother,mother))
     exec('l1_%s = f1_%s.readlines() '%(mother,mother))

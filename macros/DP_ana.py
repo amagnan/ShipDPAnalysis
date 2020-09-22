@@ -17,7 +17,7 @@ cascade = False
 dou =False
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "d:p:m:e:A:g:f:C:D", ["date=","production=","mass=","epsilon=","motherID=","geoFile=","final_dest=","cascade=","dou="])
+    opts, args = getopt.getopt(sys.argv[1:], "d:p:m:e:A:g:f:C:D:", ["date=","production=","mass=","epsilon=","motherID=","geoFile=","final_dest=","cascade=","dou="])
 except getopt.GetoptError:
     print 'no file'
     sys.exit()
