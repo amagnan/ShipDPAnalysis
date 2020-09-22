@@ -48,7 +48,7 @@ for i,dummy in enumerate(a):
         gr[h].SetLineWidth(3)
         gr[h].Draw("AP")
         ind=rate.index(max(rate))
-        print Mass, eps
+        #print Mass, eps
         line=r.TLine(max(eps),r.TMath.Log10(2.3),min(eps),r.TMath.Log10(2.3))
         line.SetLineColor(3)
         line.Draw("same")

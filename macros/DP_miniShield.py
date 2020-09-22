@@ -295,10 +295,6 @@ def myEventLoop(n):# Analysis is starting here
     P_x.clear()
     P_y.clear()
     P_z.clear()
-    P.clear()
-    P_ves.clear()
-    Theta.clear()
-    Theta_ves.clear()
     Vtx_ves_x.clear() 
     Vtx_ves_y.clear()
     Vtx_ves_z.clear()
@@ -338,7 +334,6 @@ def myEventLoop(n):# Analysis is starting here
     mu =0
     vessel = 0
     CM = 0
-    p, theta= [], []
     vtxX, vtxY, vtxZ = [], [], []
     pX, pY, pZ = [], [], []
     if xsw==0 and wg==0 and dp_id==0: 
@@ -355,8 +350,6 @@ def myEventLoop(n):# Analysis is starting here
             pX.append(sTree.MCTrack[xxx].GetPx())
             pY.append(sTree.MCTrack[xxx].GetPy())
             pZ.append(sTree.MCTrack[xxx].GetPz())
-            p.append(sTree.MCTrack[xxx].GetP())
-            theta.append(math.acos(sTree.MCTrack[xxx].GetPz()/sTree.MCTrack[xxx].GetP()))
             if isInFiducial(sTree.MCTrack[xxx].GetStartX(),sTree.MCTrack[xxx].GetStartY(),sTree.MCTrack[xxx].GetStartZ()):  vessel+=1
 
     if CM==0:
