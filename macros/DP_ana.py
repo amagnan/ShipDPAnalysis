@@ -12,10 +12,12 @@ import dpProductionRates as dputil
 import math as m
 import numpy as np
 shipRoot_conf.configure()
-dpMom = '' 
+dpMom = ''
+cascade = False
+dou =False
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "d:p:m:e:A:g:f:", ["date=","production=","mass=","epsilon=","motherID=","geoFile=","final_dest="])
+    opts, args = getopt.getopt(sys.argv[1:], "d:p:m:e:A:g:f:C:D:", ["date=","production=","mass=","epsilon=","motherID=","geoFile=","final_dest=","cascade=","dou="])
 except getopt.GetoptError:
     print 'no file'
     sys.exit()
@@ -27,6 +29,8 @@ for o,a in opts:
     if o in ('-A',): dpMom = a
     if o in ('-g', '--geoFile',): geoFile = a
     if o in ('-f',): dest = a
+    if o in ('-C',): cascade = True
+    if o in ('-D',): dou = True
 
 if dpMom!='': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_"+dpMom+"_mass"+mass_mc+"_eps"+eps
 if dpMom=='': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_mass"+mass_mc+"_eps"+eps
@@ -208,6 +212,7 @@ def findmum():#this function finds the mother of DP with weight,xs,momentum etc.
             if pro=='qcd' and dp_id==0: continue
             #print mum_id 
             mum_pdg=sTree.MCTrack[mum_id].GetPdgCode()
+            cwg = dputil.getCascadeRate(mum_pdg,sTree.MCTrack[mum_id].GetRapidity(),sTree.MCTrack[mum_id].GetPz())
             #print mum_pdg
             if pro=='meson':
                 xsw = dputil.getDPprodRate(mass_mc,eps,'meson',mum_pdg)
@@ -216,16 +221,17 @@ def findmum():#this function finds the mother of DP with weight,xs,momentum etc.
                     xsw=xsw[0]
             else: xsw = dputil.getDPprodRate(mass_mc,eps,pro,0) 
             #print "bu da farkli", xsw
-            wg = sTree.MCTrack[dp_id].GetWeight()
+            if dou: wg = sTree.MCTrack[dp_id].GetWeight()*sTree.MCTrack[dp_id].GetWeight()
+            if not dou: wg = sTree.MCTrack[dp_id].GetWeight()
             #print dp_id 
             dp_mom=r.TVector3(sTree.MCTrack[dp_id].GetPx(),sTree.MCTrack[dp_id].GetPy(),sTree.MCTrack[dp_id].GetPz())
             dp_mag=sTree.MCTrack[dp_id].GetP()
             break
         else:
-            if 'eta1' in dpMom: xsw,xsw1,wg,dp_id,dp_mom,dp_mag=0,0,0,0,0,0
-            if not 'eta1' in dpMom:xsw,wg,dp_id,dp_mom,dp_mag=0,0,0,0,0
-    if 'eta1' in dpMom: return xsw,xsw1,wg,dp_id,dp_mom,dp_mag
-    if not 'eta1' in dpMom: return xsw,wg,dp_id,dp_mom,dp_mag
+            if 'eta1' in dpMom: xsw,xsw1,wg,dp_id,dp_mom,dp_mag,cwg=0,0,0,0,0,0,0
+            if not 'eta1' in dpMom:xsw,wg,dp_id,dp_mom,dp_mag,cwg=0,0,0,0,0,0
+    if 'eta1' in dpMom: return xsw,xsw1,wg,dp_id,dp_mom,dp_mag,cwg
+    if not 'eta1' in dpMom: return xsw,wg,dp_id,dp_mom,dp_mag,cwg
 
 def find_signal(pdg):# this function finds the signal tracks. USED for finding signals in fittracks.. It is also looks for pi0 and gamma BUT no gamma or pi0 in FitTracks. So, signals are proton+-, pion+-, kaon+-, electron +- muon +-
     try:
@@ -317,12 +323,14 @@ def myEventLoop(n):# Analysis is starting here
         dp_id=fm[3]
         dp_M=fm[4]
         dp_Mag=fm[5]
+        cwg=fm[6]
     if not 'eta1' in dpMom:
         xsw=fm[0]
         wg=fm[1]
         dp_id=fm[2]
         dp_M=fm[3]
         dp_Mag=fm[4]
+        cwg=fm[5]
     MA,MAS=[],[] 
     DPmom=r.TLorentzVector(0.,0.,0.,0.)
     DPma=r.TLorentzVector(0.,0.,0.,0.) 
@@ -503,7 +511,7 @@ def myEventLoop(n):# Analysis is starting here
 
     if (e>1 and CE==0) or (mu>1 and CM==0) or (tau>1 and CT==0) or (charg>0) or (neut>0 and charg==0):#at least two charged leptons decay channel and any chargronic decay channel FOR BR_TOT
         h['DP'].Fill(mass_mc)
-        print e, mu, tau, charg, neut
+        #print e, mu, tau, charg, neut
         if CHARGE>1:
             h['DPpur'].Fill(mass_mc)
             if f_track>1:##at least two charged tracks in the VESL
@@ -513,7 +521,8 @@ def myEventLoop(n):# Analysis is starting here
                     #print "reco"
                     h['DPangW'].Fill(mass_mc)
                     h['DPangWe'].Fill(mass_mc,wg)
-                    h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
+                    if cascade: h['DPang'].Fill(mass_mc,wg*xsw*cwg)
+                    if not cascade: h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
                     if 'eta1' in dpMom: h['DPang1'].Fill(mass_mc,wg*xsw1)
                 else:
                     h['DPangW_oth'].Fill(mass_mc,wg)

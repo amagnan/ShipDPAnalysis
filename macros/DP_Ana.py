@@ -12,10 +12,11 @@ import dpProductionRates as dputil
 import math as m
 import numpy as np
 shipRoot_conf.configure()
-dpMom = '' 
+dpMom = ''
+cascade = False
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "d:p:m:e:A:g:f:", ["date=","production=","mass=","epsilon=","motherID=","geoFile=","final_dest="])
+    opts, args = getopt.getopt(sys.argv[1:], "d:p:m:e:A:g:f:C:", ["date=","production=","mass=","epsilon=","motherID=","geoFile=","final_dest=","cascade="])
 except getopt.GetoptError:
     print 'no file'
     sys.exit()
@@ -27,6 +28,7 @@ for o,a in opts:
     if o in ('-A',): dpMom = a
     if o in ('-g', '--geoFile',): geoFile = a
     if o in ('-f',): dest = a
+    if o in ('-C',): cascade = True
 
 if dpMom!='': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_"+dpMom+"_mass"+mass_mc+"_eps"+eps
 if dpMom=='': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_mass"+mass_mc+"_eps"+eps
@@ -109,10 +111,13 @@ ut.bookHist(h,'DP','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPW','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPpur','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPpurW','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPpurW2','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPves','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPvesW','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPvesW2','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPang','invariant Mass (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPangW','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPangW2','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
 ut.bookHist(h,'DPangWe','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.)
 
 ut.bookHist(h,'DP_e','invariant Mass (GeV)',100,0.,mass_mc+5.)
@@ -161,8 +166,78 @@ ut.bookHist(h,'DPangW_oth','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.
 ut.bookHist(h,'DOCA','Doca between two tracks',100,0.,100)
 ut.bookHist(h,'IP','Impact Parameter',100,0.,10.)
 
+tmpR=tmp1.replace("reco/","ana/")
+tmpR=tmpR.replace(date,dest)
+
+Rfile=r.TFile(tmpR+"_kinematics.root",'recreate')
+kine=r.TTree("kinematics","results of the mumu channel for mini-shield study")
+ 
+P_z     =r.std.vector(float)()
+P_z_ves =r.std.vector(float)()
+P_z_ang =r.std.vector(float)()
+
+Rap     =r.std.vector(float)()
+Rap_ves =r.std.vector(float)()
+Rap_ang =r.std.vector(float)()
+
+P       =r.std.vector(float)()
+P_ves   =r.std.vector(float)()
+P_ang   =r.std.vector(float)()
+
+Th      =r.std.vector(float)()
+Th_ves  =r.std.vector(float)()
+Th_ang  =r.std.vector(float)()
+ 
+kine.Branch('P_z',P_z) 
+kine.Branch('P_z_ves',P_z_ves) 
+kine.Branch('P_z_ang',P_z_ang) 
+ 
+kine.Branch('Rap',Rap) 
+kine.Branch('Rap_ves',Rap_ves) 
+kine.Branch('Rap_ang',Rap_ang) 
+ 
+kine.Branch('P',P) 
+kine.Branch('P_ves',P_ves) 
+kine.Branch('P_ang',P_ang) 
+ 
+kine.Branch('Th',Th) 
+kine.Branch('Th_ves',Th_ves) 
+kine.Branch('Th_ang',Th_ang) 
+
+epsP_z     =r.std.vector(float)()
+epsP_z_ves =r.std.vector(float)()
+epsP_z_ang =r.std.vector(float)()
+
+epsRap     =r.std.vector(float)()
+epsRap_ves =r.std.vector(float)()
+epsRap_ang =r.std.vector(float)()
+
+epsP       =r.std.vector(float)()
+epsP_ves   =r.std.vector(float)()
+epsP_ang   =r.std.vector(float)()
+
+epsTh      =r.std.vector(float)()
+epsTh_ves  =r.std.vector(float)()
+epsTh_ang  =r.std.vector(float)()
+ 
+kine.Branch('epsP_z',epsP_z) 
+kine.Branch('epsP_z_ves',epsP_z_ves) 
+kine.Branch('epsP_z_ang',epsP_z_ang) 
+ 
+kine.Branch('epsRap',epsRap) 
+kine.Branch('epsRap_ves',epsRap_ves) 
+kine.Branch('epsRap_ang',epsRap_ang) 
+ 
+kine.Branch('epsP',epsP) 
+kine.Branch('epsP_ves',epsP_ves) 
+kine.Branch('epsP_ang',epsP_ang) 
+ 
+kine.Branch('epsTh',epsTh) 
+kine.Branch('epsTh_ves',epsTh_ves) 
+kine.Branch('epsTh_ang',epsTh_ang) 
+ 
 def dist2InnerWall(X,Y,Z):
-    dist = 0
+    dist = 0 
     node = sGeo.FindNode(X,Y,Z)
     if ShipGeo.tankDesign < 5:
         if not 'cave' in node.GetName(): return dist  # TP 
@@ -207,9 +282,11 @@ def findmum():#this function finds the mother of DP with weight,xs,momentum etc.
             #print dp_id
             if pro=='qcd' and dp_id==0: continue
             #print mum_id 
+            cwg=1.
             mum_pdg=sTree.MCTrack[mum_id].GetPdgCode()
             #print mum_pdg
             if pro=='meson':
+                cwg = dputil.getCascadeRate(mum_pdg,sTree.MCTrack[mum_id].GetRapidity(),sTree.MCTrack[mum_id].GetPz())
                 xsw = dputil.getDPprodRate(mass_mc,eps,'meson',mum_pdg)
                 if 'eta1' in dpMom and xsw!=0:
                     xsw1=xsw[1]
@@ -222,10 +299,10 @@ def findmum():#this function finds the mother of DP with weight,xs,momentum etc.
             dp_mag=sTree.MCTrack[dp_id].GetP()
             break
         else:
-            if 'eta1' in dpMom: xsw,xsw1,wg,dp_id,dp_mom,dp_mag=0,0,0,0,0,0
-            if not 'eta1' in dpMom:xsw,wg,dp_id,dp_mom,dp_mag=0,0,0,0,0
-    if 'eta1' in dpMom: return xsw,xsw1,wg,dp_id,dp_mom,dp_mag
-    if not 'eta1' in dpMom: return xsw,wg,dp_id,dp_mom,dp_mag
+            if 'eta1' in dpMom: xsw,xsw1,wg,dp_id,dp_mom,dp_mag,cwg=0,0,0,0,0,0,0
+            if not 'eta1' in dpMom:xsw,wg,dp_id,dp_mom,dp_mag,cwg=0,0,0,0,0,0
+    if 'eta1' in dpMom: return xsw,xsw1,wg,dp_id,dp_mom,dp_mag,cwg
+    if not 'eta1' in dpMom: return xsw,wg,dp_id,dp_mom,dp_mag,cwg
 
 def find_signal(pdg):# this function finds the signal tracks. USED for finding signals in fittracks.. It is also looks for pi0 and gamma BUT no gamma or pi0 in FitTracks. So, signals are proton+-, pion+-, kaon+-, electron +- muon +-
     try:
@@ -307,6 +384,31 @@ def checkHadMode(sTree):
     return PID
 
 def myEventLoop(n):# Analysis is starting here
+    Pz,Momentum,Theta,Rapidity=[],[],[],[]
+    P_z.clear()
+    P_z_ves.clear()
+    P_z_ang.clear()
+    Rap.clear()
+    Rap_ves.clear()
+    Rap_ang.clear()
+    P.clear()
+    P_ves.clear()
+    P_ang.clear()
+    Th.clear()
+    Th_ves.clear()
+    Th_ang.clear()
+    epsP_z.clear()
+    epsP_z_ves.clear()
+    epsP_z_ang.clear()
+    epsRap.clear()
+    epsRap_ves.clear()
+    epsRap_ang.clear()
+    epsP.clear()
+    epsP_ves.clear()
+    epsP_ang.clear()
+    epsTh.clear()
+    epsTh_ves.clear()
+    epsTh_ang.clear()
     #print n
     rc=sTree.GetEntry(n) 
     fm=findmum()
@@ -317,12 +419,14 @@ def myEventLoop(n):# Analysis is starting here
         dp_id=fm[3]
         dp_M=fm[4]
         dp_Mag=fm[5]
+        cwg=fm[6]
     if not 'eta1' in dpMom:
         xsw=fm[0]
         wg=fm[1]
         dp_id=fm[2]
         dp_M=fm[3]
         dp_Mag=fm[4]
+        cwg=fm[5]
     MA,MAS=[],[] 
     DPmom=r.TLorentzVector(0.,0.,0.,0.)
     DPma=r.TLorentzVector(0.,0.,0.,0.) 
@@ -352,6 +456,10 @@ def myEventLoop(n):# Analysis is starting here
             e+=1
             CE+=totCharge(pid)
         if abs(pid)==13:
+            Pz.append(sTree.MCTrack[xxx].GetPz())
+            Momentum.append(sTree.MCTrack[xxx].GetP())
+            if sTree.MCTrack[xxx].GetP()!=0.: Theta.append(math.acos(sTree.MCTrack[xxx].GetPz()/sTree.MCTrack[xxx].GetP()))
+            Rapidity.append(sTree.MCTrack[xxx].GetRapidity())
             doca=sTree.MCTrack[xxx].GetStartT()
             mu+=1
             CM+=totCharge(pid)
@@ -444,6 +552,16 @@ def myEventLoop(n):# Analysis is starting here
         
         if mu>1 and CM==0.0:#at least two muons decay channel FOR pur_PROB
             h['DPpur_mu'].Fill(mass_mc) 
+            for m in range(mu):
+                P_z.push_back(Pz[m])
+                P.push_back(Momentum[m])
+                Th.push_back(Theta[m])
+                Rap.push_back(Rapidity[m])
+                epsP_z.push_back(Pz[m],eps)
+                epsP.push_back(Momentum[m],eps)
+                epsTh.push_back(Theta[m],eps)
+                epsRap.push_back(Rapidity[m],eps)
+
          
         if tau>1 and CT==0.0:#at least two taus decay channel FOR pur_PROB
             h['DPpur_tau'].Fill(mass_mc)
@@ -462,7 +580,16 @@ def myEventLoop(n):# Analysis is starting here
         if mu>1 and CM==0.0:#at least two muons decay channel FOR VES_PROB
             h['DPvesW_mu'].Fill(mass_mc,wg)
             h['DPves_mu'].Fill(mass_mc)
-            
+            for m in range(mu):
+                P_z_ves.push_back(Pz[m])
+                P_ves.push_back(Momentum[m])
+                Th_ves.push_back(Theta[m])
+                Rap_ves.push_back(Rapidity[m])
+                epsP_z_ves.push_back(Pz[m],eps)
+                epsP_ves.push_back(Momentum[m],eps)
+                epsTh_ves.push_back(Theta[m],eps)
+                epsRap_ves.push_back(Rapidity[m],eps)
+           
         if tau>1 and CT==0.0:#at least two taus decay channel FOR VES_PROB
             h['DPvesW_tau'].Fill(mass_mc,wg)
             h['DPves_tau'].Fill(mass_mc)
@@ -485,6 +612,15 @@ def myEventLoop(n):# Analysis is starting here
             h['DPang_mu'].Fill(mass_mc,wg*xsw)
             if 'eta1' in dpMom: h['DPang1_mu'].Fill(mass_mc,wg*xsw1)
             h['DPangW_mu'].Fill(mass_mc,wg) 
+            for m in range(mu):
+                P_z_ang.push_back(Pz[m])
+                P_ang.push_back(Momentum[m])
+                Th_ang.push_back(Theta[m])
+                Rap_ang.push_back(Rapidity[m])
+                epsP_z_ang.push_back(Pz[m],eps)
+                epsP_ang.push_back(Momentum[m],eps)
+                epsTh_ang.push_back(Theta[m],eps)
+                epsRap_ang.push_back(Rapidity[m],eps)
 
         if neut>0 and charg==0:#any chargronic decay channel for RECO_EFF
             h['DPang_neut'].Fill(mass_mc,wg*xsw)
@@ -503,17 +639,22 @@ def myEventLoop(n):# Analysis is starting here
 
     if (e>1 and CE==0) or (mu>1 and CM==0) or (tau>1 and CT==0) or (charg>0) or (neut>0 and charg==0):#at least two charged leptons decay channel and any chargronic decay channel FOR BR_TOT
         h['DP'].Fill(mass_mc)
-        print e, mu, tau, charg, neut
+        #print e, mu, tau, charg, neut
         if CHARGE>1:
             h['DPpur'].Fill(mass_mc)
+            h['DPpurW'].Fill(mass_mc,wg)
+            h['DPpurW2'].Fill(mass_mc,wg*wg)
             if f_track>1:##at least two charged tracks in the VESL
                 h['DPvesW'].Fill(mass_mc,wg)
+                h['DPvesW2'].Fill(mass_mc,wg*wg)
                 h['DPves'].Fill(mass_mc)
                 if RECO>1:#at least two charged tracks in the FINAL CUT 
                     #print "reco"
                     h['DPangW'].Fill(mass_mc)
                     h['DPangWe'].Fill(mass_mc,wg)
-                    h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
+                    h['DPangW2'].Fill(mass_mc,wg*wg)
+                    if cascade: h['DPang'].Fill(mass_mc,wg*xsw*cwg)
+                    if not cascade: h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
                     if 'eta1' in dpMom: h['DPang1'].Fill(mass_mc,wg*xsw1)
                 else:
                     h['DPangW_oth'].Fill(mass_mc,wg)
@@ -532,7 +673,7 @@ def myEventLoop(n):# Analysis is starting here
     else: 
         #Dump(sTree.MCTrack)
         h['DP_oth'].Fill(mass_mc)
-
+    kine.Fill()
 nEvents =sTree.GetEntries()
 for n in range(nEvents):
     myEventLoop(n)
@@ -555,6 +696,7 @@ o6  = tmp1+"_other.dat"
 o7  = tmp1+"_all.dat"
 o8  = tmp1+"_sum.dat"
 o9  = tmp1+"_rate1.dat"
+o10 = tmp1+"_weight.dat"
 
 a=open(o1,'w+')
 b=open(o2,'w+')
@@ -565,7 +707,7 @@ f=open(o6,'w+')
 g=open(o7,'w+')
 H=open(o8,'w+')
 k=open(o9,'w+')
-
+l=open(o10,'w+')
 
 print h['DP'].Integral(), h['DPpur'].Integral(), h['DPvesW'].Integral(), h['DPang'].Integral(), h['DPangW'].Integral(), h['DPangWe'].Integral()
 print h['DPvesW'].Integral(), h['DPvesW_e'].Integral(), h['DPvesW_mu'].Integral(),  h['DPvesW_tau'].Integral(), h['DPvesW_neut'].Integral(),h['DPvesW_charg'].Integral()
@@ -573,6 +715,8 @@ print h['DPangW'].Integral(), h['DPangW_e'].Integral(), h['DPangW_mu'].Integral(
 if float(h['DP'].Integral())!=0.0:
     Sum=0.0
     #print h['DP'].Integral(), h['DPpur'].Integral(), h['DPvesW'].Integral(), h['DPang'].Integral(), h['DPangWe'].Integral()
+    l.write('%.4g %s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g' %(mass_mc, eps, float(h['DPpur'].Integral()), float(h['DPves'].Integral()), float(h['DPangW'].Integral()), float(h['DPpurW'].Integral()), float(h['DPvesW'].Integral()), float(h['DPangWe'].Integral()), float(h['DPpurW2'].Integral()), float(h['DPvesW2'].Integral()), float(h['DPangW2'].Integral())))
+    l.write('\n')
     H.write('%.4g %s %.8g %.8g %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DPW'].Integral()), float(h['DP'].Integral()), float(h['DPpur'].Integral()),float(h['DPves'].Integral()), float(h['DPangW'].Integral())))
     H.write('\n')
 
@@ -687,7 +831,10 @@ f.close()
 g.close()
 H.close()
 k.close()
+l.close()
 
+Rfile.Write()
+Rfile.Close()
 tmp1=tmp1.replace("dat/","")
 hfile =tmp2+"_ana.root" 
 r.gROOT.cd()

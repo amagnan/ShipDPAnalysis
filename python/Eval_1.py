@@ -41,13 +41,14 @@ for i,dummy in enumerate(a):
         Mass=float(j[0])
     else:
         gr[h]=r.TGraph(len(eps),eps,rate)
-        gr[h].SetTitle("Mass of "+str(Mass)+";Log(#epsilon);Log(Rate)")
+        gr[h].SetTitle("Mass of "+str(Mass)+";Log(#varepsilon);Log(Rate)")
         c1.Update()
         gr[h].SetMarkerStyle(20)
         gr[h].SetMarkerColor(2)
         gr[h].SetLineWidth(3)
         gr[h].Draw("AP")
         ind=rate.index(max(rate))
+        print Mass, eps
         line=r.TLine(max(eps),r.TMath.Log10(2.3),min(eps),r.TMath.Log10(2.3))
         line.SetLineColor(3)
         line.Draw("same")

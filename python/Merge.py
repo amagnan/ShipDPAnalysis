@@ -2,10 +2,10 @@ from array import array
 import os,sys,getopt
 import math
 lepto=0 
-modes = ['meson_pi0','meson_eta11','meson_eta','meson_omega','meson_eta1']
+modes = ['meson_pi0','meson_eta','meson_omega','meson_eta1']
 #modes = ['meson_pi0','meson_eta','meson_omega','meson_eta1']
 #modes = ['meson_eta','meson_omega','meson_eta1']
-fracs = ['e','mu','tau','neutral','charged','all','other','sum']
+fracs = ['e','mu','tau','neutral','charged','all','other','sum','weight']
 #tots = ['other','sum']
 
 try:
@@ -63,6 +63,12 @@ def find_N(lines,mass,eps):
                 i = i.split(' ')
                 if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.00001: return float(i[2]), float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[7])
         return 0
+def find_weight(lines,mass,eps):
+        for i in lines:
+                i = i.replace('\n','')
+                i = i.split(' ')
+                if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.00001: return float(i[2]), float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[7]), float(i[8]), float(i[9]), float(i[10])
+        return 0
 
 def looping(mode,frac,l0,l1):
         l0 = l0.replace('\n','')
@@ -94,6 +100,9 @@ def looping(mode,frac,l0,l1):
         if frac=='other':
                 R = find_dau(l1, float(x[0]), float(x[1]))
                 if R: return R
+        if frac=='weight':
+            R=find_weight(l1,float(x[0]), float(x[1]))
+            if R: return R
         return 0
 
 #other ve sum kaldi
@@ -109,6 +118,9 @@ for l in l0:
         R, V, G, Nr, D = 0., 0., 0., 0., 0.
         NR, DPn, Pg, PgNr, Pnr,PurNr, Vn, Gn = 0., 0., 0., 0., 0., 0., 0., 0.
         Lp, Lv, Lg, Lpur = 0., 0., 0., 0.
+        m1,m2,m3=0.,0.,0.
+        v1,v2,v3=0.,0.,0.
+        r1,r2,r3=0.,0.,0.
         for mode in modes:
             #print mode
             exec('N  = find_N(l_%s_sum, mass, eps)'%(mode))
@@ -146,6 +158,17 @@ for l in l0:
                     Lpur += r[1]
                     Lv += r[2]
                     Lg += r[3]
+                if frac == 'weight':
+                    fl = 3
+                    m1+=r[0] 
+                    v1+=r[1]
+                    r1+=r[2]
+                    m2+=r[3] 
+                    v2+=r[4]
+                    r2+=r[5]
+                    m3+=r[6] 
+                    v3+=r[7]
+                    r3+=r[8]
         #print mass, eps, mode, frac
         if fl == 2:
             if Nr!=0.:
@@ -184,5 +207,7 @@ for l in l0:
         if fl == -2:
             k.write("%.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,Lp,Lpur,Lv,Lg))
             k.write("\n")
-
+        if fl == 3:
+            k.write("%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,m1,v1,r1,m2,v2,r2,m3,v3,r3))
+            k.write("\n")
 for frac in fracs: exec('l_%s.close()'%(frac))
