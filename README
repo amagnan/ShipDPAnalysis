@@ -1,48 +1,78 @@
 <<<<<<< HEAD
 
-Final Results are in the ./data/191115/
+Final Results are in the data/200922/
+
+*_sum.dat:
+
+1st column;  mass
+
+2nd column; epsilon
+
+3rd column; # of events
+
+4th column; Ev = # of DP events
+
+5th column; Dau = # of DP events with proper daughter(s)
+
+6th column; Pur = # of DP events with proper daughter(s) and ends with at least two charges
+
+7th column; Ves= # of DP weighted events with proper daughter(s) and ends with at least two charges and FitTracks in the vessel
+
+8th column; Rec = # of Final weighted Events
 
 
-i = (e,mu,tau,hadron,nhadron,chadron,pi0)
+*_all.dat:
 
-*_i.dat = mass, epsilon 
-                       , BR          = "# of DP events with daughter(s) of i mode / # of DP events"
+1st column; mass
 
-                       , Pur         = "# of DP events with at least two charged daughters of i mode /  # of DP events with daughter(s) of i mode"
+2nd column; epsilon
 
-                       , Prob_vessel = "# of DP weighted events with at least two charged daughters and FitTracks of i mode / # of DP events with at least two charged daughters of i mode"
+3rd column; P_dau^tot = Dau/Ev
 
-                       , Reco_Eff    = "Final weighted Events of i mode / # of DP weighted events with at least two charged daughters and FitTracks of i mode "
+4th column; P_pur  = Pur/Dau
 
+5th column; P_BR^tot   = 1
 
+6th column; P_ves^tot  = Ves/Pur
 
-
-*_all.dat = mass, epsilon
-                       , Dau         = "# of DP events with daughter(s) / # of run events"
-
-                       , BR_tot  = 1 = "# of DP events with daughter(s) of all i modes / # of DP events with daughter(s)"
-
-                       , Pur         = "# of DP events with at least two charged daughters /  # of DP events with daughter(s)"
-
-                       , Prob_vessel = "# of weighted DP events with at least two charged daughters and FitTracks / # of DP events with at least two charged daughters"
-
-                       , Reco_Eff    = "Final weighted Events / # of DP weighted events with at least two charged daughters and FitTracks "
+7th column; P_rec^tot  = Rec/Ves
 
 
+_e.dat, *_mu, *_tau,*_neutral.dat, *_charged.dat:
 
-*_other.dat = mass, epsilon 
-                       , Dau_loss         
+1st column; mass
 
-                       , Pur_loss        
+2nd column; epsilon
 
-                       , Prob_ves_loss  
+3rd column; P_BR^i = Dau_i/Dau
 
-                       , Reco_Eff_loss  
+4th column; P_vis^i= Pur_i/Dau
 
-*_sum.dat = mass, epsilon,
-                         , # of set events
-                         , # of run events 
-                         , # of DP events with daughter(s)
-                         , # of DP events with at least two charged daughters
-                         , # of DP events with at least two charged daughters and FitTracks
-                         , Final Events
+5th column; P_ves^i = Ves_i/Pur_i
+
+6th column; P_rec^i = Rec_i/Ves_i
+
+
+*_weight.dat:
+
+1st column; mass
+
+2nd column; epsilon
+
+3rd column; Pur
+
+4th column; Ves
+
+5th column; Rec
+
+6th column; Weighted Pur
+
+7th column; Weighted Ves
+
+8th column; Weighted Rec
+
+9th column; Weighted^2 Pur
+
+10th column; Weighted^2 Ves
+
+11th column; Weighted^2 Rec
