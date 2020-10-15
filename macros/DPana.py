@@ -193,7 +193,11 @@ tmpR=tmpR.replace(date,dest)
 
 Rfile=r.TFile(tmpR+"_kinematics.root",'recreate')
 kine=r.TTree("kinematics","results of the mumu channel for mini-shield study")
- 
+
+Eps       =r.std.vector(float)()
+Eps_ves   =r.std.vector(float)()
+Eps_ang   =r.std.vector(float)()
+
 V_x     =r.std.vector(float)()
 V_x_ves =r.std.vector(float)()
 V_x_ang =r.std.vector(float)()
@@ -221,7 +225,11 @@ P_ang   =r.std.vector(float)()
 Th      =r.std.vector(float)()
 Th_ves  =r.std.vector(float)()
 Th_ang  =r.std.vector(float)()
- 
+
+kine.Branch('Eps',Eps) 
+kine.Branch('Eps_ves',Eps_ves) 
+kine.Branch('Eps_ang',Eps_ang) 
+
 kine.Branch('V_x',V_x) 
 kine.Branch('V_x_ves',V_x_ves) 
 kine.Branch('V_x_ang',V_x_ang) 
@@ -420,6 +428,9 @@ def myEventLoop(n):# Analysis is starting here
     Th.clear()
     Th_ves.clear()
     Th_ang.clear()
+    Eps.clear()
+    Eps_ves.clear()
+    Eps_ang.clear()
     #print n
     rc=sTree.GetEntry(n) 
     fm=findmum()
@@ -574,6 +585,7 @@ def myEventLoop(n):# Analysis is starting here
                 P.push_back(Momentum[m])
                 Th.push_back(Theta[m])
                 Rap.push_back(Rapidity[m])
+                Eps.push_back(math.log10(eps))
                 hk['V_eps_x'].Fill(Vx[m],math.log10(eps)) 
                 hk['V_eps_y'].Fill(Vy[m],math.log10(eps)) 
                 hk['V_eps_z'].Fill(Vz[m],math.log10(eps)) 
@@ -607,6 +619,7 @@ def myEventLoop(n):# Analysis is starting here
                 P_ves.push_back(Momentum[m])
                 Th_ves.push_back(Theta[m])
                 Rap_ves.push_back(Rapidity[m])
+                Eps_ves.push_back(math.log10(eps))
                 hk['V_eps_x_ves'].Fill(Vx[m],math.log10(eps)) 
                 hk['V_eps_y_ves'].Fill(Vy[m],math.log10(eps)) 
                 hk['V_eps_z_ves'].Fill(Vz[m],math.log10(eps)) 
@@ -645,6 +658,7 @@ def myEventLoop(n):# Analysis is starting here
                 P_ang.push_back(Momentum[m])
                 Th_ang.push_back(Theta[m])
                 Rap_ang.push_back(Rapidity[m])
+                Eps_ang.push_back(math.log10(eps))
                 hk['V_eps_x_ang'].Fill(Vx[m],math.log10(eps)) 
                 hk['V_eps_y_ang'].Fill(Vy[m],math.log10(eps)) 
                 hk['V_eps_z_ang'].Fill(Vz[m],math.log10(eps)) 
