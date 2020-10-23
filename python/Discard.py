@@ -10,7 +10,8 @@ except getopt.GetoptError:
 for o,a in opts:
     if o in ('-d','--date',): date = a
 
-prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','pbrem','pbrem1','qcd']
+prods=['meson','meson_pi0','meson_omega','meson_eta','meson_eta1','qcd']
+#prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','pbrem','pbrem1','qcd']
 #prods=['meson','meson_pi0','meson_omega','meson_eta','meson_eta1','pbrem','pbrem1','qcd']
 #prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','meson_eta11','pbrem','pbrem1','qcd']
 #prods = ['meson','pbrem','pbrem1','comb','comb1','meson','qcd']
@@ -20,6 +21,7 @@ prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','pbrem','pbrem1','qcd'
 #for i in {'Rate1','ErrorRateP','ErrorRateM'}:
 for prod in prods:
     #inp="../data/"+date+"/"+prod+"_"+i+".dat"
+    print prod
     inp="../data/"+date+"/"+prod+"_rate1.dat"
     outp=inp.replace("rate1","Rate1")
     f=open(inp,'r')

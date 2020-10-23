@@ -56,7 +56,6 @@ f = r.TFile.Open(eospath)
 sTree=f.cbmsim
 eospath = eosship+geoFile
 fgeo = r.TFile.Open(eospath)
-sGeo = r.gGeoManager
 
 upkl    = Unpickler(fgeo)
 ShipGeo = upkl.load('ShipGeo')
@@ -190,6 +189,7 @@ ut.bookHist(h,'DPangW_oth','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.
 
 ut.bookHist(h,'DOCA','Doca between two tracks',100,0.,100)
 ut.bookHist(h,'IP','Impact Parameter',100,0.,10.)
+ut.bookHist(h,'DPweig','invariant Mass (GeV)',100,0.,mass_mc+5.)
 
 tmpR=tmp1.replace("reco/","ana/")
 tmpR=tmpR.replace(date,dest)
@@ -232,12 +232,11 @@ kine.Branch('Th_ang',Th_ang)
 def dist2InnerWall(X,Y,Z):
     dist = 0 
     node = sGeo.FindNode(X,Y,Z)
-    print node.GetName()
     if ShipGeo.tankDesign < 5:
         if not 'cave' in node.GetName(): return dist  # TP 
     else:
-        if not 'DecayVacuum' in node.GetName(): return dist
-        #if not 'decayVol' in node.GetName(): return dist
+        #if not 'DecayVacuum' in node.GetName(): return dist
+        if not 'decayVol' in node.GetName(): return dist
     start = array('d',[X,Y,Z])
     nsteps = 8
     dalpha = 2*r.TMath.Pi()/nsteps
@@ -289,7 +288,6 @@ def findmum():#this function finds the mother of DP with weight,xs,momentum etc.
                     xsw = dputil.getDPprodRate(mass_mc,eps,pro,0,False,400.,ptmax,zmin,zmax)
                     #if zmin!=0.1 or zmax!=0.9 or ptmax!=4.0: xsw = dputil.getDPprodRate(mass_mc,eps,pro,0,False,400.,ptmax,zmin,zmax)
                     #else: xsw = dputil.getDPprodRate(mass_mc,eps,pro,0)
-            print "bu da farkli", xsw
             wg = sTree.MCTrack[dp_id].GetWeight()
             #print dp_id 
             dp_mom=r.TVector3(sTree.MCTrack[dp_id].GetPx(),sTree.MCTrack[dp_id].GetPy(),sTree.MCTrack[dp_id].GetPz())
@@ -492,9 +490,7 @@ def myEventLoop(n):# Analysis is starting here
         if not find_signal(xx.getPDG()): continue#This is charge Cut
         if not isInFiducial(vtx.X(),vtx.Y(),vtx.Z()): continue #vessel cut
         f_track+=1
-        print(F,sTree.fitTrack2MC[F],mc.GetPdgCode(),dy,vtx.X(),vtx.Y(),vtx.Z())
         if not checkFiducialVolume(sTree,F,dy): continue
-        print("burasi vessel for fit")
         nmeas = fitStatus.getNdf()
         chi2 = fitStatus.getChi2()
         if not nmeas>25.: continue
@@ -640,6 +636,7 @@ def myEventLoop(n):# Analysis is starting here
                     if cascade: h['DPang'].Fill(mass_mc,wg*xsw*cwg)
                     if not cascade: h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
                     if 'eta1' in dpMom: h['DPang1'].Fill(mass_mc,wg*xsw1)
+                    if wg<1e-39: h['DPweig'].Fill(mass_mc)
                 else:
                     h['DPangW_oth'].Fill(mass_mc,wg)
                     h['DPang_oth'].Fill(mass_mc,wg*xsw)
@@ -699,7 +696,7 @@ print h['DPangW'].Integral(), h['DPangW_e'].Integral(), h['DPangW_mu'].Integral(
 if float(h['DP'].Integral())!=0.0:
     Sum=0.0
     #print h['DP'].Integral(), h['DPpur'].Integral(), h['DPvesW'].Integral(), h['DPang'].Integral(), h['DPangWe'].Integral()
-    l.write('%.4g %s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g' %(mass_mc, eps, float(h['DPpur'].Integral()), float(h['DPves'].Integral()), float(h['DPangW'].Integral()), float(h['DPpurW'].Integral()), float(h['DPvesW'].Integral()), float(h['DPangWe'].Integral()), float(h['DPpurW2'].Integral()), float(h['DPvesW2'].Integral()), float(h['DPangW2'].Integral())))
+    l.write('%.4g %s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g' %(mass_mc, eps, float(h['DPpur'].Integral()), float(h['DPves'].Integral()), float(h['DPangW'].Integral()), float(h['DPpurW'].Integral()), float(h['DPvesW'].Integral()), float(h['DPangWe'].Integral()), float(h['DPpurW2'].Integral()), float(h['DPvesW2'].Integral()), float(h['DPangW2'].Integral()), float(h['DPweig'].Integral())))
     l.write('\n')
     H.write('%.4g %s %.8g %.8g %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DPW'].Integral()), float(h['DP'].Integral()), float(h['DPpur'].Integral()),float(h['DPves'].Integral()), float(h['DPangW'].Integral())))
     H.write('\n')
