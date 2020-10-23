@@ -67,10 +67,11 @@ def find_weight(lines,mass,eps):
         for i in lines:
                 i = i.replace('\n','')
                 i = i.split(' ')
-                if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.00001: return float(i[2]), float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[7]), float(i[8]), float(i[9]), float(i[10])
+                if abs(math.log10(float(i[1])) - math.log10(eps)) <0.01 and abs(float(i[0]) - mass)<0.00001: return float(i[2]), float(i[3]), float(i[4]), float(i[5]), float(i[6]), float(i[7]), float(i[8]), float(i[9]), float(i[10]), float(i[11])
         return 0
 
 def looping(mode,frac,l0,l1):
+        print mode, frac
         l0 = l0.replace('\n','')
         x = l0.split(' ')
         if frac=='e' or frac=='mu' or frac=='tau' or frac=='neutral' or frac=='charged':
@@ -120,7 +121,7 @@ for l in l0:
         Lp, Lv, Lg, Lpur = 0., 0., 0., 0.
         m1,m2,m3=0.,0.,0.
         v1,v2,v3=0.,0.,0.
-        r1,r2,r3=0.,0.,0.
+        r1,r2,r3, r4=0.,0.,0.,0.
         for mode in modes:
             #print mode
             exec('N  = find_N(l_%s_sum, mass, eps)'%(mode))
@@ -169,6 +170,7 @@ for l in l0:
                     m3+=r[6] 
                     v3+=r[7]
                     r3+=r[8]
+                    r4+=r[9]
         #print mass, eps, mode, frac
         if fl == 2:
             if Nr!=0.:
@@ -208,6 +210,6 @@ for l in l0:
             k.write("%.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,Lp,Lpur,Lv,Lg))
             k.write("\n")
         if fl == 3:
-            k.write("%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,m1,v1,r1,m2,v2,r2,m3,v3,r3))
+            k.write("%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g"%(mass,eps,m1,v1,r1,m2,v2,r2,m3,v3,r3,r4))
             k.write("\n")
 for frac in fracs: exec('l_%s.close()'%(frac))
