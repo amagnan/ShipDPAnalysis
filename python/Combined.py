@@ -64,14 +64,28 @@ line_1 = data1.readlines()#meson
 line_2 = data2.readlines()#pbrem
 line_3 = data3.readlines()#qcd
 
-err12=0.30
+#err12=0.30
+#err3P=0.10
+#err3M=0.20
+
+#errC12=(2*err12)**0.5
+#errM3M=(err12*err12+err3M*err3M)**0.5
+#errM3P=(err12*err12+err3P*err3P)**0.5
+
+err1=0.30
+ 
+err2P=0.50
+err2M=0.40
+ 
 err3P=0.10
 err3M=0.20
 
-errC12=(2*err12)**0.5
-errM3M=(err12*err12+err3M*err3M)**0.5
-errM3P=(err12*err12+err3P*err3P)**0.5
+err12P=(err1*err1+err2P*err2P)**0.5
+err12M=(err1*err1+err2M*err2M)**0.5
 
+err23P=(err3P*err3P+err2P*err2P)**0.5
+err23M=(err3M*err3M+err2M*err2M)**0.5
+ 
 def find_Rate(lines,mass,eps):
     for i in lines:
         k = i.replace('\n','')
@@ -83,15 +97,15 @@ def find_Rate(lines,mass,eps):
 for i in line_1:#pbrem just in case
     i = i.replace('\n','')
     i = i.split(' ')
-    data1P.write("%s %s %s"%(i[0],i[1],str(float(i[2])+float(i[2])*err12)))
+    data1P.write("%s %s %s"%(i[0],i[1],str(float(i[2])+float(i[2])*err1)))
     data1P.write("\n")
-    data1M.write("%s %s %s"%(i[0],i[1],str(float(i[2])-float(i[2])*err12)))
+    data1M.write("%s %s %s"%(i[0],i[1],str(float(i[2])-float(i[2])*err1)))
     data1M.write("\n")
     p = find_Rate( line_2, Decimal(i[0]), Decimal(i[1]) )
     if p:
         Rate_tot = Decimal(i[2]) + p
-        RateP_tot = Rate_tot + Rate_tot*Decimal(errC12)
-        RateM_tot = Rate_tot - Rate_tot*Decimal(errC12)
+        RateP_tot = Rate_tot + Rate_tot*Decimal(err12P)
+        RateM_tot = Rate_tot - Rate_tot*Decimal(err12M)
         Rate.write('%.5E %.9E %.9E' %(Decimal(i[0]), Decimal(i[1]), Rate_tot))
         Rate.write('\n')
         RateP.write('%.5E %.9E %.9E' %(Decimal(i[0]), Decimal(i[1]), RateP_tot))
@@ -102,16 +116,16 @@ for i in line_1:#pbrem just in case
 for i in line_2:#pbrem just in case
     i = i.replace('\n','')
     i = i.split(' ')
-    data2P.write("%s %s %s"%(i[0],i[1],str(float(i[2])+float(i[2])*err12)))
+    data2P.write("%s %s %s"%(i[0],i[1],str(float(i[2])+float(i[2])*err2P)))
     data2P.write("\n")
-    data2M.write("%s %s %s"%(i[0],i[1],str(float(i[2])-float(i[2])*err12)))
+    data2M.write("%s %s %s"%(i[0],i[1],str(float(i[2])-float(i[2])*err2M)))
     data2M.write("\n")
     if float(i[0])>0.95 and float(i[0])<1.5:
         Rate.write('%.5E %.9E %.9E' %(Decimal(i[0]), Decimal(i[1]), Rate_tot))
         Rate.write('\n')
-        RateP.write("%s %s %s"%(i[0],i[1],str(float(i[2])+float(i[2])*err12)))
+        RateP.write("%s %s %s"%(i[0],i[1],str(float(i[2])+float(i[2])*err2P)))
         RateP.write("\n")
-        RateM.write("%s %s %s"%(i[0],i[1],str(float(i[2])-float(i[2])*err12)))
+        RateM.write("%s %s %s"%(i[0],i[1],str(float(i[2])-float(i[2])*err2M)))
         RateM.write("\n")
 
 for i in line_3:#meson rates with pbrem shared
@@ -124,15 +138,16 @@ for i in line_3:#meson rates with pbrem shared
     p = find_Rate( line_2, Decimal(i[0]), Decimal(i[1]) )
     if p:
         Rate_tot = Decimal(i[2]) + p
-        RateP_tot = Rate_tot + Rate_tot*Decimal(errM3P)
-        RateM_tot = Rate_tot - Rate_tot*Decimal(errM3M)
+        RateP_tot = Rate_tot + Rate_tot*Decimal(err23P)
+        RateM_tot = Rate_tot - Rate_tot*Decimal(err23M)
         Rate.write('%.5E %.9E %.9E' %(Decimal(i[0]), Decimal(i[1]), Rate_tot))
         Rate.write('\n')
         RateP.write('%.5E %.9E %.9E' %(Decimal(i[0]), Decimal(i[1]), RateP_tot))
         RateP.write('\n')
         RateM.write('%.5E %.9E %.9E' %(Decimal(i[0]), Decimal(i[1]), RateM_tot))
         RateM.write('\n')
-    if float(i[0])>3.7:
+    #if float(i[0])>3.7:
+    elif float(i[0])>3.5:
         RateP.write("%s %s %s"%(i[0],i[1],str(float(i[2])+float(i[2])*err3P)))
         RateP.write("\n")
         RateM.write("%s %s %s"%(i[0],i[1],str(float(i[2])-float(i[2])*err3M)))
