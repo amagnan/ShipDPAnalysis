@@ -38,7 +38,7 @@ if dpMom!='': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/r
 if dpMom=='':
     if pro=='qcd': tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/"+pro+"_mass"+mass_mc+"_eps"+eps
     if "pbrem" in pro:
-        if zmin!=0.1 or zmax!=0.9 or ptmax!=4.0: tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/pbrem_mass"+mass_mc+"_eps"+eps+"_zmin"+zmin+"_zmax"+zmax+"_ptmax"+ptmax
+        if float(zmin)!=0.1 or float(zmax)!=0.9 or float(ptmax)!=4.0: tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/pbrem_mass"+mass_mc+"_eps"+eps+"_zmin"+zmin+"_zmax"+zmax+"_ptmax"+ptmax
         else: tmp1 = "/eos/experiment/ship/data/DarkPhoton/PBC-June-3/"+date+"/reco/pbrem_mass"+mass_mc+"_eps"+eps
  
 inputFile = tmp1+"_rec.root"
@@ -190,6 +190,8 @@ ut.bookHist(h,'DPangW_oth','invariant Mass with Weights (GeV)',100,0.,mass_mc+5.
 ut.bookHist(h,'DOCA','Doca between two tracks',100,0.,100)
 ut.bookHist(h,'IP','Impact Parameter',100,0.,10.)
 ut.bookHist(h,'DPweig','invariant Mass (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPangC','invariant Mass (GeV)',100,0.,mass_mc+5.)
+ut.bookHist(h,'DPangCW','invariant Mass (GeV)',100,0.,mass_mc+5.)
 
 tmpR=tmp1.replace("reco/","ana/")
 tmpR=tmpR.replace(date,dest)
@@ -633,7 +635,10 @@ def myEventLoop(n):# Analysis is starting here
                     h['DPangW'].Fill(mass_mc)
                     h['DPangWe'].Fill(mass_mc,wg)
                     h['DPangW2'].Fill(mass_mc,wg*wg)
-                    if cascade: h['DPang'].Fill(mass_mc,wg*xsw*cwg)
+                    if cascade:
+                        h['DPang'].Fill(mass_mc,wg*xsw*cwg)
+                        h['DPangC'].Fill(mass_mc,cwg)
+                        h['DPangCW'].Fill(mass_mc,wg*cwg)
                     if not cascade: h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
                     if 'eta1' in dpMom: h['DPang1'].Fill(mass_mc,wg*xsw1)
                     if wg<1e-39: h['DPweig'].Fill(mass_mc)
@@ -696,7 +701,8 @@ print h['DPangW'].Integral(), h['DPangW_e'].Integral(), h['DPangW_mu'].Integral(
 if float(h['DP'].Integral())!=0.0:
     Sum=0.0
     #print h['DP'].Integral(), h['DPpur'].Integral(), h['DPvesW'].Integral(), h['DPang'].Integral(), h['DPangWe'].Integral()
-    l.write('%.4g %s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g' %(mass_mc, eps, float(h['DPpur'].Integral()), float(h['DPves'].Integral()), float(h['DPangW'].Integral()), float(h['DPpurW'].Integral()), float(h['DPvesW'].Integral()), float(h['DPangWe'].Integral()), float(h['DPpurW2'].Integral()), float(h['DPvesW2'].Integral()), float(h['DPangW2'].Integral()), float(h['DPweig'].Integral())))
+    if cascade:l.write('%.4g %s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g' %(mass_mc, eps, float(h['DPpur'].Integral()), float(h['DPves'].Integral()), float(h['DPangW'].Integral()), float(h['DPpurW'].Integral()), float(h['DPvesW'].Integral()), float(h['DPangWe'].Integral()), float(h['DPpurW2'].Integral()), float(h['DPvesW2'].Integral()), float(h['DPangW2'].Integral()), float(h['DPweig'].Integral()), float(h['DPangC'].Integral()), float(h['DPangCW'].Integral())))
+    if not cascade: l.write('%.4g %s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g' %(mass_mc, eps, float(h['DPpur'].Integral()), float(h['DPves'].Integral()), float(h['DPangW'].Integral()), float(h['DPpurW'].Integral()), float(h['DPvesW'].Integral()), float(h['DPangWe'].Integral()), float(h['DPpurW2'].Integral()), float(h['DPvesW2'].Integral()), float(h['DPangW2'].Integral()), float(h['DPweig'].Integral())))
     l.write('\n')
     H.write('%.4g %s %.8g %.8g %.8g %.8g %.8g %.8g' %(mass_mc, eps, nEvents, float(h['DPW'].Integral()), float(h['DP'].Integral()), float(h['DPpur'].Integral()),float(h['DPves'].Integral()), float(h['DPangW'].Integral())))
     H.write('\n')
