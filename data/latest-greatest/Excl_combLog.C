@@ -1,10 +1,10 @@
 void Excl_combLog()
 {
 //=========Macro generated from canvas: c1/
-//=========  (Tue Oct 27 20:28:18 2020) by ROOT version 6.20/04
+//=========  (Thu Oct 29 13:18:49 2020) by ROOT version 6.20/04
    TCanvas *c1 = new TCanvas("c1", "",0,45,1920,1080);
    c1->SetHighLightColor(2);
-   c1->Range(-0.08334317,-19.625,3.760388,-3.375);
+   c1->Range(-0.08194326,-19.625,3.747789,-3.375);
    c1->SetFillColor(0);
    c1->SetBorderMode(0);
    c1->SetBorderSize(2);
@@ -172,7 +172,7 @@ void Excl_combLog()
    graph->SetLineColor(17);
    graph->SetMarkerColor(17);
    
-   TH1F *Graph_Graph01 = new TH1F("Graph_Graph01","",100,2,3700);
+   TH1F *Graph_Graph01 = new TH1F("Graph_Graph01","",100,2,3600);
    Graph_Graph01->SetMinimum(1e-18);
    Graph_Graph01->SetMaximum(1e-05);
    Graph_Graph01->SetDirectory(0);
@@ -491,16 +491,16 @@ void Excl_combLog()
    5,
    2};
    Double_t Graph_fy3[99] = {
-   4.927266e-07,
+   3.339e-06,
    1.268218e-07,
    4.082855e-09,
-   9.43787e-10,
+   9.44822e-10,
    3.997183e-10,
    2.154051e-10,
-   7.677468e-11,
-   4.547241e-11,
+   7.677503e-11,
+   4.547262e-11,
    3.264329e-11,
-   2.143029e-11,
+   2.143809e-11,
    1.615117e-11,
    1.154553e-11,
    8.218641e-12,
@@ -575,21 +575,21 @@ void Excl_combLog()
    1.676996e-16,
    2.173181e-16,
    2.627205e-16,
-   3.085503e-16,
-   3.220639e-16,
-   3.026927e-16,
-   2.298878e-16,
-   1.720133e-16,
-   1.477073e-16,
-   1.370068e-16,
-   1.546721e-16,
-   2.340744e-16,
-   3.211456e-16,
-   2.428175e-16,
-   2.296297e-16,
-   1.419116e-15,
-   1.874994e-15,
-   4.655754e-15};
+   3.086882e-16,
+   3.224735e-16,
+   3.26179e-16,
+   2.861383e-16,
+   2.427336e-16,
+   2.293327e-16,
+   2.160857e-16,
+   2.299588e-16,
+   3.530953e-16,
+   4.621426e-16,
+   3.646263e-16,
+   3.219467e-16,
+   1.550379e-15,
+   2.56719e-15,
+   6.670985e-15};
    graph = new TGraph(99,Graph_fx3,Graph_fy3);
    graph->SetName("Graph");
    graph->SetTitle("Combined Dipole");
@@ -598,8 +598,8 @@ void Excl_combLog()
    graph->SetMarkerColor(6);
    
    TH1F *Graph_Graph3 = new TH1F("Graph_Graph3","Combined Dipole",100,1.8,3189.8);
-   Graph_Graph3->SetMinimum(1.233061e-16);
-   Graph_Graph3->SetMaximum(5.419993e-07);
+   Graph_Graph3->SetMinimum(1.509296e-16);
+   Graph_Graph3->SetMaximum(3.6729e-06);
    Graph_Graph3->SetDirectory(0);
    Graph_Graph3->SetStats(0);
 
@@ -730,16 +730,16 @@ void Excl_combLog()
    5,
    2};
    Double_t Graph_fy4[101] = {
-   4.930103e-07,
+   3.342e-06,
    1.269948e-07,
    4.088726e-09,
-   9.476588e-10,
+   9.485932e-10,
    4.021999e-10,
    2.183514e-10,
-   7.827661e-11,
+   7.827697e-11,
    4.663693e-11,
-   3.421212e-11,
-   2.2945e-11,
+   3.421228e-11,
+   2.294711e-11,
    1.719705e-11,
    1.277886e-11,
    9.466774e-12,
@@ -816,21 +816,21 @@ void Excl_combLog()
    8.506561e-18,
    3.154496e-17,
    6.27249e-17,
-   1.033432e-16,
-   1.465676e-16,
-   1.87332e-16,
-   1.883779e-16,
-   1.61164e-16,
-   1.444495e-16,
-   1.357994e-16,
-   1.537538e-16,
-   2.334468e-16,
-   3.204941e-16,
-   2.427482e-16,
-   2.296233e-16,
-   1.41909e-15,
-   1.874977e-15,
-   4.655711e-15};
+   1.033485e-16,
+   1.466061e-16,
+   1.917829e-16,
+   2.163555e-16,
+   2.144036e-16,
+   2.148751e-16,
+   2.100148e-16,
+   2.2686e-16,
+   3.508924e-16,
+   4.60246e-16,
+   3.644097e-16,
+   3.219289e-16,
+   1.550358e-15,
+   2.567131e-15,
+   6.670832e-15};
    graph = new TGraph(101,Graph_fx4,Graph_fy4);
    graph->SetName("Graph");
    graph->SetTitle("Combined VDM");
@@ -840,7 +840,7 @@ void Excl_combLog()
    
    TH1F *Graph_Graph4 = new TH1F("Graph_Graph4","Combined VDM",101,1.8,3299.8);
    Graph_Graph4->SetMinimum(7.655905e-18);
-   Graph_Graph4->SetMaximum(5.423113e-07);
+   Graph_Graph4->SetMaximum(3.6762e-06);
    Graph_Graph4->SetDirectory(0);
    Graph_Graph4->SetStats(0);
 
@@ -975,18 +975,18 @@ void Excl_combLog()
    5,
    2};
    Double_t Graph_fy5[105] = {
-   5.070234e-07,
+   3.482e-06,
    1.307573e-07,
    4.169654e-09,
-   9.726039e-10,
+   9.731146e-10,
    4.09027e-10,
    2.220271e-10,
-   7.897179e-11,
-   4.665047e-11,
-   3.378858e-11,
-   2.225543e-11,
+   7.897252e-11,
+   4.665068e-11,
+   3.378874e-11,
+   2.226158e-11,
    1.658334e-11,
-   1.193543e-11,
+   1.193548e-11,
    8.522441e-12,
    5.724374e-12,
    3.783137e-12,
@@ -1065,21 +1065,21 @@ void Excl_combLog()
    1.333859e-16,
    1.712253e-16,
    2.090008e-16,
-   2.472054e-16,
-   2.539499e-16,
-   2.402692e-16,
-   1.815165e-16,
-   1.389306e-16,
-   1.203716e-16,
-   1.135968e-16,
-   1.23281e-16,
-   1.899547e-16,
-   2.513044e-16,
-   1.898086e-16,
-   1.821352e-16,
-   1.338388e-15,
-   1.526736e-15,
-   3.68998e-15};
+   2.47333e-16,
+   2.542553e-16,
+   2.58956e-16,
+   2.270764e-16,
+   1.929994e-16,
+   1.775277e-16,
+   1.687501e-16,
+   1.817071e-16,
+   2.851649e-16,
+   3.657396e-16,
+   2.876643e-16,
+   2.553971e-16,
+   1.466014e-15,
+   2.082917e-15,
+   5.273513e-15};
    graph = new TGraph(105,Graph_fx5,Graph_fy5);
    graph->SetName("Graph");
    graph->SetTitle("");
@@ -1089,8 +1089,8 @@ void Excl_combLog()
    graph->SetMarkerColor(6);
    
    TH1F *Graph_Graph5 = new TH1F("Graph_Graph5","",105,1.8,3519.8);
-   Graph_Graph5->SetMinimum(1.022371e-16);
-   Graph_Graph5->SetMaximum(5.577257e-07);
+   Graph_Graph5->SetMinimum(1.200473e-16);
+   Graph_Graph5->SetMaximum(3.8302e-06);
    Graph_Graph5->SetDirectory(0);
    Graph_Graph5->SetStats(0);
 
@@ -1227,16 +1227,16 @@ void Excl_combLog()
    5,
    2};
    Double_t Graph_fy6[107] = {
-   5.0732e-07,
+   3.485e-06,
    1.309357e-07,
    4.175649e-09,
-   9.767018e-10,
+   9.771247e-10,
    4.115665e-10,
    2.25065e-10,
-   8.05167e-11,
-   4.784516e-11,
+   8.051708e-11,
+   4.784538e-11,
    3.541278e-11,
-   2.383296e-11,
+   2.383428e-11,
    1.765721e-11,
    1.321046e-11,
    9.816756e-12,
@@ -1319,21 +1319,21 @@ void Excl_combLog()
    6.757126e-18,
    2.531419e-17,
    4.982669e-17,
-   8.229928e-17,
-   1.172168e-16,
-   1.490075e-16,
-   1.487175e-16,
-   1.303671e-16,
-   1.175601e-16,
-   1.125061e-16,
-   1.225513e-16,
-   1.894244e-16,
-   2.50843e-16,
-   1.89758e-16,
-   1.821302e-16,
-   1.338363e-15,
-   1.526722e-15,
-   3.689946e-15};
+   8.230382e-17,
+   1.172487e-16,
+   1.522502e-16,
+   1.717552e-16,
+   1.702817e-16,
+   1.670529e-16,
+   1.642147e-16,
+   1.792867e-16,
+   2.833309e-16,
+   3.643259e-16,
+   2.874922e-16,
+   2.553842e-16,
+   1.46598e-15,
+   2.082869e-15,
+   5.273391e-15};
    graph = new TGraph(107,Graph_fx6,Graph_fy6);
    graph->SetName("Graph");
    graph->SetTitle("");
@@ -1344,7 +1344,7 @@ void Excl_combLog()
    
    TH1F *Graph_Graph6 = new TH1F("Graph_Graph6","",107,1.8,3629.8);
    Graph_Graph6->SetMinimum(6.081413e-18);
-   Graph_Graph6->SetMaximum(5.58052e-07);
+   Graph_Graph6->SetMaximum(3.8335e-06);
    Graph_Graph6->SetDirectory(0);
    Graph_Graph6->SetStats(0);
 
@@ -1469,16 +1469,16 @@ void Excl_combLog()
    5,
    2};
    Double_t Graph_fy7[95] = {
-   4.719131e-07,
-   1.211072e-07,
-   3.940488e-09,
-   9.019158e-10,
+   3.131e-06,
+   1.211067e-07,
+   3.940942e-09,
+   9.036827e-10,
    3.801736e-10,
    2.057842e-10,
-   7.357428e-11,
-   4.37506e-11,
-   3.098817e-11,
-   2.024277e-11,
+   7.357462e-11,
+   4.37508e-11,
+   3.098832e-11,
+   2.025284e-11,
    1.531412e-11,
    1.098115e-11,
    7.780581e-12,
@@ -1549,21 +1549,21 @@ void Excl_combLog()
    2.46445e-16,
    3.084281e-16,
    3.770179e-16,
-   4.333053e-16,
-   4.588894e-16,
-   4.304731e-16,
-   3.210199e-16,
-   2.406412e-16,
-   2.199733e-16,
-   1.984458e-16,
-   2.126532e-16,
-   3.283825e-16,
-   4.567137e-16,
-   3.473697e-16,
-   3.216651e-16,
-   1.550222e-15,
-   2.533483e-15,
-   6.68815e-15};
+   4.335069e-16,
+   4.594815e-16,
+   4.605492e-16,
+   4.040118e-16,
+   3.441312e-16,
+   3.198718e-16,
+   3.049706e-16,
+   3.289122e-16,
+   5.087729e-16,
+   6.565684e-16,
+   5.109166e-16,
+   4.514088e-16,
+   1.981801e-15,
+   3.676461e-15,
+   9.397579e-15};
    graph = new TGraph(95,Graph_fx7,Graph_fy7);
    graph->SetName("Graph");
    graph->SetTitle("");
@@ -1573,8 +1573,8 @@ void Excl_combLog()
    graph->SetMarkerColor(6);
    
    TH1F *Graph_Graph7 = new TH1F("Graph_Graph7","",100,1.8,2969.8);
-   Graph_Graph7->SetMinimum(1.786013e-16);
-   Graph_Graph7->SetMaximum(5.191044e-07);
+   Graph_Graph7->SetMinimum(2.218005e-16);
+   Graph_Graph7->SetMaximum(3.4441e-06);
    Graph_Graph7->SetDirectory(0);
    Graph_Graph7->SetStats(0);
 
@@ -1701,16 +1701,16 @@ void Excl_combLog()
    5,
    2};
    Double_t Graph_fy8[97] = {
-   4.721783e-07,
-   1.212724e-07,
-   3.949426e-09,
-   9.054615e-10,
+   3.134e-06,
+   1.212719e-07,
+   3.949772e-09,
+   9.071143e-10,
    3.837214e-10,
    2.085999e-10,
-   7.50136e-11,
-   4.487103e-11,
+   7.501395e-11,
+   4.487123e-11,
    3.247731e-11,
-   2.166726e-11,
+   2.167065e-11,
    1.652532e-11,
    1.215419e-11,
    8.962187e-12,
@@ -1783,21 +1783,21 @@ void Excl_combLog()
    1.213171e-17,
    4.435514e-17,
    8.798892e-17,
-   1.456941e-16,
-   2.053383e-16,
-   2.642664e-16,
-   2.667006e-16,
-   2.259446e-16,
-   2.126062e-16,
-   1.954574e-16,
-   2.115466e-16,
-   3.274296e-16,
-   4.558752e-16,
-   3.472754e-16,
-   3.216563e-16,
-   1.550215e-15,
-   2.53346e-15,
-   6.688088e-15};
+   1.457022e-16,
+   2.053884e-16,
+   2.717628e-16,
+   3.056525e-16,
+   3.037624e-16,
+   3.033249e-16,
+   2.97413e-16,
+   3.244053e-16,
+   5.04817e-16,
+   6.542444e-16,
+   5.106437e-16,
+   4.513859e-16,
+   1.981755e-15,
+   3.676377e-15,
+   9.397363e-15};
    graph = new TGraph(97,Graph_fx8,Graph_fy8);
    graph->SetName("Graph");
    graph->SetTitle("");
@@ -1808,7 +1808,7 @@ void Excl_combLog()
    
    TH1F *Graph_Graph8 = new TH1F("Graph_Graph8","",100,1.8,3079.8);
    Graph_Graph8->SetMinimum(1.091854e-17);
-   Graph_Graph8->SetMaximum(5.193961e-07);
+   Graph_Graph8->SetMaximum(3.4474e-06);
    Graph_Graph8->SetDirectory(0);
    Graph_Graph8->SetStats(0);
 
@@ -2016,7 +2016,7 @@ void Excl_combLog()
    
    multigraph->Add(graph,"");
    multigraph->Draw("L");
-   multigraph->GetXaxis()->SetLimits(2, 3500);
+   multigraph->GetXaxis()->SetLimits(2, 3600);
    multigraph->GetXaxis()->SetTitle("m_{#gamma^{D}}(MeV/c^{2})");
    multigraph->GetXaxis()->SetLabelFont(42);
    multigraph->GetXaxis()->SetLabelSize(0.04);

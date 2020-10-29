@@ -1,4 +1,4 @@
-date='latest-greatest'
+date='200213'
 import math
 
 mothers=['pi0','eta','omega','eta1']
@@ -9,7 +9,8 @@ for mother in mothers:
 f0 = open("mr.txt","r")#dosya lazim
 l0 = f0.readlines()
 
-f1 = open("../data/"+date+"/meson_Rate1.dat","w")
+#f1 = open("../data/"+date+"/meson_Rate1.dat","w")
+f1 = open("../data/"+date+"/meson_rate1.dat","w")
 
 def find(mother,l0,l_i):
     for i in l_i:
