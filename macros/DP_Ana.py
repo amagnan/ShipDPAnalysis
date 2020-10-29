@@ -29,7 +29,7 @@ for o,a in opts:
     if o in ('-A',): dpMom = a
     if o in ('-g', '--geoFile',): geoFile = a
     if o in ('-f',): dest = a
-    if o in ('-C',): cascade = True
+    if o in ('-C',): cascade = a
     if o in ('-z',): zmin = a
     if o in ('-Z',): zmax = a
     if o in ('-t',): ptmax = a
@@ -637,10 +637,12 @@ def myEventLoop(n):# Analysis is starting here
                     h['DPangW2'].Fill(mass_mc,wg*wg)
                     if cascade:
                         h['DPang'].Fill(mass_mc,wg*xsw*cwg)
+                        if 'eta1' in dpMom: h['DPang1'].Fill(mass_mc,cwg*wg*xsw1)
                         h['DPangC'].Fill(mass_mc,cwg)
                         h['DPangCW'].Fill(mass_mc,wg*cwg)
-                    if not cascade: h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
-                    if 'eta1' in dpMom: h['DPang1'].Fill(mass_mc,wg*xsw1)
+                    if not cascade:
+                        h['DPang'].Fill(mass_mc,wg*xsw)#FOR THE RATE
+                        if 'eta1' in dpMom: h['DPang1'].Fill(mass_mc,wg*xsw1)
                     if wg<1e-39: h['DPweig'].Fill(mass_mc)
                 else:
                     h['DPangW_oth'].Fill(mass_mc,wg)

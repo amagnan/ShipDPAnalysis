@@ -9,8 +9,8 @@ for o,a in opts:
     if o in ('-d','--date',): date = a
 
 #prods = ['pbrem','pbrem1','meson','qcd','comb','comb1']
-prods = ['pbrem','pbrem1','meson','qcd']
-#prods = ['qcd']
+#prods = ['pbrem','pbrem1','meson','qcd']
+prods = ['meson']
 #for i in {"Rate1","ErrorRateM","ErrorRateP"}:
 for i in {"Rate1"}:
     for prod in prods:

@@ -11,7 +11,7 @@ for o,a in opts:
     if o in ('-d','--date',): date = a
 
 #prods=['meson_pi0','meson_omega','meson_eta','meson_eta1']
-prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','pbrem','pbrem1','qcd']
+#prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','pbrem','pbrem1','qcd']
 #prods=['meson','meson_pi0','meson_omega','meson_eta','meson_eta1','qcd']
 #prods=['meson','meson_pi0','meson_omega','meson_eta','meson_eta1','pbrem','pbrem1','qcd']
 #prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','meson_eta11','pbrem','pbrem1','qcd']
@@ -19,6 +19,7 @@ prods=['meson_pi0','meson_omega','meson_eta','meson_eta1','pbrem','pbrem1','qcd'
 #prods = ['meson','pbrem','pbrem1','meson','qcd']
 #prods = ['pbrem','pbrem1']
 #prods = ['ALPACA']
+prods=['meson']
 #for i in {'Rate1','ErrorRateP','ErrorRateM'}:
 #prods = ['meson']
 for prod in prods:
@@ -32,10 +33,10 @@ for prod in prods:
         x=x.replace("\n","")
         x=x.split(" ")
         if prod=='meson_eta11' and Decimal(x[3]):
-            l.write('%.5E %.9E %.9E' %(Decimal(x[0]),Decimal(x[1]),Decimal(x[3])))
+            l.write('%.5E %.9E %.9E' %(Decimal(x[0]),Decimal(x[1]),Decimal(float(x[3]))))
             l.write('\n')
         if prod!='meson_eta11' and Decimal(x[2]):
-            l.write('%.5E %.9E %.9E' %(Decimal(x[0]),Decimal(x[1]),Decimal(x[2])))
+            l.write('%.5E %.9E %.9E' %(Decimal(x[0]),Decimal(x[1]),Decimal(float(x[2]))))
             l.write('\n')
 f.close()
 l.close()
